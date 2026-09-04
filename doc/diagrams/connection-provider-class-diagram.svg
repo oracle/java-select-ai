@@ -1,0 +1,138 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2100" height="1280" viewBox="0 0 2100 1280" role="img" aria-labelledby="title desc">
+<title id="title">ConnectionProvider and ConnectionCallback class diagram</title>
+<desc id="desc">Class diagram for ConnectionProvider, ConnectionCallback, DataSourceConnectionProvider, and SingleConnectionProvider.</desc>
+<style>
+  .bg { fill: #ffffff; }
+  .title { font: 700 34px Arial, Helvetica, sans-serif; fill: #111827; }
+  .subtitle { font: 18px Arial, Helvetica, sans-serif; fill: #4b5563; }
+  .box { fill: #f8fafc; stroke: #334155; stroke-width: 3; rx: 8; }
+  .header { fill: #e2e8f0; stroke: #334155; stroke-width: 3; }
+  .name { font: 700 23px Arial, Helvetica, sans-serif; fill: #0f172a; }
+  .stereo { font: 16px Arial, Helvetica, sans-serif; fill: #475569; }
+  .member { font: 18px "Menlo", "Consolas", monospace; fill: #111827; }
+  .small { font: 16px "Menlo", "Consolas", monospace; fill: #111827; }
+  .section { stroke: #94a3b8; stroke-width: 1.5; }
+  .line { stroke: #1f2937; stroke-width: 2.5; fill: none; }
+  .dependency { stroke: #1f2937; stroke-width: 2.5; fill: none; stroke-dasharray: 10 7; marker-end: url(#arrow); }
+  .impl { stroke: #1f2937; stroke-width: 2.5; fill: none; stroke-dasharray: 10 7; marker-end: url(#triangle); }
+  .arrow { stroke: #1f2937; stroke-width: 2.5; fill: none; marker-end: url(#arrow); }
+  .labelBox { fill: #ffffff; stroke: #e2e8f0; stroke-width: 1.5; rx: 5; }
+  .label { font: 700 16px Arial, Helvetica, sans-serif; fill: #475569; }
+  .note { fill: #fff7ed; stroke: #f97316; stroke-width: 2; rx: 8; }
+  .noteText { font: 17px Arial, Helvetica, sans-serif; fill: #9a3412; }
+</style>
+<defs>
+  <marker id="arrow" markerWidth="12" markerHeight="12" refX="11" refY="4" orient="auto" markerUnits="strokeWidth">
+    <path d="M0,0 L0,8 L11,4 z" fill="#1f2937" />
+  </marker>
+  <marker id="triangle" markerWidth="15" markerHeight="15" refX="14" refY="7" orient="auto" markerUnits="strokeWidth">
+    <path d="M14,7 L1,14 L1,0 z" fill="#ffffff" stroke="#1f2937" stroke-width="1.7" />
+  </marker>
+</defs>
+
+<rect class="bg" x="0" y="0" width="2100" height="1280" />
+<text class="title" x="60" y="62">ConnectionProvider and ConnectionCallback Class Diagram</text>
+<text class="subtitle" x="60" y="94">Focused view of public connection lifecycle contracts and concrete provider implementations</text>
+
+<!-- ConnectionProvider interface -->
+<g transform="translate(725 145)">
+  <rect class="box" x="0" y="0" width="650" height="205" />
+  <path class="header" d="M8 0 H642 Q650 0 650 8 V78 H0 V8 Q0 0 8 0 Z" />
+  <text class="name" x="325" y="33" text-anchor="middle">ConnectionProvider</text>
+  <text class="stereo" x="325" y="60" text-anchor="middle">&lt;&lt;interface&gt;&gt;</text>
+  <line class="section" x1="0" y1="78" x2="650" y2="78" />
+  <text class="member" x="24" y="124">+ withConnection(callback : ConnectionCallback&lt;T&gt;) : T</text>
+  <text class="member" x="24" y="160">  throws SQLException, SelectAIException</text>
+</g>
+
+<!-- ConnectionCallback interface -->
+<g transform="translate(725 485)">
+  <rect class="box" x="0" y="0" width="650" height="205" />
+  <path class="header" d="M8 0 H642 Q650 0 650 8 V78 H0 V8 Q0 0 8 0 Z" />
+  <text class="name" x="325" y="33" text-anchor="middle">ConnectionCallback&lt;T&gt;</text>
+  <text class="stereo" x="325" y="60" text-anchor="middle">&lt;&lt;functional interface&gt;&gt;</text>
+  <line class="section" x1="0" y1="78" x2="650" y2="78" />
+  <text class="member" x="24" y="124">+ execute(connection : Connection) : T</text>
+  <text class="member" x="24" y="160">  throws SQLException, SelectAIException</text>
+</g>
+
+<!-- Concrete implementations -->
+<g transform="translate(110 845)">
+  <rect class="box" x="0" y="0" width="700" height="275" />
+  <path class="header" d="M8 0 H692 Q700 0 700 8 V66 H0 V8 Q0 0 8 0 Z" />
+  <text class="name" x="350" y="42" text-anchor="middle">DataSourceConnectionProvider</text>
+  <line class="section" x1="0" y1="66" x2="700" y2="66" />
+  <text class="member" x="24" y="112">- dataSource : DataSource</text>
+  <line class="section" x1="0" y1="150" x2="700" y2="150" />
+  <text class="member" x="24" y="194">+ withConnection(callback) : T</text>
+  <text class="small" x="24" y="228">  obtains Connection from DataSource</text>
+  <text class="small" x="24" y="258">  closes it after the operation</text>
+</g>
+
+<g transform="translate(1290 845)">
+  <rect class="box" x="0" y="0" width="700" height="275" />
+  <path class="header" d="M8 0 H692 Q700 0 700 8 V66 H0 V8 Q0 0 8 0 Z" />
+  <text class="name" x="350" y="42" text-anchor="middle">SingleConnectionProvider</text>
+  <line class="section" x1="0" y1="66" x2="700" y2="66" />
+  <text class="member" x="24" y="112">- dbConnection : DbConnection</text>
+  <line class="section" x1="0" y1="150" x2="700" y2="150" />
+  <text class="member" x="24" y="194">+ withConnection(callback) : T</text>
+  <text class="small" x="24" y="228">  obtains Connection from DbConnection</text>
+  <text class="small" x="24" y="258">  preserves single-connection behavior</text>
+</g>
+
+<!-- Supporting types -->
+<g transform="translate(110 230)">
+  <rect class="box" x="0" y="0" width="430" height="135" />
+  <path class="header" d="M8 0 H422 Q430 0 430 8 V60 H0 V8 Q0 0 8 0 Z" />
+  <text class="name" x="215" y="39" text-anchor="middle">DataSource</text>
+  <text class="stereo" x="215" y="102" text-anchor="middle">javax.sql</text>
+</g>
+
+<g transform="translate(1560 230)">
+  <rect class="box" x="0" y="0" width="430" height="135" />
+  <path class="header" d="M8 0 H422 Q430 0 430 8 V60 H0 V8 Q0 0 8 0 Z" />
+  <text class="name" x="215" y="39" text-anchor="middle">DbConnection</text>
+  <line class="section" x1="0" y1="60" x2="430" y2="60" />
+  <text class="member" x="24" y="103">+ getConnection() : Connection</text>
+</g>
+
+<g transform="translate(1510 520)">
+  <rect class="box" x="0" y="0" width="430" height="135" />
+  <path class="header" d="M8 0 H422 Q430 0 430 8 V60 H0 V8 Q0 0 8 0 Z" />
+  <text class="name" x="215" y="39" text-anchor="middle">Connection</text>
+  <text class="stereo" x="215" y="102" text-anchor="middle">java.sql</text>
+</g>
+
+<!-- Relationships -->
+<path class="dependency" d="M1050 350 L1050 485" />
+<rect class="labelBox" x="1082" y="402" width="130" height="32" />
+<text class="label" x="1147" y="424" text-anchor="middle">executes</text>
+
+<path class="arrow" d="M1375 590 L1540 590" />
+<rect class="labelBox" x="1425" y="552" width="125" height="32" />
+<text class="label" x="1488" y="574" text-anchor="middle">receives</text>
+
+<path class="impl" d="M460 845 L460 760 L640 760 L640 440 L820 350" />
+<rect class="labelBox" x="490" y="728" width="150" height="32" />
+<text class="label" x="565" y="750" text-anchor="middle">implements</text>
+
+<path class="impl" d="M1640 845 L1640 760 L1460 760 L1460 440 L1280 350" />
+<rect class="labelBox" x="1460" y="728" width="150" height="32" />
+<text class="label" x="1535" y="750" text-anchor="middle">implements</text>
+
+<path class="arrow" d="M325 365 L325 845" />
+<rect class="labelBox" x="245" y="585" width="160" height="32" />
+<text class="label" x="325" y="607" text-anchor="middle">uses source</text>
+
+<path class="arrow" d="M1775 365 L1775 455 L2040 455 L2040 845 L1810 845" />
+<rect class="labelBox" x="1840" y="415" width="175" height="32" />
+<text class="label" x="1928" y="437" text-anchor="middle">uses wrapper</text>
+
+<!-- Note -->
+<g transform="translate(560 1150)">
+  <rect class="note" x="0" y="0" width="860" height="105" />
+  <text class="noteText" x="26" y="38">Concrete providers implement the same public ConnectionProvider contract.</text>
+  <text class="noteText" x="26" y="72">DataSource mode is per-operation; DbConnectionConfig mode uses one connection.</text>
+</g>
+</svg>
