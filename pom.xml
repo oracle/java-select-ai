@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.oracle.database.selectai</groupId>
+    <artifactId>select-ai-java</artifactId>
+    <version>1.0.0</version>
+    <name>Oracle Select AI for Java</name>
+    <description>Java SDK for Oracle Autonomous AI Database's Select AI operations backed by DBMS_CLOUD_AI.</description>
+    <packaging>jar</packaging>
+    <url>https://github.com/oracle/java-select-ai</url>
+    <inceptionYear>2026</inceptionYear>
+
+    <organization>
+        <name>Oracle</name>
+        <url>https://www.oracle.com</url>
+    </organization>
+
+    <licenses>
+        <license>
+            <name>Universal Permissive License v1.0</name>
+            <url>https://oss.oracle.com/licenses/upl/</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <organization>Oracle</organization>
+            <organizationUrl>https://www.oracle.com</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:https://github.com/oracle/java-select-ai.git</connection>
+        <developerConnection>scm:git:https://github.com/oracle/java-select-ai.git</developerConnection>
+        <url>https://github.com/oracle/java-select-ai</url>
+        <tag>HEAD</tag>
+    </scm>
+
+    <issueManagement>
+        <system>GitHub Issues</system>
+        <url>https://github.com/oracle/java-select-ai/issues</url>
+    </issueManagement>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
+        <slf4j.version>2.0.17</slf4j.version>
+        <ojdbc11.version>23.26.1.0.0</ojdbc11.version>
+        <jackson-databind-core>2.22.0</jackson-databind-core>
+        <junit.jupiter.version>5.10.3</junit.jupiter.version>
+        <mockito.version>5.11.0</mockito.version>
+        <assertj.version>3.25.3</assertj.version>
+        <maven.surefire.plugin.version>3.2.5</maven.surefire.plugin.version>
+        <maven.javadoc.plugin.version>3.12.0</maven.javadoc.plugin.version>
+        <java.release.version>17</java.release.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ojdbc11</artifactId>
+            <version>${ojdbc11.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.oracle.database.security</groupId>
+            <artifactId>oraclepki</artifactId>
+            <version>${ojdbc11.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson-databind-core}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>${junit.jupiter.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <version>${mockito.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+    <profiles>
+        <profile>
+            <id>samples</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-simple</artifactId>
+                    <version>${slf4j.version}</version>
+                    <scope>runtime</scope>
+                </dependency>
+            </dependencies>
+        </profile>
+    </profiles>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven.compiler.plugin.version}</version>
+                <configuration>
+                    <release>${java.release.version}</release>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>${maven.javadoc.plugin.version}</version>
+                <configuration>
+                    <doclint>none</doclint>
+                    <quiet>true</quiet>
+                    <notimestamp>true</notimestamp>
+                    <linksource>true</linksource>
+                    <release>${java.release.version}</release>
+                    <sourcepath>${project.basedir}/src/main/java${path.separator}${project.basedir}/samples/src/main/java</sourcepath>
+                    <overview>${project.basedir}/src/main/javadoc/overview.html</overview>
+                    <excludePackageNames>com.oracle.database.selectai.impl:com.oracle.database.selectai.samples*</excludePackageNames>
+                    <groups>
+                        <group>
+                            <title>SDK API</title>
+                            <packages>com.oracle.database.selectai:com.oracle.database.selectai.model</packages>
+                        </group>
+                    </groups>
+                    <doctitle>Oracle&amp;reg; Select AI for Java</doctitle>
+                    <windowtitle>Oracle Select AI for Java</windowtitle>
+                    <header>Oracle&amp;reg; Select AI for Java</header>
+                    <bottom>Copyright &#169; 2026. All rights reserved.</bottom>
+                    <outputDirectory>${project.basedir}/doc</outputDirectory>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven.surefire.plugin.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>

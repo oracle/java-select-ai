@@ -1,0 +1,28 @@
+# Maven / Java build output
+target/
+samples/out/
+*.class
+*.jar
+*.war
+*.ear
+*.nar
+
+# Logs and runtime dumps
+*.log
+*.pid
+hs_err_pid*
+replay_pid*
+
+# OS metadata
+.DS_Store
+Thumbs.db
+
+# IDE / editor local state
+.idea/
+.oca/
+*.iml
+*.iws
+.classpath
+.project
+.settings/
+.vscode/

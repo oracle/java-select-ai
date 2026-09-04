@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.oracle.database.selectai"},{"l":"com.oracle.database.selectai.model"}];updateSearchResults();

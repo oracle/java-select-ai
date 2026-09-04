@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="3200" height="1700" viewBox="0 0 3200 1700">
+<defs>
+  <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
+    <path d="M 0 0 L 12 6 L 0 12 z" fill="#334155"/>
+  </marker>
+</defs>
+<rect x="0" y="0" width="3200" height="1700" fill="#ffffff"/>
+<text x="55" y="55" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" fill="#1f2937">SelectAI Class Diagram</text>
+<text x="55" y="90" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#5b6472">Clean focused view of the current com.oracle.database.selectai SelectAI and DatabaseAdmin APIs</text>
+
+<!-- relationships -->
+<path d="M 1120 515 H 860" fill="none" stroke="#334155" stroke-width="3" stroke-dasharray="10 8" marker-end="url(#arrow)"/>
+<rect x="925" y="475" width="130" height="32" rx="5" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="990" y="498" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" text-anchor="middle" fill="#475569">implements</text>
+
+<path d="M 1780 438 H 2070" fill="none" stroke="#334155" stroke-width="3" stroke-dasharray="10 8" marker-end="url(#arrow)"/>
+<rect x="1875" y="398" width="100" height="32" rx="5" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="1925" y="421" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" text-anchor="middle" fill="#475569">returns</text>
+
+<path d="M 1450 812 L 1464 826 L 1450 840 L 1436 826 Z" fill="#ffffff" stroke="#334155" stroke-width="3"/>
+<path d="M 1450 812 V 657" fill="none" stroke="#334155" stroke-width="3"/>
+<rect x="1484" y="720" width="144" height="32" rx="5" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="1556" y="743" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" text-anchor="middle" fill="#475569">config input</text>
+
+<path d="M 1450 1120 L 1464 1134 L 1450 1148 L 1436 1134 Z" fill="#ffffff" stroke="#334155" stroke-width="3"/>
+<path d="M 1450 1120 V 657" fill="none" stroke="#334155" stroke-width="3"/>
+<rect x="1484" y="990" width="176" height="32" rx="5" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="1572" y="1013" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" text-anchor="middle" fill="#475569">uses provider</text>
+
+<path d="M 860 610 H 990 V 1340 H 860" fill="none" stroke="#334155" stroke-width="3" stroke-dasharray="10 8" marker-end="url(#arrow)"/>
+<rect x="938" y="1298" width="104" height="32" rx="5" fill="#ffffff" stroke="#e2e8f0"/>
+<text x="990" y="1321" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" text-anchor="middle" fill="#475569">creates</text>
+
+<!-- SelectAI -->
+<g>
+  <rect x="70" y="150" width="790" height="610" rx="8" fill="#f8fafc" stroke="#334155" stroke-width="3"/>
+  <rect x="70" y="150" width="790" height="70" rx="8" fill="#dfe7f1" stroke="#334155" stroke-width="3"/>
+  <path d="M 70 220 H 860" stroke="#334155" stroke-width="3"/>
+  <text x="465" y="182" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle" fill="#243244">SelectAI</text>
+  <text x="465" y="209" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="600" text-anchor="middle" fill="#243244">&lt;&lt;interface&gt;&gt; extends AutoCloseable</text>
+
+  <text x="92" y="248" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#64748b">client creation and lifecycle</text>
+  <text x="92" y="278" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ create(DbConnectionConfig[, SelectAIOptions]) : SelectAI</text>
+  <text x="92" y="306" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ create(DataSource[, SelectAIOptions]) : SelectAI</text>
+  <text x="92" y="334" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ close() : void</text>
+  <text x="92" y="362" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ getConnection() : Connection</text>
+
+  <path d="M 70 392 H 860" stroke="#b8c4d4" stroke-width="2"/>
+  <text x="92" y="420" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#64748b">resources and collections</text>
+  <text x="92" y="450" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ credential(CredentialConfig) : Credential</text>
+  <text x="92" y="478" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ profile(String) : Profile</text>
+  <text x="92" y="506" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ profile(String, ProfileAttributes, String, ProfileStatus) : Profile</text>
+  <text x="92" y="534" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ listProfiles() : List&lt;Profile&gt;</text>
+  <text x="92" y="562" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ listProfiles(String) : List&lt;Profile&gt;</text>
+  <text x="92" y="590" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ vectorIndex(String) : VectorIndex</text>
+  <text x="92" y="618" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ vectorIndex(VectorIndexConfig) : VectorIndex</text>
+  <text x="92" y="646" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ listVectorIndexes() : List&lt;VectorIndex&gt;</text>
+  <text x="92" y="674" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ listVectorIndexes(String) : List&lt;VectorIndex&gt;</text>
+  <text x="92" y="702" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ conversation(ConversationAttributes) : Conversation</text>
+  <text x="92" y="730" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ conversation(String) : Conversation</text>
+  <text x="92" y="758" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ listConversations() : List&lt;Conversation&gt;</text>
+</g>
+
+<!-- DatabaseAdmin -->
+<g>
+  <rect x="70" y="820" width="790" height="340" rx="8" fill="#f8fafc" stroke="#334155" stroke-width="3"/>
+  <rect x="70" y="820" width="790" height="70" rx="8" fill="#dfe7f1" stroke="#334155" stroke-width="3"/>
+  <path d="M 70 890 H 860" stroke="#334155" stroke-width="3"/>
+  <text x="465" y="852" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle" fill="#243244">DatabaseAdmin</text>
+  <text x="465" y="879" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="600" text-anchor="middle" fill="#243244">&lt;&lt;interface&gt;&gt; extends AutoCloseable</text>
+
+  <text x="92" y="918" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#64748b">client creation and lifecycle</text>
+  <text x="92" y="948" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ create(DbConnectionConfig[, SelectAIOptions]) : DatabaseAdmin</text>
+  <text x="92" y="976" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ create(DataSource[, SelectAIOptions]) : DatabaseAdmin</text>
+  <text x="92" y="1004" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ close() : void</text>
+
+  <path d="M 70 1034 H 860" stroke="#b8c4d4" stroke-width="2"/>
+  <text x="92" y="1062" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#64748b">administrative operations</text>
+  <text x="92" y="1092" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ enableDataAccess() / disableDataAccess() : boolean</text>
+  <text x="92" y="1120" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ grantPrivileges(...) / revokePrivileges(...) : boolean</text>
+  <text x="92" y="1148" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ grantNetworkAccess(...) / revokeNetworkAccess(...) : boolean</text>
+</g>
+
+<!-- DefaultSelectAI -->
+<g>
+  <rect x="1120" y="360" width="660" height="330" rx="8" fill="#f8fafc" stroke="#334155" stroke-width="3"/>
+  <rect x="1120" y="360" width="660" height="52" rx="8" fill="#dfe7f1" stroke="#334155" stroke-width="3"/>
+  <path d="M 1120 412 H 1780" stroke="#334155" stroke-width="3"/>
+  <text x="1450" y="394" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle" fill="#243244">DefaultSelectAI (internal)</text>
+  <text x="1145" y="442" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#64748b">fields</text>
+  <text x="1145" y="472" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">- dbConnectionConfig : DbConnectionConfig</text>
+  <text x="1145" y="500" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">- dbConnection : DbConnection</text>
+  <text x="1145" y="528" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">- connectionProvider : ConnectionProvider</text>
+  <text x="1145" y="556" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">- statement options via JdbcExecutionConnectionProvider</text>
+  <path d="M 1120 580 H 1780" stroke="#b8c4d4" stroke-width="2"/>
+  <text x="1145" y="610" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">~ DefaultSelectAI(DbConnectionConfig | DataSource)</text>
+  <text x="1145" y="638" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">~ DefaultSelectAI(..., SelectAIOptions)</text>
+  <text x="1145" y="666" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ getConnection() : Connection</text>
+</g>
+
+<!-- DbConnectionConfig -->
+<g>
+  <rect x="1160" y="826" width="580" height="218" rx="8" fill="#f8fafc" stroke="#334155" stroke-width="3"/>
+  <rect x="1160" y="826" width="580" height="52" rx="8" fill="#e8edf5" stroke="#334155" stroke-width="3"/>
+  <path d="M 1160 878 H 1740" stroke="#334155" stroke-width="3"/>
+  <text x="1450" y="860" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle" fill="#243244">DbConnectionConfig</text>
+  <text x="1185" y="908" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#64748b">fields</text>
+  <text x="1185" y="938" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">- jdbcUrl : String</text>
+  <text x="1185" y="966" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">- dbUser : String</text>
+  <text x="1185" y="994" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">- dbPassword : String</text>
+  <text x="1185" y="1022" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">- jdbcProperties : Properties</text>
+</g>
+
+<!-- ConnectionProvider -->
+<g>
+  <rect x="1160" y="1134" width="580" height="194" rx="8" fill="#f8fafc" stroke="#334155" stroke-width="3"/>
+  <rect x="1160" y="1134" width="580" height="70" rx="8" fill="#e8edf5" stroke="#334155" stroke-width="3"/>
+  <path d="M 1160 1204 H 1740" stroke="#334155" stroke-width="3"/>
+  <text x="1450" y="1166" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle" fill="#243244">ConnectionProvider</text>
+  <text x="1450" y="1193" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="600" text-anchor="middle" fill="#243244">&lt;&lt;interface&gt;&gt;</text>
+  <text x="1185" y="1234" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">+ withConnection(callback) : T</text>
+</g>
+
+<!-- Right side models -->
+<g>
+  <rect x="2070" y="330" width="610" height="232" rx="8" fill="#f8fafc" stroke="#334155" stroke-width="3"/>
+  <rect x="2070" y="330" width="610" height="70" rx="8" fill="#e8edf5" stroke="#334155" stroke-width="3"/>
+  <path d="M 2070 400 H 2680" stroke="#334155" stroke-width="3"/>
+  <text x="2375" y="362" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle" fill="#243244">Resource APIs</text>
+  <text x="2375" y="389" font-family="Arial, Helvetica, sans-serif" font-size="21" font-weight="600" text-anchor="middle" fill="#243244">&lt;&lt;interfaces&gt;&gt;</text>
+  <text x="2092" y="430" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">Credential</text>
+  <text x="2092" y="458" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">Profile</text>
+  <text x="2092" y="486" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">VectorIndex</text>
+  <text x="2092" y="514" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">Conversation</text>
+</g>
+
+<g>
+  <rect x="2070" y="685" width="760" height="286" rx="8" fill="#f8fafc" stroke="#334155" stroke-width="3"/>
+  <rect x="2070" y="685" width="760" height="52" rx="8" fill="#e8edf5" stroke="#334155" stroke-width="3"/>
+  <path d="M 2070 737 H 2830" stroke="#334155" stroke-width="3"/>
+  <text x="2450" y="719" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle" fill="#243244">Request / Config Models</text>
+  <text x="2092" y="767" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#64748b">connection and resource configuration</text>
+  <text x="2092" y="797" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">DbConnectionConfig</text>
+  <text x="2092" y="825" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">SelectAIOptions</text>
+  <text x="2092" y="853" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">CredentialConfig</text>
+  <text x="2092" y="881" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">ProfileAttributes</text>
+  <text x="2092" y="909" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">ProfileStatus</text>
+  <text x="2092" y="937" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">VectorIndexConfig</text>
+  <text x="2092" y="965" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">ConversationAttributes</text>
+</g>
+
+<!-- Default implementations -->
+<g>
+  <rect x="70" y="1280" width="790" height="266" rx="8" fill="#f8fafc" stroke="#334155" stroke-width="3"/>
+  <rect x="70" y="1280" width="790" height="52" rx="8" fill="#e8edf5" stroke="#334155" stroke-width="3"/>
+  <path d="M 70 1332 H 860" stroke="#334155" stroke-width="3"/>
+  <text x="465" y="1314" font-family="Arial, Helvetica, sans-serif" font-size="23" font-weight="700" text-anchor="middle" fill="#243244">Default Implementations</text>
+  <text x="92" y="1362" font-family="Arial, Helvetica, sans-serif" font-size="17" font-weight="700" fill="#64748b">default implementation classes</text>
+  <text x="92" y="1392" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">DefaultCredential</text>
+  <text x="92" y="1420" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">DefaultProfile</text>
+  <text x="92" y="1448" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">DefaultVectorIndex</text>
+  <text x="92" y="1476" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">DefaultConversation</text>
+  <text x="92" y="1504" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#243244">DefaultDatabaseAdmin</text>
+</g>
+
+<!-- Notes -->
+<g>
+  <rect x="2070" y="1065" width="760" height="136" rx="8" fill="#fff8dd" stroke="#d59b22" stroke-width="2"/>
+  <text x="2094" y="1106" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#7c4a03">Feedback, summarize, and synthetic-data operations are Profile-scoped.</text>
+  <text x="2094" y="1134" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#7c4a03">SelectAI opens/configures resources. DatabaseAdmin manages grants/data access.</text>
+  <text x="2094" y="1162" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#7c4a03">Factory methods return in-memory objects for create paths; call create() where applicable.</text>
+</g>
+
+<g>
+  <rect x="1120" y="1450" width="1280" height="118" rx="8" fill="#fff8dd" stroke="#d59b22" stroke-width="2"/>
+  <text x="1146" y="1492" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#7c4a03">DbConnectionConfig mode owns one JDBC connection. DataSource mode borrows a connection for each operation.</text>
+  <text x="1146" y="1520" font-family="Arial, Helvetica, sans-serif" font-size="20" fill="#7c4a03">SelectAIOptions applies SDK statement options such as query timeout.</text>
+</g>
+</svg>
