@@ -10,13 +10,13 @@
 - [Connection management](#connection-management)
   - [DataSource](#datasource)
   - [DbConnectionConfig](#dbconnectionconfig)
-- [Feature examples](#feature-examples)
+- [Examples](#examples)
 - [Resource lifecycle](#resource-lifecycle)
 - [Error handling and timeouts](#error-handling-and-timeouts)
 - [Security](#security)
-- [API documentation](#api-documentation)
+- [Documentation](#documentation)
 - [Samples](#samples)
-- [Troubleshooting and support](#troubleshooting-and-support)
+- [Help](#help)
 - [Development](#development)
 - [Contributing](#contributing)
 - [License](#license)
@@ -473,7 +473,7 @@ treated as single-threaded unless access is synchronized externally.
 
 For more detail, see [`doc/datasource-connection-support.md`](doc/datasource-connection-support.md).
 
-## Feature examples
+## Examples
 
 Runnable examples are organized under [`samples/`](samples/) by feature:
 
@@ -542,7 +542,7 @@ requirements.
 
 For vulnerability reporting, see [`SECURITY.md`](SECURITY.md).
 
-## API documentation
+## Documentation
 
 The generated API documentation is available at [`doc/apidocs/index.html`](doc/apidocs/index.html).
 It documents the public interfaces, models, validation behavior, exceptions,
@@ -607,7 +607,7 @@ schema objects, network access, Object Storage content, or administrative
 privileges. Review [`samples/README.md`](samples/README.md) before running
 state-changing samples.
 
-## Troubleshooting and support
+## Help
 
 - [Generated API documentation](doc/apidocs/index.html)
 - [Sample instructions](samples/README.md)
