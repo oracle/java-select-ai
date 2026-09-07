@@ -53,7 +53,7 @@
         <jackson-databind-core>2.22.0</jackson-databind-core>
         <junit.jupiter.version>5.10.3</junit.jupiter.version>
         <mockito.version>5.11.0</mockito.version>
-        <assertj.version>3.25.3</assertj.version>
+        <assertj.version>3.27.7</assertj.version>
         <maven.surefire.plugin.version>3.2.5</maven.surefire.plugin.version>
         <maven.javadoc.plugin.version>3.12.0</maven.javadoc.plugin.version>
         <java.release.version>17</java.release.version>
