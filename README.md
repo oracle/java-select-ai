@@ -1,3 +1,5 @@
+TEST OGHO template compliance and OCA checks - do not merge
+
 # Select AI for Java
 
 ## Table of Contents
