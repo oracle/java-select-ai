@@ -120,7 +120,7 @@
 <span class="source-line-no">107</span><span id="line-107">        try {</span>
 <span class="source-line-no">108</span><span id="line-108">            ObjectMapper mapper = new ObjectMapper();</span>
 <span class="source-line-no">109</span><span id="line-109">            mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);</span>
-<span class="source-line-no">110</span><span id="line-110">            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);</span>
+<span class="source-line-no">110</span><span id="line-110">            mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);</span>
 <span class="source-line-no">111</span><span id="line-111">            return mapper.writeValueAsString(this);</span>
 <span class="source-line-no">112</span><span id="line-112">        } catch (Exception e) {</span>
 <span class="source-line-no">113</span><span id="line-113">            throw new IllegalStateException("Failed to serialize GenerateParams", e);</span>

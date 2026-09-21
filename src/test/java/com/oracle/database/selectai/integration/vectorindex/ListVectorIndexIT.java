@@ -21,7 +21,6 @@ import com.oracle.database.selectai.Credential;
 import com.oracle.database.selectai.Profile;
 import com.oracle.database.selectai.SelectAI;
 import com.oracle.database.selectai.VectorIndex;
-import com.oracle.database.selectai.integration.IntegrationTestFixture;
 import com.oracle.database.selectai.model.CredentialConfig;
 import com.oracle.database.selectai.model.SelectAIException;
 import com.oracle.database.selectai.model.SelectAIOptions;
@@ -193,6 +192,7 @@ class ListVectorIndexIT extends VectorIndexIntegrationFixture {
      */
     @Test
     void test54010ListInvalidRegex() throws Exception {
+        createListFixture();
         assertThatThrownBy(() -> selectAI.listVectorIndexes("[unclosed"))
                 .isInstanceOfSatisfying(SelectAIException.class,
                         exception -> assertThat(exception.getCause())
@@ -230,6 +230,7 @@ class ListVectorIndexIT extends VectorIndexIntegrationFixture {
      */
     @Test
     void test54013ListOverlongRegex() throws Exception {
+        createListFixture();
         String pattern = "^" + "a".repeat(1000) + "$";
         assertThatThrownBy(() -> selectAI.listVectorIndexes(pattern))
                 .isInstanceOfSatisfying(SelectAIException.class,

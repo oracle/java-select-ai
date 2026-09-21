@@ -11,7 +11,6 @@ import com.oracle.database.selectai.Session;
 import com.oracle.database.selectai.model.ConversationAttributes;
 import com.oracle.database.selectai.model.ConversationPrompt;
 import com.oracle.database.selectai.model.SelectAIException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -27,10 +26,9 @@ class ChatSessionIT extends GenerateIntegrationFixture {
 
     @Override
     protected String profileObjectList() {
-        return objectListFor("people", "gymnast");
+        return null;
     }
 
-    @BeforeEach
     @Override
     protected void createIsolatedProfile() throws Exception {
         super.createIsolatedProfile();

@@ -8,11 +8,29 @@
 package com.oracle.database.selectai.integration.translate;
 
 import com.oracle.database.selectai.integration.IntegrationTestFixture;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 
 /**
  * Shared defaults for integration tests that exercise translation behavior.
  */
 abstract class TranslationIntegrationFixture extends IntegrationTestFixture {
+
+    @BeforeEach
+    final void setUpConnection(TestInfo testInfo) throws Exception {
+        openIsolatedConnection(testInfo);
+    }
+
+    @AfterEach
+    final void tearDownConnection() throws Exception {
+        closeIsolatedConnection();
+    }
+
+    @Override
+    protected String profileObjectList() {
+        return null;
+    }
 
     protected static final String TRANSLATE_TEXT = "Thank you";
     protected static final String SOURCE_LANGUAGE = "en";

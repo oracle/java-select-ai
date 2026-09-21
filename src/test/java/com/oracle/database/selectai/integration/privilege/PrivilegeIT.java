@@ -8,11 +8,8 @@
 package com.oracle.database.selectai.integration.privilege;
 
 import com.oracle.database.selectai.DatabaseAdmin;
-import com.oracle.database.selectai.integration.IntegrationTestFixture;
 import com.oracle.database.selectai.model.SelectAIException;
 import oracle.jdbc.pool.OracleDataSource;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.PreparedStatement;
@@ -30,39 +27,17 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 /**
  * Live integration coverage for the Java privilege and network-ACL API.
  *
- * <p>The shared database configuration must identify a user with the privileges
- * required by these tests. The DatabaseAdmin client performs network ACL and
- * package-privilege changes, while the shared Select AI connection is used for
- * SQL verification and temporary-user cleanup.</p>
+ * <p>The shared database configuration identifies the ordinary feature-test
+ * user whose grants are being inspected. A separate admin-capable connection
+ * performs network ACL, package-privilege, temporary-user, and SQL metadata
+ * operations.</p>
  */
-class PrivilegeIT extends IntegrationTestFixture {
+class PrivilegeIT extends PrivilegeIntegrationFixture {
 
     private static final int TEST_PORT = 587;
     private static final List<String> TEST_PRIVILEGES = List.of("connect", "smtp");
     private static final List<String> SELECT_AI_PACKAGES = List.of(
             "DBMS_CLOUD", "DBMS_CLOUD_AI", "DBMS_CLOUD_AI_AGENT", "DBMS_CLOUD_PIPELINE");
-    private DatabaseAdmin databaseAdmin;
-
-    @Override
-    protected boolean requiresProfile() {
-        return false;
-    }
-
-    @BeforeEach
-    @Override
-    protected void createIsolatedProfile() throws Exception {
-        super.createIsolatedProfile();
-        databaseAdmin = DatabaseAdmin.create(dbConfig);
-    }
-
-    @AfterEach
-    void closeDatabaseAdmin() throws SelectAIException {
-        if (databaseAdmin != null) {
-            databaseAdmin.close();
-            databaseAdmin = null;
-        }
-    }
-
     /**
      * Test: Generates a unique host name and grants the configured database user
      * the {@code CONNECT} and {@code SMTP} privileges on that host for port 587
@@ -442,16 +417,26 @@ class PrivilegeIT extends IntegrationTestFixture {
     }
 
     private OracleDataSource oracleDataSource() throws SQLException {
+        var adminConfig = adminDbConfig();
         OracleDataSource dataSource = new OracleDataSource();
-        dataSource.setURL(dbConfig.getJdbcUrl());
-        dataSource.setUser(dbConfig.getDbUser());
-        dataSource.setPassword(dbConfig.getDbPassword());
+        dataSource.setURL(adminConfig.getJdbcUrl());
+        dataSource.setUser(adminConfig.getDbUser());
+        dataSource.setPassword(adminConfig.getDbPassword());
         return dataSource;
+    }
+
+    private java.sql.Connection adminJdbcConnection() {
+        assumeTrue(adminSelectAI != null,
+                "The admin database connection is not initialized.");
+        java.sql.Connection connection = adminSelectAI.getConnection();
+        assumeTrue(connection != null,
+                "The admin database connection is not available.");
+        return connection;
     }
 
     private String createDatabaseUser(String username) throws SQLException {
         String password = "JsaI" + UUID.randomUUID().toString().replace("-", "") + "Aa1";
-        try (Statement statement = jdbcConnection().createStatement()) {
+        try (Statement statement = adminJdbcConnection().createStatement()) {
             statement.executeUpdate(
                     "CREATE USER " + username + " IDENTIFIED BY \"" + password + "\"");
             statement.executeUpdate("GRANT CREATE SESSION TO " + username);
@@ -467,7 +452,7 @@ class PrivilegeIT extends IntegrationTestFixture {
     }
 
     private void dropDatabaseUser(String username) {
-        try (Statement statement = jdbcConnection().createStatement()) {
+        try (Statement statement = adminJdbcConnection().createStatement()) {
             statement.executeUpdate("DROP USER " + username + " CASCADE");
         } catch (SQLException ignored) {
             // Preserve the primary test failure; cleanup is best effort.
@@ -475,7 +460,7 @@ class PrivilegeIT extends IntegrationTestFixture {
     }
 
     private boolean hasExecuteGrant(String username, String packageName) throws SQLException {
-        try (PreparedStatement statement = jdbcConnection().prepareStatement(
+        try (PreparedStatement statement = adminJdbcConnection().prepareStatement(
                 "SELECT GRANTEE, OWNER, TABLE_NAME, PRIVILEGE "
                         + "FROM DBA_TAB_PRIVS "
                         + "WHERE GRANTEE = ? "
@@ -501,7 +486,7 @@ class PrivilegeIT extends IntegrationTestFixture {
         String sql = "SELECT COUNT(*) FROM DBA_HOST_ACES "
                 + "WHERE host = ? AND principal = ? AND privilege = ?"
                 + (lowerPort == null ? " AND lower_port IS NULL" : " AND lower_port = ?");
-        try (PreparedStatement statement = jdbcConnection().prepareStatement(sql)) {
+        try (PreparedStatement statement = adminJdbcConnection().prepareStatement(sql)) {
             statement.setString(1, host);
             statement.setString(2, principal);
             statement.setString(3, privilege);

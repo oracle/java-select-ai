@@ -66,7 +66,7 @@ public final class SyntheticDataBatchRequest {
     public String getObjectListJson() {
         try {
             ObjectMapper mapper = new ObjectMapper();
-            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
             return mapper.writeValueAsString(objectList);
         } catch (Exception e) {
             throw new IllegalStateException("Failed to serialize SyntheticDataBatchRequest.objectList", e);

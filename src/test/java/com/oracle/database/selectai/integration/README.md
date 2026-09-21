@@ -4,6 +4,10 @@ These tests execute the Java SDK against a live Oracle Database. They are under
 `src/test/java/com/oracle/database/selectai/integration` and use JUnit 5 with Maven
 Surefire.
 
+Integration tests run from the source repository against the current Maven
+project build. They are not a substitute for application-level verification of
+the published Maven Central artifact.
+
 ## Table of Contents
 
 - [Prerequisites](#prerequisites)
@@ -32,11 +36,12 @@ Surefire.
 - JDK 17 or newer
 - Maven 3.8 or newer
 - A test Oracle Database with `DBMS_CLOUD_AI` installed and accessible to the
-  configured user
+  configured feature-test user and admin-capable setup user
 - An Oracle wallet when using a wallet-based JDBC URL
 - The database privileges required by the selected suite. Some tests create
   tables, credentials, profiles, indexes, users, and database links, so use an
-  isolated test database rather than a production database.
+  isolated test database rather than a production database. Administration
+  suites use a separate admin-capable database connection.
 - Valid credentials for any external provider or object-storage location used
   by the selected tests
 
@@ -55,10 +60,12 @@ escaped newlines for that private-key variable.
 
 ## Required Configuration
 
-Every integration test needs database connectivity because the shared fixture
-initializes a live test schema before each integration class.
+Every integration test needs database connectivity. Only suites whose feature
+fixture explicitly calls `createFreshIntegrationSchema()` initialize the common
+live test schema; connection-only suites do not create the shared tables.
 
-Set these for any integration run:
+Set these for any integration run. These values identify the feature-test
+user that the fixture creates or reconfigures before running integration tests:
 
 ```bash
 export SELECT_AI_IT_DB_USER=<database user>
@@ -68,17 +75,36 @@ export SELECT_AI_IT_DB_PASSWORD=<database password>
 Then choose one connection style:
 
 ```bash
-# Walletless JDBC URL.
+# Walletless JDBC URL for the ordinary feature-test user.
 export SELECT_AI_IT_DB_URL=<walletless JDBC URL>
 ```
 
 or:
 
 ```bash
-# Wallet-derived JDBC URL.
+# Wallet-derived JDBC URL for the ordinary feature-test user.
 export SELECT_AI_IT_DB_NAME=<database/TNS service name>
 export SELECT_AI_IT_WALLET_LOCATION=<wallet directory>
 ```
+
+Table-backed suites and database-administration scenarios require a separate
+admin-capable database account. Their feature fixture creates and refreshes the
+common tables in the `ADMIN` schema through this account, and admin suites use
+it for database-wide operations. Connection-only, credential, provider,
+vector-index, summarize, and privilege tests do not require these admin
+variables unless a selected test documents an admin operation.
+
+```bash
+export SELECT_AI_IT_ADMIN_DB_USER=<admin-capable database user>
+export SELECT_AI_IT_ADMIN_DB_PASSWORD=<admin-capable database password>
+```
+
+The account does not have to be named `ADMIN`, but it must have the privileges
+required to create, drop, and populate the `ADMIN`-owned fixture tables. It
+must also have the required database capabilities for the selected admin
+scenarios, such as creating users, changing package privileges or network ACLs,
+and reading the catalog views used by the selected test. Feature operations
+continue to run with `SELECT_AI_IT_DB_USER`.
 
 For the full `ConnectionIT` suite, set both styles: a walletless
 `SELECT_AI_IT_DB_URL`, plus `SELECT_AI_IT_DB_NAME` and
@@ -126,6 +152,11 @@ Optional connection variables:
 export SELECT_AI_IT_WALLET_PASSWORD=<wallet password>
 ```
 
+The basic connection tests use the ordinary feature-test account. Tests
+`test10115RetrievesMaxOpenCursors`, `test10117CreatesUserAndTable`, and
+`test10123DataSourceCreatesUserAndTable` require the separate admin variables
+above.
+
 ### Profile, Generate, Translate, Conversation, Feedback
 
 Use the database variables plus the OCI profile fixture variables:
@@ -145,6 +176,10 @@ Example:
 mvn -Dtest='CreateProfileIT' test
 ```
 
+Profile, generate, feedback, synthetic-data, concurrency, and database-admin
+fixtures use the `ADMIN.PEOPLE` and `ADMIN.GYMNAST` tables. Translation,
+conversation, and chat-session fixtures do not initialize the shared tables.
+
 ### Credential
 
 Credential lifecycle tests need only the required database variables for the
@@ -157,8 +192,10 @@ export SELECT_AI_IT_CRED_USERNAME=<credential username>
 export SELECT_AI_IT_CRED_PASSWORD=<credential password>
 ```
 
-Local-user credential coverage creates a temporary database user with
-`SELECT_AI_IT_DB_PASSWORD`; no additional password variable is required.
+Local-user credential coverage uses the admin connection to create and remove a
+temporary database user, then performs the credential operation through that
+temporary local user. It therefore requires the admin variables above. The
+temporary user's password is derived from `SELECT_AI_IT_DB_PASSWORD`.
 
 ### Provider
 
@@ -209,6 +246,17 @@ Synthetic-data tests use the required database variables and the shared test
 schema created by the fixture. Add profile-backed OCI variables only for tests
 that generate through a profile-backed operation.
 
+The multi-object synthetic-data cases use the `ADMIN.PEOPLE` and
+`ADMIN.GYMNAST` tables. The configured feature-test user must have the
+required access to those objects.
+
+The two profile-attribute cases that use the `gymnasts` table default to the
+historical `ADMIN` owner and can be redirected independently:
+
+```bash
+export SELECT_AI_IT_PROFILE_ATTRIBUTES_OBJECT_OWNER=<object owner with gymnasts table>
+```
+
 ## Variable Catalog
 
 Use this catalog when a feature requires extra settings beyond its minimal
@@ -218,17 +266,31 @@ configuration.
 
 | Variable | Required value | Description |
 | --- | --- | --- |
-| `SELECT_AI_IT_DB_USER` | Yes | Database user used by the integration tests. |
-| `SELECT_AI_IT_DB_PASSWORD` | Yes | Password for the database user. |
+| `SELECT_AI_IT_DB_USER` | Yes | Feature-test user created or reconfigured by the fixture and used by feature operations; common tables are owned by `ADMIN`. |
+| `SELECT_AI_IT_DB_PASSWORD` | Yes | Password for the ordinary feature-test user. |
 | `SELECT_AI_IT_DB_URL` | One connection style | Explicit JDBC URL. For `ConnectionIT`'s no-wallet test, this must be a walletless URL and must not contain `TNS_ADMIN`. |
 | `SELECT_AI_IT_DB_NAME` | Required for wallet-specific tests | TNS service/database name. The wallet URL is built as `jdbc:oracle:thin:@<DB_NAME>_high?TNS_ADMIN=<WALLET_LOCATION>`. |
 | `SELECT_AI_IT_WALLET_LOCATION` | Required for wallet-specific tests | Directory containing the wallet. |
 | `SELECT_AI_IT_WALLET_PASSWORD` | Optional | Password for the password-protected-wallet scenario. |
 
-For the shared fixture, provide `SELECT_AI_IT_DB_URL`, or provide both
-`SELECT_AI_IT_DB_NAME` and `SELECT_AI_IT_WALLET_LOCATION`. To run all connection
-variants, provide all three URL-related values: a walletless `DB_URL`, plus
-`DB_NAME` and `WALLET_LOCATION`.
+For any suite that opens the shared connection, provide
+`SELECT_AI_IT_DB_URL`, or provide both `SELECT_AI_IT_DB_NAME` and
+`SELECT_AI_IT_WALLET_LOCATION`. To run all connection variants, provide all
+three URL-related values: a walletless `DB_URL`, plus `DB_NAME` and
+`WALLET_LOCATION`.
+
+### Administration database settings
+
+| Variable | Required value | Description |
+| --- | --- | --- |
+| `SELECT_AI_IT_ADMIN_DB_USER` | Required for table-backed suites and admin scenarios | Admin-capable setup/admin user that creates and refreshes the shared tables and runs admin-only scenarios. |
+| `SELECT_AI_IT_ADMIN_DB_PASSWORD` | Required with `SELECT_AI_IT_ADMIN_DB_USER` | Password for the admin-capable setup/admin user. |
+
+### Feature object-owner settings
+
+| Variable | Required value | Description |
+| --- | --- | --- |
+| `SELECT_AI_IT_PROFILE_ATTRIBUTES_OBJECT_OWNER` | Optional; defaults to `ADMIN` | Object owner for the profile-attribute `gymnasts` table cases. |
 
 ### OCI settings used by the default profile fixture
 
@@ -245,7 +307,7 @@ tests, as well as OCI provider and vector-index tests.
 | `SELECT_AI_IT_OCI_COMPARTMENT_ID` | Required when the profile provider is OCI | OCI compartment used by the profile and OCI provider tests. |
 | `SELECT_AI_IT_PROVIDER` | Optional; defaults to `oci` | Provider used by the shared profile fixture. |
 | `SELECT_AI_IT_REGION` | Optional | OCI region override. The OCI provider tests default to `us-chicago-1` when this is absent. |
-| `SELECT_AI_IT_OCI_MODEL` | Optional for the shared fixture; required by OCI provider tests | OCI GenAI model name. |
+| `SELECT_AI_IT_OCI_MODEL` | Optional for the shared profile; required by OCI provider tests | OCI GenAI model name. |
 | `SELECT_AI_IT_OCI_APIFORMAT` | Optional; OCI provider tests default to `GENERIC` | OCI API format. |
 | `SELECT_AI_IT_OCI_ENDPOINT_ID` | Only for the OCI endpoint profile test | OCI inference endpoint OCID. |
 | `SELECT_AI_IT_OCI_RUNTIMETYPE` | Only for the OCI endpoint profile test | Endpoint runtime type; defaults to `COHERE`. |
@@ -317,13 +379,13 @@ mvn -Dtest='**/*IT' test
 Run one suite:
 
 ```bash
-mvn -Dtest='CreateProfileIT' test
+mvn -Dtest=ProviderIT test
 ```
 
 Run one test method:
 
 ```bash
-mvn -Dtest='CreateProfileIT#test12000CreateBasicProfile' test
+mvn -Dtest='ProviderIT#test30000OpenAiProfileChatUsingDirectProvider' test
 ```
 
 ## Integration test number ranges
@@ -367,17 +429,57 @@ owning file.
 The exact method name depends on the test class. Maven writes individual
 results and diagnostic output under `target/surefire-reports`.
 
+The test-only SLF4J configuration sets the default log level to `off`, so
+normal integration-test output is quiet. To enable implementation and
+integration-test logs at `WARN`, run a selected integration test with:
+
+```bash
+mvn -Dorg.slf4j.simpleLogger.log.com.oracle.database.selectai.impl=warn \
+    -Dorg.slf4j.simpleLogger.log.com.oracle.database.selectai.integration=warn \
+    -Dtest='ProviderIT' test
+```
+
+Some tests intentionally exercise database error paths. When logs are enabled,
+the console may contain exception stack traces from the implementation's
+`ERROR` logs. These messages are expected only when the test itself passes and
+Maven reports `BUILD SUCCESS`. A `BUILD FAILURE` must be investigated using the
+first failing test and its report under `target/surefire-reports`.
+
 ## Test behavior and troubleshooting
 
+- Every concrete `*IT` class extends a feature-specific fixture. The feature
+  fixture owns its connection/resource lifecycle and explicitly opts into
+  shared table setup when required; `IntegrationTestFixture` only provides
+  reusable environment, logging, JDBC, and cleanup support.
+- Every integration test inherits a `protected` SLF4J logger named `logger`.
+  Add logging directly where needed:
+
+  ```java
+  logger.debug("Profile attributes: {}", profile.getProfileAttributes());
+  logger.info("Calling chat with prompt: {}", prompt);
+  logger.warn("Unexpected response: {}", response);
+  ```
+
+  Integration-test logs are disabled by default. To see debug logging for the
+  integration package, run Maven with:
+
+  ```bash
+  mvn -Dorg.slf4j.simpleLogger.log.com.oracle.database.selectai.integration=debug \
+      -Dtest='ProviderIT#test30000OpenAiProfileChatUsingDirectProvider' test
+  ```
+
+  Logs appear in the Maven console and under `target/surefire-reports`.
 - A plain `mvn test` uses Maven's normal test selection. Use
   `-Dtest='**/*IT'` to select the integration classes explicitly.
-- The shared fixture recreates the common integration schema before each
-  concrete integration class and removes managed profiles, credentials, and
-  indexes after each test. Do not run these tests against shared or production
-  data.
-- Missing feature-specific settings generally cause only that feature's test
-  to be skipped. Missing shared database settings prevent the suite from
-  starting.
+- Table-backed feature fixtures recreate the common `ADMIN`-owned integration
+  tables once before each table-backed integration class. Each feature fixture
+  explicitly creates only the SDK client/profile and other resources it needs,
+  then removes them after each test.
+- Missing feature-specific settings cause the affected test to be skipped and
+  are reported as warning messages such as
+  `SKIPPED ProviderIT#test30005...: missing SELECT_AI_IT_PROVIDER_AZURE_API_KEY`.
+  Missing baseline database settings skip the selected suite before it opens a
+  connection.
 - If the database reports authentication or wallet errors, verify the user,
   password, JDBC URL, wallet directory, and wallet password independently.
 - If a provider test is skipped, check the required provider variables in the

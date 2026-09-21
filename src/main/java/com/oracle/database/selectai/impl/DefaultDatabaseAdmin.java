@@ -35,7 +35,7 @@ import java.util.stream.IntStream;
  */
 final class DefaultDatabaseAdmin implements DatabaseAdmin {
     /** Logger for administrative database operations. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseAdmin.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDatabaseAdmin.class);
 
     /** Database connection wrapper, available only for DbConnectionConfig mode. */
     private final DbConnection dbConnection;

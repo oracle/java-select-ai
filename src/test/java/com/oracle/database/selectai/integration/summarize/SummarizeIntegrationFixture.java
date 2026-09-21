@@ -8,18 +8,32 @@
 package com.oracle.database.selectai.integration.summarize;
 
 import com.oracle.database.selectai.integration.IntegrationTestFixture;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 
 /**
  * Shared defaults for summarization integration tests.
  */
 abstract class SummarizeIntegrationFixture extends IntegrationTestFixture {
 
+    @BeforeEach
+    final void setUpConnection(TestInfo testInfo) throws Exception {
+        openIsolatedConnection(testInfo);
+    }
+
+    @AfterEach
+    final void tearDownConnection() throws Exception {
+        closeIsolatedConnection();
+    }
+
     protected static final String SUMMARY_PROMPT = "Summarize in two sentences";
-    protected static final String DEFAULT_CREDENTIAL_NAME = "";
 
     protected final String summarizeCredential() {
-        return envOrDefault(
-                "SELECT_AI_IT_SUMMARIZE_CREDENTIAL_NAME",
-                envOrDefault("SELECT_AI_IT_OCI_CREDENTIAL_NAME", DEFAULT_CREDENTIAL_NAME));
+        String configuredCredential = env("SELECT_AI_IT_SUMMARIZE_CREDENTIAL_NAME");
+
+        return configuredCredential != null
+                ? configuredCredential
+                : isolatedCredentialName();
     }
 }

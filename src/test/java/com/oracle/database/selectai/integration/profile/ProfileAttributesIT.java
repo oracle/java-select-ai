@@ -7,7 +7,6 @@
 package com.oracle.database.selectai.integration.profile;
 
 import com.oracle.database.selectai.Profile;
-import com.oracle.database.selectai.integration.IntegrationTestFixture;
 import com.oracle.database.selectai.model.Feedback;
 import com.oracle.database.selectai.model.GenerateAction;
 import com.oracle.database.selectai.model.ProfileAttributes;
@@ -32,7 +31,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 /**
  * Live profile lifecycle and attribute integration coverage.
  *
- * <p>The shared fixture supplies environment loading, JDBC
+ * <p>The common integration support supplies environment loading, JDBC
  * setup, isolated resource names, and cleanup. Tests exercise profile
  * creation, retrieval, attribute updates, status changes, and lifecycle
  * behavior.</p>

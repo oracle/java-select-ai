@@ -399,10 +399,10 @@ class DefaultDatabaseAdminTest {
         ArgumentCaptor<String> sqlCaptor = ArgumentCaptor.forClass(String.class);
         verify(connection).prepareCall(sqlCaptor.capture());
         assertThat(sqlCaptor.getValue())
-                .contains("DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE")
+                .contains("SYS.DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE")
                 .contains("lower_port => ?")
                 .contains("upper_port => ?")
-                .contains("xs$name_list(?, ?)");
+                .contains("SYS.XS$NAME_LIST(?, ?)");
         verify(statement).setString(1, "*.openai.azure.com");
         verify(statement).setInt(2, 443);
         verify(statement).setInt(3, 443);
@@ -449,8 +449,8 @@ class DefaultDatabaseAdminTest {
         ArgumentCaptor<String> sqlCaptor = ArgumentCaptor.forClass(String.class);
         verify(connection).prepareCall(sqlCaptor.capture());
         assertThat(sqlCaptor.getValue())
-                .contains("DBMS_NETWORK_ACL_ADMIN.REMOVE_HOST_ACE")
-                .contains("xs$name_list(?)");
+                .contains("SYS.DBMS_NETWORK_ACL_ADMIN.REMOVE_HOST_ACE")
+                .contains("SYS.XS$NAME_LIST(?)");
         verify(statement).setString(1, "*.openai.azure.com");
         verify(statement).setNull(2, Types.INTEGER);
         verify(statement).setNull(3, Types.INTEGER);
@@ -475,8 +475,8 @@ class DefaultDatabaseAdminTest {
         ArgumentCaptor<String> sqlCaptor = ArgumentCaptor.forClass(String.class);
         verify(connection).prepareCall(sqlCaptor.capture());
         assertThat(sqlCaptor.getValue())
-                .contains("DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE")
-                .contains("xs$name_list(?)");
+                .contains("SYS.DBMS_NETWORK_ACL_ADMIN.APPEND_HOST_ACE")
+                .contains("SYS.XS$NAME_LIST(?)");
         verify(statement).setString(1, "*.openai.azure.com");
         verify(statement).setNull(2, Types.INTEGER);
         verify(statement).setNull(3, Types.INTEGER);
@@ -501,8 +501,8 @@ class DefaultDatabaseAdminTest {
         ArgumentCaptor<String> sqlCaptor = ArgumentCaptor.forClass(String.class);
         verify(connection).prepareCall(sqlCaptor.capture());
         assertThat(sqlCaptor.getValue())
-                .contains("DBMS_NETWORK_ACL_ADMIN.REMOVE_HOST_ACE")
-                .contains("xs$name_list(?)");
+                .contains("SYS.DBMS_NETWORK_ACL_ADMIN.REMOVE_HOST_ACE")
+                .contains("SYS.XS$NAME_LIST(?)");
         verify(statement).setString(1, "*.openai.azure.com");
         verify(statement).setNull(2, Types.INTEGER);
         verify(statement).setNull(3, Types.INTEGER);

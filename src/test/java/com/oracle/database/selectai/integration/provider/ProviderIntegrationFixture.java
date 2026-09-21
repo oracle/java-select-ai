@@ -8,11 +8,24 @@
 package com.oracle.database.selectai.integration.provider;
 
 import com.oracle.database.selectai.integration.IntegrationTestFixture;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 
 /**
  * Provider-specific defaults shared by provider integration tests.
  */
 abstract class ProviderIntegrationFixture extends IntegrationTestFixture {
+
+    @BeforeEach
+    final void setUpConnection(TestInfo testInfo) throws Exception {
+        openIsolatedConnection(testInfo);
+    }
+
+    @AfterEach
+    final void tearDownConnection() throws Exception {
+        closeIsolatedConnection();
+    }
 
     protected static final String CHAT_PROMPT =
             "What is 8 + 9? Reply with only the integer.";

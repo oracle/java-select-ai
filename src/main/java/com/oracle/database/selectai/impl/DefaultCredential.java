@@ -28,25 +28,7 @@ import java.sql.SQLException;
  */
 final class DefaultCredential implements Credential {
     /** Logger for credential lifecycle operations. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(Credential.class);
-    /** PL/SQL block for username/password credential creation. */
-    private static final String CREATE_USERNAME_PASSWORD_CREDENTIAL_SQL =
-            "BEGIN " +
-                    "  DBMS_CLOUD.CREATE_CREDENTIAL(?, ?, ?); " +
-                    "END;";
-    /** PL/SQL block for OCI signing-key credential creation. */
-    private static final String CREATE_OCI_KEY_CREDENTIAL_SQL =
-            "BEGIN " +
-                    "  DBMS_CLOUD.CREATE_CREDENTIAL(?, ?, ?, ?, ?); " +
-                    "END;";
-    /** PL/SQL block for dropping a credential. */
-    private static final String DROP_CREDENTIAL_SQL =
-            "BEGIN " +
-                    "  DBMS_CLOUD.DROP_CREDENTIAL(?); " +
-                    "END;";
-    /** SQL used to detect whether a credential exists before forced drop. */
-    private static final String CREDENTIAL_EXISTS_SQL =
-            "SELECT COUNT(*) FROM USER_CREDENTIALS WHERE CREDENTIAL_NAME = UPPER(?)";
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultCredential.class);
     /** Provider used to obtain connections for credential operations. */
     private final ConnectionProvider connectionProvider;
     /** Credential payload bound to this instance. */
@@ -81,9 +63,7 @@ final class DefaultCredential implements Credential {
         }
         this.connectionProvider = connectionProvider;
         this.credentialConfig = credentialConfig;
-        if (LOGGER.isDebugEnabled()) {
-            LOGGER.debug("Credential created for name: {}", credentialConfig.getCredentialName());
-        }
+        LOGGER.debug("Credential object initialized");
     }
 
     /**
@@ -99,7 +79,7 @@ final class DefaultCredential implements Credential {
     @Override
     public boolean create() throws SelectAIException {
         validateCredentialConfigForCreate();
-        LOGGER.debug("Invoking DBMS_CLOUD.CREATE_CREDENTIAL for credential {}", getCredentialName());
+        LOGGER.debug("Invoking DBMS_CLOUD.CREATE_CREDENTIAL");
         try {
             if (usesUsernamePasswordCredential()) {
                 createUsernamePasswordCredential();
@@ -107,7 +87,7 @@ final class DefaultCredential implements Credential {
                 createOciKeyCredential();
             }
         } catch (SQLException e) {
-            LOGGER.error("DBMS_CLOUD.CREATE_CREDENTIAL failed for credential {}", getCredentialName(), e);
+            LOGGER.error("DBMS_CLOUD.CREATE_CREDENTIAL failed", e);
             throw new SelectAIException("Failed to execute DBMS_CLOUD.CREATE_CREDENTIAL", e,
                     e.getErrorCode(), e.getSQLState());
         }
@@ -137,23 +117,22 @@ final class DefaultCredential implements Credential {
      */
     @Override
     public boolean drop(boolean force) throws SelectAIException {
-        LOGGER.debug("Invoking DBMS_CLOUD.DROP_CREDENTIAL for credential {}", getCredentialName());
+        LOGGER.debug("Invoking DBMS_CLOUD.DROP_CREDENTIAL");
         try {
             connectionProvider.withConnection(connection -> {
                 if (force && !credentialExists(connection)) {
-                    LOGGER.info("Credential {} does not exist; forced drop treated as successful",
-                            getCredentialName());
+                    LOGGER.info("Credential does not exist; forced drop treated as successful");
                     return true;
                 }
-                try (CallableStatement stmt = connection.prepareCall(DROP_CREDENTIAL_SQL)) {
+                try (CallableStatement stmt = connection.prepareCall(Sql.DROP_CREDENTIAL.get())) {
                     stmt.setString(1, getCredentialName());
                     stmt.execute();
-                    LOGGER.info("Successfully dropped credential {}", getCredentialName());
+                    LOGGER.info("Successfully dropped credential");
                     return true;
                 }
             });
         } catch (SQLException e) {
-            LOGGER.error("DBMS_CLOUD.DROP_CREDENTIAL failed for credential {}", getCredentialName(), e);
+            LOGGER.error("DBMS_CLOUD.DROP_CREDENTIAL failed", e);
             throw new SelectAIException("Failed to execute DBMS_CLOUD.DROP_CREDENTIAL", e,
                     e.getErrorCode(), e.getSQLState());
         }
@@ -166,12 +145,12 @@ final class DefaultCredential implements Credential {
 
     private void createUsernamePasswordCredential() throws SQLException, SelectAIException {
         connectionProvider.withConnection(connection -> {
-            try (CallableStatement stmt = connection.prepareCall(CREATE_USERNAME_PASSWORD_CREDENTIAL_SQL)) {
+            try (CallableStatement stmt = connection.prepareCall(Sql.CREATE_USERNAME_PASSWORD_CREDENTIAL.get())) {
                 stmt.setString(1, getCredentialName());
                 stmt.setString(2, credentialConfig.getUsername());
                 stmt.setString(3, credentialConfig.getPassword());
                 stmt.execute();
-                LOGGER.info("Successfully created username/password credential {}", getCredentialName());
+                LOGGER.info("Successfully created username/password credential");
                 return true;
             }
         });
@@ -179,21 +158,21 @@ final class DefaultCredential implements Credential {
 
     private void createOciKeyCredential() throws SQLException, SelectAIException {
         connectionProvider.withConnection(connection -> {
-            try (CallableStatement stmt = connection.prepareCall(CREATE_OCI_KEY_CREDENTIAL_SQL)) {
+            try (CallableStatement stmt = connection.prepareCall(Sql.CREATE_OCI_KEY_CREDENTIAL.get())) {
                 stmt.setString(1, getCredentialName());
                 stmt.setString(2, credentialConfig.getUserOcid());
                 stmt.setString(3, credentialConfig.getTenancyOcid());
                 stmt.setString(4, credentialConfig.getPrivateKey());
                 stmt.setString(5, credentialConfig.getFingerprint());
                 stmt.execute();
-                LOGGER.info("Successfully created OCI signing-key credential {}", getCredentialName());
+                LOGGER.info("Successfully created OCI signing-key credential");
                 return true;
             }
         });
     }
 
     private boolean credentialExists(Connection connection) throws SQLException {
-        try (PreparedStatement stmt = connection.prepareStatement(CREDENTIAL_EXISTS_SQL)) {
+        try (PreparedStatement stmt = connection.prepareStatement(Sql.CREDENTIAL_EXISTS.get())) {
             stmt.setString(1, getCredentialName());
             try (ResultSet resultSet = stmt.executeQuery()) {
                 return resultSet.next() && resultSet.getInt(1) > 0;

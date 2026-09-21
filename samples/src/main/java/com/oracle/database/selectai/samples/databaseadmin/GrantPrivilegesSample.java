@@ -52,8 +52,8 @@ import java.util.List;
  *
  * <p>Compile and run this sample:</p>
  * <pre>{@code
- * javac --release 17 -cp "target/select-ai-java-1.0.0.jar:target/dependency/*" -d samples/out samples/src/main/java/com/oracle/database/selectai/samples/databaseadmin/GrantPrivilegesSample.java
- * java -cp "samples/out:target/select-ai-java-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.databaseadmin.GrantPrivilegesSample
+ * javac --release 17 -cp "target/select-ai-1.0.0.jar:target/dependency/*" -d samples/out samples/src/main/java/com/oracle/database/selectai/samples/databaseadmin/GrantPrivilegesSample.java
+ * java -cp "samples/out:target/select-ai-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.databaseadmin.GrantPrivilegesSample
  * }</pre>
  *
  * <p>This sample prints normal result data to standard output so it is easy to

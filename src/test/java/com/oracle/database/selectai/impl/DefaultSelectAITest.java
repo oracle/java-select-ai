@@ -409,7 +409,7 @@ class DefaultSelectAITest {
         ResultSet listResultSet = mock(ResultSet.class);
         ResultSet attributesResultSet = mock(ResultSet.class);
         String profileAttributesSql = "SELECT attribute_name, attribute_value " +
-                "FROM USER_CLOUD_AI_PROFILE_ATTRIBUTES " +
+                "FROM C##CLOUD$SERVICE.USER_CLOUD_AI_PROFILE_ATTRIBUTES " +
                 "WHERE profile_name = ?";
         when(dbConnection.getConnection()).thenReturn(connection);
         when(connection.prepareStatement(Sql.LIST_PROFILES_BY_PATTERN.get())).thenReturn(listStatement);

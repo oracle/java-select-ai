@@ -12,6 +12,8 @@ import com.oracle.database.selectai.model.ConversationAttributes;
 import com.oracle.database.selectai.model.ConversationPrompt;
 import com.oracle.database.selectai.model.SelectAIException;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.Test;
 
 import java.sql.CallableStatement;
@@ -35,23 +37,32 @@ abstract class ConversationIntegrationFixture extends IntegrationTestFixture {
 
     protected final List<Conversation> managedConversations = new ArrayList<>();
 
+    @BeforeEach
+    final void setUpConnection(TestInfo testInfo) throws Exception {
+        openIsolatedConnection(testInfo);
+    }
+
     @Override
     protected String profileObjectList() {
-        return objectListFor("people", "gymnast");
+        return null;
     }
 
     @AfterEach
-    void dropManagedConversations() {
-        for (Conversation conversation : managedConversations) {
-            try {
-                if (conversation.getConversationId() != null) {
-                    conversation.drop(true);
+    void dropManagedConversations() throws Exception {
+        try {
+            for (Conversation conversation : managedConversations) {
+                try {
+                    if (conversation.getConversationId() != null) {
+                        conversation.drop(true);
+                    }
+                } catch (Exception ignored) {
+                    // Preserve the primary test failure; cleanup is best effort.
                 }
-            } catch (Exception ignored) {
-                // Preserve the primary test failure; cleanup is best effort.
             }
+            managedConversations.clear();
+        } finally {
+            closeIsolatedConnection();
         }
-        managedConversations.clear();
     }
 
 

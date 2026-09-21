@@ -51,7 +51,7 @@ import java.util.List;
  */
 final class DefaultSelectAI implements SelectAI {
     /** Logger for top-level Select AI operations. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(SelectAI.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultSelectAI.class);
 
     /** Connection configuration supplied by the caller. */
     private final DbConnectionConfig dbConnectionConfig;

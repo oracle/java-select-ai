@@ -49,14 +49,14 @@ import java.sql.SQLException;
  *
  * <p>Compile this sample:</p>
  * <pre>{@code
- * javac --release 17 -cp "target/select-ai-java-1.0.0.jar:target/dependency/*" \
+ * javac --release 17 -cp "target/select-ai-1.0.0.jar:target/dependency/*" \
  *   -d samples/out \
  *   samples/src/main/java/com/oracle/database/selectai/samples/selectai/CreateSelectAIDataSourceWithOptionsSample.java
  * }</pre>
  *
  * <p>Run this sample:</p>
  * <pre>{@code
- * java -cp "samples/out:target/select-ai-java-1.0.0.jar:target/dependency/*" \
+ * java -cp "samples/out:target/select-ai-1.0.0.jar:target/dependency/*" \
  *   com.oracle.database.selectai.samples.selectai.CreateSelectAIDataSourceWithOptionsSample
  * }</pre>
  *

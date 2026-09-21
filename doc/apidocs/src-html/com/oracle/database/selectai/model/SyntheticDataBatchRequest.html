@@ -79,7 +79,7 @@
 <span class="source-line-no">066</span><span id="line-66">    public String getObjectListJson() {</span>
 <span class="source-line-no">067</span><span id="line-67">        try {</span>
 <span class="source-line-no">068</span><span id="line-68">            ObjectMapper mapper = new ObjectMapper();</span>
-<span class="source-line-no">069</span><span id="line-69">            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);</span>
+<span class="source-line-no">069</span><span id="line-69">            mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);</span>
 <span class="source-line-no">070</span><span id="line-70">            return mapper.writeValueAsString(objectList);</span>
 <span class="source-line-no">071</span><span id="line-71">        } catch (Exception e) {</span>
 <span class="source-line-no">072</span><span id="line-72">            throw new IllegalStateException("Failed to serialize SyntheticDataBatchRequest.objectList", e);</span>

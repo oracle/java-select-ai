@@ -14,6 +14,10 @@ import com.oracle.database.selectai.model.ProfileAttributes;
 import com.oracle.database.selectai.model.ProfileStatus;
 import com.oracle.database.selectai.model.SelectAIException;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -32,12 +36,27 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 /**
  * Live profile lifecycle and attribute integration coverage.
  *
- * <p>The shared fixture supplies environment loading, JDBC
+ * <p>The common integration support supplies environment loading, JDBC
  * setup, isolated resource names, and cleanup. Tests exercise profile
  * creation, retrieval, attribute updates, status changes, and lifecycle
  * behavior.</p>
  */
 abstract class ProfileIntegrationFixture extends IntegrationTestFixture {
+
+    @BeforeAll
+    static void createProfileSchema(TestInfo testInfo) throws Exception {
+        createFreshIntegrationSchema(testClassName(testInfo));
+    }
+
+    @BeforeEach
+    final void setUpConnection(TestInfo testInfo) throws Exception {
+        openIsolatedConnection(testInfo);
+    }
+
+    @AfterEach
+    final void tearDownConnection() throws Exception {
+        closeIsolatedConnection();
+    }
 
     protected static final String MODEL_UPDATE = "meta.llama-3.1-70b-instruct";
     protected static final String MULTI_ATTRIBUTE_MODEL =
@@ -46,7 +65,7 @@ abstract class ProfileIntegrationFixture extends IntegrationTestFixture {
 
     @Override
     protected String profileObjectList() {
-        return objectListForOwner("SH");
+        return objectListForOwner("ADMIN", "people", "gymnast");
     }
 
 

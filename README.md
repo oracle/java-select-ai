@@ -56,17 +56,32 @@ building the project.
 
 ## Installation
 
-The SDK is currently distributed as a source-based release. It is not yet
-published to Maven Central, an Oracle Maven repository, or a GitHub package or
-release asset. The source repository is [Oracle Java Select AI on GitHub](https://github.com/oracle/java-select-ai).
+Select AI for Java version `1.0.0` is published to
+[Maven Central](https://central.sonatype.com/artifact/com.oracle.database.selectai/select-ai/1.0.0).
 
-There is currently no approved downloadable release JAR, SHA-256 checksum
-file, or public/internal artifact repository location for this release. The
-JAR produced by the build is a local build artifact. When an approved binary
-distribution is available, this section will provide its release asset,
-checksum file, POM, sources, and Javadoc locations.
+Add the SDK to a Maven application with:
 
-Build and install the SDK locally from the repository root:
+```xml
+<dependency>
+    <groupId>com.oracle.database.selectai</groupId>
+    <artifactId>select-ai</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+The published JAR, POM, sources, Javadoc, signatures, and repository checksums
+are available from the
+[Maven Central artifact page](https://central.sonatype.com/artifact/com.oracle.database.selectai/select-ai/1.0.0).
+
+Applications should use the published Maven dependency so Maven resolves the
+SDK's transitive runtime dependencies. The SDK provides the SLF4J API but does
+not include an SLF4J logging provider; configure the logging provider required
+by the application.
+
+### Build from source
+
+Build and install the SDK locally from the repository root when contributing to
+the project, running source-based samples, or verifying a local change:
 
 ```bash
 mvn clean install
@@ -75,22 +90,11 @@ mvn clean install
 The local Maven coordinates are:
 
 ```text
-com.oracle.database.selectai:select-ai-java:1.0.0
+com.oracle.database.selectai:select-ai:1.0.0
 ```
 
-After the local install, an application can declare:
-
-```xml
-<dependency>
-    <groupId>com.oracle.database.selectai</groupId>
-    <artifactId>select-ai-java</artifactId>
-    <version>1.0.0</version>
-</dependency>
-```
-
-The dependency declaration resolves only after the artifact has been installed
-locally or made available through an application-managed repository. The SDK
-JAR is also available at `target/select-ai-java-1.0.0.jar` after the build.
+The locally built JAR is available at `target/select-ai-1.0.0.jar` after the
+build.
 
 ### Direct JAR usage and runtime dependencies
 
@@ -118,14 +122,14 @@ The SDK runtime classpath includes:
 Use the SDK JAR and the copied dependencies on the application classpath:
 
 ```bash
-java -cp "target/select-ai-java-1.0.0.jar:target/dependency/*" \
+java -cp "target/select-ai-1.0.0.jar:target/dependency/*" \
     com.example.Application
 ```
 
 On Windows PowerShell, use `;` instead of `:` in the classpath:
 
 ```powershell
-java -cp "target/select-ai-java-1.0.0.jar;target/dependency/*" `
+java -cp "target/select-ai-1.0.0.jar;target/dependency/*" `
     com.example.Application
 ```
 
@@ -149,21 +153,23 @@ mvn -Psamples `
     dependency:copy-dependencies
 ```
 
-For local artifact verification only, calculate a SHA-256 checksum after
-building. Use the command available on your platform:
+For a published artifact, use the Maven Central artifact page to review the
+available repository checksums and signatures. For local artifact verification
+only, calculate a SHA-256 checksum after building. Use the command available
+on your platform:
 
 ```bash
 # macOS
-shasum -a 256 target/select-ai-java-1.0.0.jar
+shasum -a 256 target/select-ai-1.0.0.jar
 
 # Linux and systems with GNU Coreutils
-sha256sum target/select-ai-java-1.0.0.jar
+sha256sum target/select-ai-1.0.0.jar
 ```
 
 On Windows PowerShell:
 
 ```powershell
-Get-FileHash target/select-ai-java-1.0.0.jar -Algorithm SHA256
+Get-FileHash target/select-ai-1.0.0.jar -Algorithm SHA256
 ```
 
 ## Prerequisites and database setup
@@ -336,9 +342,9 @@ mvn -Psamples \
     dependency:copy-dependencies
 
 mkdir -p quickstart-out
-javac --release 17 -cp "target/select-ai-java-1.0.0.jar:target/dependency/*" \
+javac --release 17 -cp "target/select-ai-1.0.0.jar:target/dependency/*" \
     -d quickstart-out QuickStart.java
-java -cp "quickstart-out:target/select-ai-java-1.0.0.jar:target/dependency/*" \
+java -cp "quickstart-out:target/select-ai-1.0.0.jar:target/dependency/*" \
     QuickStart
 ```
 
@@ -349,9 +355,9 @@ mvn clean install
 mvn -Psamples -DincludeScope=runtime -DoutputDirectory=target/dependency dependency:copy-dependencies
 
 New-Item -ItemType Directory -Force quickstart-out | Out-Null
-javac --release 17 -cp "target/select-ai-java-1.0.0.jar;target/dependency/*" `
+javac --release 17 -cp "target/select-ai-1.0.0.jar;target/dependency/*" `
     -d quickstart-out QuickStart.java
-java -cp "quickstart-out;target/select-ai-java-1.0.0.jar;target/dependency/*" `
+java -cp "quickstart-out;target/select-ai-1.0.0.jar;target/dependency/*" `
     QuickStart
 ```
 
@@ -564,7 +570,7 @@ Build the SDK, copy sample runtime dependencies, and compile the samples:
 ```bash
 mvn clean install
 mvn -Psamples -DincludeScope=runtime -DoutputDirectory=target/dependency dependency:copy-dependencies
-javac --release 17 -cp "target/select-ai-java-1.0.0.jar:target/dependency/*" \
+javac --release 17 -cp "target/select-ai-1.0.0.jar:target/dependency/*" \
   -d samples/out $(find samples/src/main/java -name "*.java")
 ```
 
@@ -577,7 +583,7 @@ Set the common variables and run a sample:
 export SELECTAI_DB_USER="<database-user>"
 export SELECTAI_DB_PASSWORD="<database-password>"
 export SELECTAI_JDBC_URL="jdbc:oracle:thin:@<service_name>?TNS_ADMIN=<wallet-directory>"
-java -cp "samples/out:target/select-ai-java-1.0.0.jar:target/dependency/*" \
+java -cp "samples/out:target/select-ai-1.0.0.jar:target/dependency/*" \
   com.oracle.database.selectai.samples.profile.ListProfilesSample
 ```
 
@@ -590,14 +596,14 @@ mvn -Psamples -DincludeScope=runtime -DoutputDirectory=target/dependency depende
 
 $sampleSources = Get-ChildItem samples/src/main/java -Recurse -Filter *.java |
     ForEach-Object { $_.FullName }
-javac --release 17 -cp "target/select-ai-java-1.0.0.jar;target/dependency/*" `
+javac --release 17 -cp "target/select-ai-1.0.0.jar;target/dependency/*" `
     -d samples/out $sampleSources
 
 $env:SELECTAI_DB_USER = "<database-user>"
 $env:SELECTAI_DB_PASSWORD = "<database-password>"
 $env:SELECTAI_JDBC_URL = "jdbc:oracle:thin:@<service_name>?TNS_ADMIN=<wallet-directory>"
 
-java -cp "samples/out;target/select-ai-java-1.0.0.jar;target/dependency/*" `
+java -cp "samples/out;target/select-ai-1.0.0.jar;target/dependency/*" `
     com.oracle.database.selectai.samples.profile.ListProfilesSample
 ```
 
@@ -619,6 +625,20 @@ state-changing samples.
 For non-security issues, use GitHub Issues with the SDK version, database
 version, relevant operation, sanitized error details, and reproducible steps.
 Do not include passwords, private keys, access tokens, or customer data.
+
+The test-only SLF4J configuration keeps normal Maven test output quiet. Some
+tests intentionally exercise database and validation failure paths; when logs
+are enabled, their expected `ERROR` messages may include exception stack
+traces. A final `BUILD SUCCESS` means the tests passed. To enable Java
+implementation logs at `WARN` during a full build, run:
+
+```bash
+mvn -Dorg.slf4j.simpleLogger.log.com.oracle.database.selectai.impl=warn clean install
+```
+
+See [`DEVELOPMENT.md`](DEVELOPMENT.md) for selected unit-test and
+integration-test logging commands and guidance for distinguishing expected
+diagnostics from actual test failures.
 
 ## Development
 

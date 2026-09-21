@@ -8,15 +8,12 @@
 package com.oracle.database.selectai.integration.databaseadmin;
 
 import com.oracle.database.selectai.DatabaseAdmin;
-import com.oracle.database.selectai.integration.IntegrationTestFixture;
 import com.oracle.database.selectai.model.SelectAIException;
 import com.oracle.database.selectai.model.SelectAIOptions;
 import com.oracle.database.selectai.model.SyntheticDataBatchRequest;
 import com.oracle.database.selectai.model.SyntheticDataObjectList;
 import com.oracle.database.selectai.model.SyntheticDataParams;
 import oracle.jdbc.pool.OracleDataSource;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
@@ -28,33 +25,12 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 /**
  * Live integration coverage for the privileged DatabaseAdmin API.
  *
- * <p>The standard SelectAI client is used for ordinary application operations;
- * this suite uses a separate DatabaseAdmin client for database-wide data-access
- * procedures and verifies the public AutoCloseable lifecycle.</p>
+ * <p>The standard SelectAI client runs as the configured feature-test user, while
+ * the common schema tables are owned by {@code ADMIN}. This suite uses a
+ * separate admin-capable connection for database-wide data-access procedures
+ * and verifies the public AutoCloseable lifecycle.</p>
  */
-class DatabaseAdminIT extends IntegrationTestFixture {
-
-    private DatabaseAdmin databaseAdmin;
-
-    @Override
-    protected String profileObjectList() {
-        return objectListFor("people", "gymnast");
-    }
-
-    @BeforeEach
-    @Override
-    protected void createIsolatedProfile() throws Exception {
-        super.createIsolatedProfile();
-        databaseAdmin = DatabaseAdmin.create(dbConfig);
-    }
-
-    @AfterEach
-    void closeDatabaseAdmin() throws SelectAIException {
-        if (databaseAdmin != null) {
-            databaseAdmin.close();
-            databaseAdmin = null;
-        }
-    }
+class DatabaseAdminIT extends DatabaseAdminIntegrationFixture {
 
     /**
      * Test: Calls the database-wide {@code enableDataAccess()} procedure, calls
@@ -101,7 +77,7 @@ class DatabaseAdminIT extends IntegrationTestFixture {
 
         assertThat(databaseAdmin.enableDataAccess()).isTrue();
         try {
-            // The profile was created by the shared fixture with the same
+            // The profile was created by this suite with the same
             // people/gymnast object list used by this request.
             assertThat(profile.narrate("How many gymnasts are in the database?"))
                     .isNotBlank();
@@ -189,7 +165,7 @@ class DatabaseAdminIT extends IntegrationTestFixture {
      */
     @Test
     void test13004DatabaseAdminSupportsTryWithResources() throws Exception {
-        try (DatabaseAdmin admin = DatabaseAdmin.create(dbConfig)) {
+        try (DatabaseAdmin admin = DatabaseAdmin.create(adminDbConfig())) {
             assertThat(admin).isNotNull();
         }
     }
@@ -208,16 +184,17 @@ class DatabaseAdminIT extends IntegrationTestFixture {
                 .queryTimeoutSeconds(30)
                 .build();
 
-        try (DatabaseAdmin admin = DatabaseAdmin.create(dbConfig, options)) {
+        try (DatabaseAdmin admin = DatabaseAdmin.create(adminDbConfig(), options)) {
             assertThat(admin.enableDataAccess()).isTrue();
         }
     }
 
     private OracleDataSource oracleDataSource() throws SQLException {
+        var adminConfig = adminDbConfig();
         OracleDataSource dataSource = new OracleDataSource();
-        dataSource.setURL(dbConfig.getJdbcUrl());
-        dataSource.setUser(dbConfig.getDbUser());
-        dataSource.setPassword(dbConfig.getDbPassword());
+        dataSource.setURL(adminConfig.getJdbcUrl());
+        dataSource.setUser(adminConfig.getDbUser());
+        dataSource.setPassword(adminConfig.getDbPassword());
         return dataSource;
     }
 

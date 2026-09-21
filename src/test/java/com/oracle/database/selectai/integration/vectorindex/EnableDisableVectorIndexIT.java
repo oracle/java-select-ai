@@ -21,7 +21,6 @@ import com.oracle.database.selectai.Credential;
 import com.oracle.database.selectai.Profile;
 import com.oracle.database.selectai.SelectAI;
 import com.oracle.database.selectai.VectorIndex;
-import com.oracle.database.selectai.integration.IntegrationTestFixture;
 import com.oracle.database.selectai.model.CredentialConfig;
 import com.oracle.database.selectai.model.SelectAIException;
 import com.oracle.database.selectai.model.SelectAIOptions;

@@ -59,7 +59,7 @@ class DefaultProfileTest {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final String PROFILE_ATTRIBUTES_SQL =
             "SELECT attribute_name, attribute_value "
-                    + "FROM USER_CLOUD_AI_PROFILE_ATTRIBUTES "
+                    + "FROM C##CLOUD$SERVICE.USER_CLOUD_AI_PROFILE_ATTRIBUTES "
                     + "WHERE profile_name = ?";
 
     @Mock
@@ -533,6 +533,28 @@ void createWrapsSqlFailuresWithDatabaseDetails() throws Exception {
                     assertThat(selectAIException.getErrorCode()).isEqualTo(942);
                     assertThat(selectAIException.getSqlState()).isEqualTo("42000");
                 });
+    }
+
+    /**
+     * Test: Verifies generate failure diagnostics do not expose the raw prompt.
+     * Expected: The prompt marker is absent from the SDK exception text and captured logs.
+     */
+    @Test
+    void generateFailureDoesNotExposePromptInExceptionOrLogs() throws Exception {
+        DefaultProfile profile = loadedProfile();
+        String sensitivePrompt = "SEC_PROMPT_MARKER generate should not be logged";
+        SQLException sqlException = new SQLException("database rejected request", "42000", 942);
+        when(connection.prepareCall(Sql.GENERATE.get())).thenReturn(callableStatement);
+        when(callableStatement.execute()).thenThrow(sqlException);
+
+        LogCapture.CapturedFailure failure = LogCapture.captureFailure(
+                () -> profile.generate(sensitivePrompt, GenerateAction.chat));
+
+        assertThat(failure.throwable())
+                .isInstanceOf(SelectAIException.class)
+                .hasMessageContaining("GENERATE")
+                .hasCause(sqlException);
+        LogCapture.assertFailureDoesNotExpose(failure, sensitivePrompt, "SEC_PROMPT_MARKER");
     }
 
     /**
@@ -1487,6 +1509,38 @@ void createWrapsSqlFailuresWithDatabaseDetails() throws Exception {
     }
 
     /**
+     * Test: Verifies synthetic-data failure diagnostics do not expose user prompts or params.
+     * Expected: The sensitive prompt marker is absent from the SDK exception text and captured logs.
+     */
+    @Test
+    void syntheticDataFailureDoesNotExposeUserPromptOrParamsInExceptionOrLogs() throws Exception {
+        DefaultProfile profile = loadedProfile();
+        String sensitivePrompt = "SEC_SYNTH_MARKER synthetic prompt should not be logged";
+        SQLException sqlException = new SQLException("database rejected request", "42000", 942);
+        SyntheticDataSingleRequest request = SyntheticDataSingleRequest.builder("EMPLOYEES")
+                .ownerName("HR")
+                .recordCount(10)
+                .userPrompt(sensitivePrompt)
+                .params(SyntheticDataParams.builder()
+                        .sampleRows(1)
+                        .priority(SyntheticDataParams.Priority.HIGH)
+                        .build())
+                .build();
+        when(connection.prepareCall(Sql.GENERATE_SYNTHETIC_DATA_SINGLE.get()))
+                .thenReturn(callableStatement);
+        when(callableStatement.execute()).thenThrow(sqlException);
+
+        LogCapture.CapturedFailure failure = LogCapture.captureFailure(
+                () -> profile.generateSyntheticData(request));
+
+        assertThat(failure.throwable())
+                .isInstanceOf(SelectAIException.class)
+                .hasMessageContaining("GENERATE_SYNTHETIC_DATA (single)")
+                .hasCause(sqlException);
+        LogCapture.assertFailureDoesNotExpose(failure, sensitivePrompt, "SEC_SYNTH_MARKER");
+    }
+
+    /**
      * Test: Verifies batch synthetic data wraps closed connection failure.
      * Expected: A SelectAIException for multi synthetic-data generation is thrown with the
      * closed-connection SQLException, error code 17002, and SQL state 08003.
@@ -1830,6 +1884,51 @@ void createWrapsSqlFailuresWithDatabaseDetails() throws Exception {
     }
 
     /**
+     * Test: Verifies summarize failure diagnostics do not expose content, location, credential,
+     * or prompt text.
+     * Expected: Sensitive markers are absent from the SDK exception text and captured logs.
+     */
+    @Test
+    void summarizeFailureDoesNotExposeContentLocationCredentialOrPromptInExceptionOrLogs()
+            throws Exception {
+        DefaultProfile profile = loadedProfile();
+        String sensitiveContent = "SEC_SUMMARY_CONTENT_MARKER document should not be logged";
+        String sensitivePrompt = "SEC_SUMMARY_PROMPT_MARKER instructions should not be logged";
+        String sensitiveLocation = "https://object.example/SEC_SUMMARY_LOCATION_MARKER";
+        String sensitiveCredential = "SEC_SUMMARY_CREDENTIAL_MARKER";
+        SQLException inlineException = new SQLException("database rejected request", "42000", 942);
+        SQLException locationException = new SQLException("database rejected request", "42000", 942);
+        CallableStatement inlineStatement = mock(CallableStatement.class);
+        CallableStatement locationStatement = mock(CallableStatement.class);
+        when(connection.prepareCall(Sql.SUMMARIZE.get())).thenReturn(inlineStatement);
+        when(connection.prepareCall(Sql.SUMMARIZE_LOCATION.get())).thenReturn(locationStatement);
+        when(inlineStatement.execute()).thenThrow(inlineException);
+        when(locationStatement.execute()).thenThrow(locationException);
+
+        LogCapture.CapturedFailure inlineFailure = LogCapture.captureFailure(
+                () -> profile.summarize(sensitiveContent, null, null, sensitivePrompt, null));
+        LogCapture.CapturedFailure locationFailure = LogCapture.captureFailure(
+                () -> profile.summarize(null, sensitiveCredential, sensitiveLocation,
+                        sensitivePrompt, null));
+
+        assertThat(inlineFailure.throwable())
+                .isInstanceOf(SelectAIException.class)
+                .hasMessageContaining("SUMMARIZE")
+                .hasCause(inlineException);
+        assertThat(locationFailure.throwable())
+                .isInstanceOf(SelectAIException.class)
+                .hasMessageContaining("SUMMARIZE")
+                .hasCause(locationException);
+        LogCapture.assertFailureDoesNotExpose(inlineFailure,
+                sensitiveContent, sensitivePrompt, "SEC_SUMMARY_CONTENT_MARKER",
+                "SEC_SUMMARY_PROMPT_MARKER");
+        LogCapture.assertFailureDoesNotExpose(locationFailure,
+                sensitiveLocation, sensitiveCredential, sensitivePrompt,
+                "SEC_SUMMARY_LOCATION_MARKER", "SEC_SUMMARY_CREDENTIAL_MARKER",
+                "SEC_SUMMARY_PROMPT_MARKER");
+    }
+
+    /**
      * Test: Verifies summarize returns null when database returns null clob.
      * Expected: The summary is null and the SUMMARIZE callable statement is executed.
      */
@@ -2028,6 +2127,28 @@ void createWrapsSqlFailuresWithDatabaseDetails() throws Exception {
                 .isInstanceOf(SelectAIException.class)
                 .hasMessageContaining("TRANSLATE")
                 .hasCause(sqlException);
+    }
+
+    /**
+     * Test: Verifies translate failure diagnostics do not expose source text.
+     * Expected: The source-text marker is absent from the SDK exception text and captured logs.
+     */
+    @Test
+    void translateFailureDoesNotExposeSourceTextInExceptionOrLogs() throws Exception {
+        DefaultProfile profile = loadedProfile();
+        String sensitiveText = "SEC_TRANSLATE_MARKER source text should not be logged";
+        SQLException sqlException = new SQLException("database rejected request", "42000", 942);
+        when(connection.prepareCall(Sql.TRANSLATE.get())).thenReturn(callableStatement);
+        when(callableStatement.execute()).thenThrow(sqlException);
+
+        LogCapture.CapturedFailure failure = LogCapture.captureFailure(
+                () -> profile.translate(sensitiveText, "en", "de"));
+
+        assertThat(failure.throwable())
+                .isInstanceOf(SelectAIException.class)
+                .hasMessageContaining("TRANSLATE")
+                .hasCause(sqlException);
+        LogCapture.assertFailureDoesNotExpose(failure, sensitiveText, "SEC_TRANSLATE_MARKER");
     }
 
     private DefaultProfile loadedProfile() throws Exception {

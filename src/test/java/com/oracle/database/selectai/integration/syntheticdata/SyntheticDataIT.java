@@ -59,6 +59,7 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
                 .contains("\"comments\":true");
         SyntheticDataSingleRequest request = SyntheticDataSingleRequest.builder(SINGLE_OBJECT_NAME)
                 .recordCount(5)
+                .ownerName(BATCH_OBJECT_OWNER)
                 .userPrompt("age must be greater than 20")
                 .params(params)
                 .build();
@@ -78,6 +79,7 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
     void test18001GeneratesWithMinimumFields() throws Exception {
         SyntheticDataSingleRequest request = SyntheticDataSingleRequest.builder(SINGLE_OBJECT_NAME)
                 .recordCount(1)
+                .ownerName(BATCH_OBJECT_OWNER)
                 .build();
 
         assertRowsGenerated(request, 1);
@@ -99,6 +101,7 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
                 .build();
         SyntheticDataSingleRequest request = SyntheticDataSingleRequest.builder(SINGLE_OBJECT_NAME)
                 .recordCount(1)
+                .ownerName(BATCH_OBJECT_OWNER)
                 .params(params)
                 .build();
 
@@ -122,6 +125,7 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
         SyntheticDataSingleRequest request = SyntheticDataSingleRequest.builder(SINGLE_OBJECT_NAME)
                 .recordCount(1)
                 .params(params)
+                .ownerName(BATCH_OBJECT_OWNER)
                 .build();
 
         assertRowsGenerated(request, 1);
@@ -143,6 +147,7 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
         SyntheticDataSingleRequest request = SyntheticDataSingleRequest.builder(SINGLE_OBJECT_NAME)
                 .recordCount(1)
                 .params(params)
+                .ownerName(BATCH_OBJECT_OWNER)
                 .build();
 
         assertRowsGenerated(request, 1);
@@ -188,21 +193,21 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
         SyntheticDataBatchRequest.Builder request = SyntheticDataBatchRequest.builder()
                 .params(SyntheticDataParams.builder()
                         .sampleRows(1)
-                        .priority("HIGH")
+                        .priority("LOW")
                         .build());
         request.addObject(SyntheticDataObjectList.builder(BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[0])
-                .recordCount(2)
+                .recordCount(3)
                 .userPrompt("Use realistic person names")
                 .build());
         request.addObject(SyntheticDataObjectList.builder(BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[1])
-                .recordCount(3)
+                .recordCount(2)
                 .userPrompt("Use realistic gymnastics scores")
                 .build());
         SyntheticDataBatchRequest builtRequest = request.build();
 
         assertThat(builtRequest.getObjectListJson())
-                .contains("\"record_count\":2")
                 .contains("\"record_count\":3")
+                .contains("\"record_count\":2")
                 .contains("Use realistic person names")
                 .contains("Use realistic gymnastics scores");
 
@@ -210,10 +215,10 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
 
         assertThat(rowCount(BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[0]))
                 .as("generated rows for %s.%s", BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[0])
-                .isEqualTo(rowCountsBefore[0] + 2);
+                .isEqualTo(rowCountsBefore[0] + 3);
         assertThat(rowCount(BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[1]))
                 .as("generated rows for %s.%s", BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[1])
-                .isEqualTo(rowCountsBefore[1] + 3);
+                .isEqualTo(rowCountsBefore[1] + 2);
     }
 
 

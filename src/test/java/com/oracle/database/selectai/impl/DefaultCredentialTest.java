@@ -31,16 +31,16 @@ import static org.mockito.Mockito.when;
 class DefaultCredentialTest {
 
     private static final String CREATE_USERNAME_PASSWORD_CREDENTIAL_SQL = "BEGIN " +
-            "  DBMS_CLOUD.CREATE_CREDENTIAL(?, ?, ?); " +
+            "  C##CLOUD$SERVICE.DBMS_CLOUD.CREATE_CREDENTIAL(?, ?, ?); " +
             "END;";
     private static final String CREATE_CREDENTIAL_SQL = "BEGIN " +
-            "  DBMS_CLOUD.CREATE_CREDENTIAL(?, ?, ?, ?, ?); " +
+            "  C##CLOUD$SERVICE.DBMS_CLOUD.CREATE_CREDENTIAL(?, ?, ?, ?, ?); " +
             "END;";
     private static final String DROP_CREDENTIAL_SQL = "BEGIN " +
-            "  DBMS_CLOUD.DROP_CREDENTIAL(?); " +
+            "  C##CLOUD$SERVICE.DBMS_CLOUD.DROP_CREDENTIAL(?); " +
             "END;";
     private static final String CREDENTIAL_EXISTS_SQL =
-            "SELECT COUNT(*) FROM USER_CREDENTIALS WHERE CREDENTIAL_NAME = UPPER(?)";
+            "SELECT COUNT(*) FROM SYS.USER_CREDENTIALS WHERE CREDENTIAL_NAME = UPPER(?)";
 
     @Mock
     private DbConnection dbConnection;
@@ -300,6 +300,56 @@ class DefaultCredentialTest {
                 .isInstanceOf(SelectAIException.class)
                 .hasMessageContaining("CREATE_CREDENTIAL")
                 .hasCause(sqlException);
+    }
+
+    /**
+     * Test: Verifies credential create failure diagnostics do not expose secret fields.
+     * Expected: Password, private-key, and OCID markers are absent from exception text and logs.
+     */
+    @Test
+    void credentialCreateFailureDoesNotExposeCredentialSecretsInExceptionOrLogs() throws Exception {
+        String sensitivePassword = "SEC_CRED_PASSWORD_MARKER";
+        String sensitiveUserOcid = "ocid1.user.oc1..SEC_CRED_USER_OCID_MARKER";
+        String sensitivePrivateKey = "SEC_CRED_PRIVATE_KEY_MARKER";
+        SQLException passwordException = new SQLException("database rejected request", "42000", 942);
+        SQLException ociException = new SQLException("database rejected request", "42000", 942);
+        CallableStatement passwordStatement = org.mockito.Mockito.mock(CallableStatement.class);
+        CallableStatement ociStatement = org.mockito.Mockito.mock(CallableStatement.class);
+        when(dbConnection.getConnection()).thenReturn(connection);
+        when(connection.prepareCall(CREATE_USERNAME_PASSWORD_CREDENTIAL_SQL)).thenReturn(passwordStatement);
+        when(connection.prepareCall(CREATE_CREDENTIAL_SQL)).thenReturn(ociStatement);
+        when(passwordStatement.execute()).thenThrow(passwordException);
+        when(ociStatement.execute()).thenThrow(ociException);
+
+        DefaultCredential passwordCredential = new DefaultCredential(new SingleConnectionProvider(dbConnection),
+                CredentialConfig.builder("USERPASS_CRED")
+                        .username("service-user")
+                        .password(sensitivePassword)
+                        .build());
+        DefaultCredential ociCredential = new DefaultCredential(new SingleConnectionProvider(dbConnection),
+                CredentialConfig.builder("OCI_CRED")
+                        .userOcid(sensitiveUserOcid)
+                        .tenancyOcid("ocid1.tenancy.oc1..example")
+                        .privateKey(sensitivePrivateKey)
+                        .fingerprint("fingerprint")
+                        .build());
+
+        LogCapture.CapturedFailure passwordFailure = LogCapture.captureFailure(passwordCredential::create);
+        LogCapture.CapturedFailure ociFailure = LogCapture.captureFailure(ociCredential::create);
+
+        assertThat(passwordFailure.throwable())
+                .isInstanceOf(SelectAIException.class)
+                .hasMessageContaining("CREATE_CREDENTIAL")
+                .hasCause(passwordException);
+        assertThat(ociFailure.throwable())
+                .isInstanceOf(SelectAIException.class)
+                .hasMessageContaining("CREATE_CREDENTIAL")
+                .hasCause(ociException);
+        LogCapture.assertFailureDoesNotExpose(passwordFailure,
+                sensitivePassword, "SEC_CRED_PASSWORD_MARKER");
+        LogCapture.assertFailureDoesNotExpose(ociFailure,
+                sensitiveUserOcid, sensitivePrivateKey, "SEC_CRED_USER_OCID_MARKER",
+                "SEC_CRED_PRIVATE_KEY_MARKER");
     }
 
     /**
