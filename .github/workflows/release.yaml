@@ -63,6 +63,6 @@ jobs:
             --draft \
             --title "Select AI for Java ${version}" \
             --generate-notes \
-            "target/select-ai-java-${version}.jar" \
-            "target/select-ai-java-${version}-sources.jar" \
-            "target/select-ai-java-${version}-javadoc.jar"
+            "target/select-ai-${version}.jar" \
+            "target/select-ai-${version}-sources.jar" \
+            "target/select-ai-${version}-javadoc.jar"
