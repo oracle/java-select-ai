@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
  *   <li>SELECTAI_PROFILE_NAME</li>
  *   <li>SELECTAI_PROFILE_PROMPT</li>
  * </ul>
- *
+ *1q
  * <p>Example {@code SELECTAI_JDBC_URL}:</p>
  * <pre>{@code
  * jdbc:oracle:thin:@mydb_high?TNS_ADMIN=/path/to/wallet
@@ -42,12 +42,12 @@ import org.slf4j.LoggerFactory;
  *
  * <p>Compile this sample:</p>
  * <pre>{@code
- * javac --release 17 -cp "target/select-ai-java-1.0.0.jar:target/dependency/*" -d samples/out samples/src/main/java/com/oracle/database/selectai/samples/profile/ChatProfileSample.java
+ * javac --release 17 -cp "target/select-ai-1.0.0.jar:target/dependency/*" -d samples/out samples/src/main/java/com/oracle/database/selectai/samples/profile/ChatProfileSample.java
  * }</pre>
  *
  * <p>Run this sample:</p>
  * <pre>{@code
- * java -cp "samples/out:target/select-ai-java-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.profile.ChatProfileSample
+ * java -cp "samples/out:target/select-ai-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.profile.ChatProfileSample
  * }</pre>
  *
  * <p>This sample prints normal result data to standard output so it is easy to

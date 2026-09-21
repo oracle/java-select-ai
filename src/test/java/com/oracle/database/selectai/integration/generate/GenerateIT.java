@@ -12,8 +12,9 @@ import com.oracle.database.selectai.model.GenerateAction;
 import com.oracle.database.selectai.model.GenerateParams;
 import com.oracle.database.selectai.model.ProfileAttributes;
 import com.oracle.database.selectai.model.SelectAIException;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 
 import java.sql.SQLException;
 import java.util.UUID;
@@ -25,6 +26,11 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * Live integration tests for profile generation actions and request options.
  */
 class GenerateIT extends GenerateIntegrationFixture {
+
+    @BeforeAll
+    static void createGenerateSchema(TestInfo testInfo) throws Exception {
+        createFreshIntegrationSchema(testClassName(testInfo));
+    }
 
     private static final String[] PROMPTS = {
             "How many gymnasts in database?",
@@ -39,10 +45,9 @@ class GenerateIT extends GenerateIntegrationFixture {
 
     @Override
     protected String profileObjectList() {
-        return objectListFor("people", "gymnast");
+        return objectListForOwner("ADMIN", "people", "gymnast");
     }
 
-    @BeforeEach
     @Override
     protected void createIsolatedProfile() throws Exception {
         super.createIsolatedProfile();
@@ -71,9 +76,9 @@ class GenerateIT extends GenerateIntegrationFixture {
      * {@code "How many people are there in the database?"}. The profile is configured with
      * an enforced object list containing the PEOPLE and GYMNAST tables.
      * Expected: Each generated prompt is non-blank and contains the escaped qualified names
-     * {@code \"ADMIN\".\"PEOPLE\"} and {@code \"ADMIN\".\"GYMNAST\"}, proving that the
-     * database uses both configured objects. The inherited fixture cleanup removes the profile
-     * and temporary credential.
+     * for the ADMIN-owned PEOPLE and GYMNAST tables, proving that the database uses both
+     * configured objects. The inherited fixture cleanup removes the profile and temporary
+     * credential.
      */
     @Test
     void test16001ShowPrompt() throws Exception {
@@ -117,7 +122,8 @@ class GenerateIT extends GenerateIntegrationFixture {
     void test16003Chat() throws Exception {
         assertThat(profile.chat("What is 4 + 4 ?"))
                 .isNotBlank()
-                .contains("8");
+                .satisfies(response -> assertThat(response.toLowerCase())
+                            .containsAnyOf("8", "eight"));
     }
 
     /**
@@ -166,7 +172,8 @@ class GenerateIT extends GenerateIntegrationFixture {
     void test16006GenerateRunSql() throws Exception {
         assertThat(profile.generate(PROMPTS[0], GenerateAction.runsql))
                 .isNotBlank()
-                .contains("5");
+                .satisfies(response -> assertThat(response.toLowerCase())
+                            .containsAnyOf("5", "five"));
     }
 
     /**
@@ -209,7 +216,8 @@ class GenerateIT extends GenerateIntegrationFixture {
     void test16009GenerateNarrate() throws Exception {
         assertThat(profile.generate(PROMPTS[0], GenerateAction.narrate))
                 .isNotBlank()
-                .contains("5");
+                .satisfies(response -> assertThat(response.toLowerCase())
+                            .containsAnyOf("5", "five"));
     }
 
     /**

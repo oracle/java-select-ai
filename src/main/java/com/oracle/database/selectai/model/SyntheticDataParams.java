@@ -108,7 +108,7 @@ public final class SyntheticDataParams {
         try {
             ObjectMapper mapper = new ObjectMapper();
             mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
-            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
             return mapper.writeValueAsString(this);
         } catch (Exception e) {
             throw new IllegalStateException("Failed to serialize SyntheticDataParams", e);

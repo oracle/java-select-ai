@@ -9,7 +9,6 @@ package com.oracle.database.selectai.integration.feedback;
 
 import com.oracle.database.selectai.model.Feedback;
 import com.oracle.database.selectai.model.SelectAIException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.sql.Connection;
@@ -29,7 +28,6 @@ class FeedbackIT extends FeedbackIntegrationFixture {
         return objectListFor("people", "gymnast");
     }
 
-    @BeforeEach
     @Override
     protected void createIsolatedProfile() throws Exception {
         super.createIsolatedProfile();

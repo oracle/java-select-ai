@@ -705,7 +705,7 @@
 <span class="source-line-no">692</span><span id="line-692">        ObjectMapper mapper = new ObjectMapper();</span>
 <span class="source-line-no">693</span><span id="line-693">        try {</span>
 <span class="source-line-no">694</span><span id="line-694">            mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);</span>
-<span class="source-line-no">695</span><span id="line-695">            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);</span>
+<span class="source-line-no">695</span><span id="line-695">            mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);</span>
 <span class="source-line-no">696</span><span id="line-696">            return mapper.writeValueAsString(this);</span>
 <span class="source-line-no">697</span><span id="line-697">        } catch (Exception e) {</span>
 <span class="source-line-no">698</span><span id="line-698">            throw new IllegalStateException("Failed to serialize ProfileAttributes to JSON", e);</span>

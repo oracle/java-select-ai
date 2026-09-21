@@ -23,13 +23,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  */
 class TranslateIT extends TranslationIntegrationFixture {
 
-    @Override
-    protected String profileObjectList() {
-        return objectListForOwner("SH");
-    }
-
     /**
-     * Test: On the fixture-created profile configured with the SH-owned object list, call
+     * Test: On the fixture-created profile configured with the ADMIN-owned PEOPLE
+     * and GYMNAST tables, call
      * {@code translate("Thank you", "en", "de")}.
      * Expected: The provider returns a non-blank translation containing {@code "Danke"} after
      * lower-casing. The inherited fixture cleanup drops the profile and temporary credential.

@@ -8,7 +8,6 @@
 package com.oracle.database.selectai.integration.connection;
 
 import com.oracle.database.selectai.SelectAI;
-import com.oracle.database.selectai.integration.IntegrationTestFixture;
 import com.oracle.database.selectai.model.DbConnectionConfig;
 import com.oracle.database.selectai.model.SelectAIException;
 import oracle.jdbc.pool.OracleDataSource;
@@ -21,7 +20,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.nio.file.Path;
+import java.security.Security;
+import java.util.Properties;
 import java.util.UUID;
+
+import oracle.security.pki.OraclePKIProvider;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -30,23 +34,19 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
  * Live connection and JDBC integration coverage.
  *
  * <p>The public Java surface is the synchronous JDBC connection exposed by
- * {@link SelectAI#getConnection()}. The shared fixture reads
+ * {@link DefaultSelectAI#getConnection()}. The shared fixture reads
  * {@code SELECT_AI_IT_*} environment variables and skips this suite when live
  * configuration is absent.</p>
  *
- * <p>{@code test10100} opens its own wallet-derived JDBC URL from
- * {@code SELECT_AI_IT_DB_NAME} and {@code SELECT_AI_IT_WALLET_LOCATION}.
- * Privileged scenarios and temporary local-user scenarios use
- * {@code SELECT_AI_IT_DB_USER} and {@code SELECT_AI_IT_DB_PASSWORD}.</p>
+ * <p>Most tests use the feature-test user configured by
+ * {@code SELECT_AI_IT_DB_USER} and {@code SELECT_AI_IT_DB_PASSWORD}.
+ * Tests requiring administrative privileges use
+ * {@code SELECT_AI_IT_ADMIN_DB_USER} and
+ * {@code SELECT_AI_IT_ADMIN_DB_PASSWORD}.</p>
  */
-class ConnectionIT extends IntegrationTestFixture {
+class ConnectionIT extends ConnectionIntegrationFixture {
 
     private static final String INVALID_JDBC_URL = "jdbc:oracle:thin:@invalid_dsn";
-
-    @Override
-    protected boolean requiresProfile() {
-        return false;
-    }
 
     /**
      * Test: Builds a wallet-derived configuration from the configured database name and wallet
@@ -128,7 +128,7 @@ class ConnectionIT extends IntegrationTestFixture {
      * Test: Creates a client with the deliberately invalid URL
      * {@code jdbc:oracle:thin:@invalid_dsn} and the configured username and password.
      * Expected: Client creation throws {@link SelectAIException} with a {@link SQLException}
-     * cause containing {@code ORA-17868:}.
+     * cause containing {@code ORA-12154:}.
      */
     @Test
     void test10104ConnectionRejectsBadJdbcUrl() {
@@ -136,7 +136,7 @@ class ConnectionIT extends IntegrationTestFixture {
                 .isInstanceOf(SelectAIException.class)
                 .hasCauseInstanceOf(SQLException.class)
                 .satisfies(exception -> assertThat(exception.getCause())
-                        .hasMessageContaining("ORA-17868:"));
+                        .hasMessageContaining("ORA-12154:"));
     }
 
     /**
@@ -358,8 +358,6 @@ class ConnectionIT extends IntegrationTestFixture {
      */
     @Test
     void test10117CreatesUserAndTable() throws Exception {
-        String adminUser = dbConfig.getDbUser();
-        String adminPassword = dbConfig.getDbPassword();
         String localPassword = dbConfig.getDbPassword();
         String username = uniqueIdentifier("JSAI_IT_USER_");
         String tableName = uniqueIdentifier("JSAI_IT_TBL_");
@@ -371,8 +369,7 @@ class ConnectionIT extends IntegrationTestFixture {
         try {
             closeConnection(selectAI);
 
-            adminClient = SelectAI.create(
-                    connectionConfigWithCredentials(adminUser, adminPassword));
+            adminClient = SelectAI.create(adminDbConfig());
 
             createUser(
                     adminClient.getConnection(),
@@ -508,29 +505,6 @@ class ConnectionIT extends IntegrationTestFixture {
     }
 
     /**
-     * Test: Reads the configured wallet password, builds a wallet configuration containing that
-     * password, opens the wallet-backed connection, and validates it for five seconds.
-     * Expected: The connection remains open and {@code isValid(5)} returns {@code true}; the
-     * wallet-backed client is closed in the {@code finally} block.
-     */
-    @Test
-    void test10122PasswordProtectedWalletConnection() throws Exception {
-        String walletPassword = requiredFeatureValue(
-                "SELECT_AI_IT_WALLET_PASSWORD",
-                "Password-protected wallet coverage requires a wallet password");
-        SelectAI walletClient = null;
-        try {
-            walletClient = SelectAI.create(passwordProtectedWalletConnectionConfig(walletPassword));
-            Connection connection = walletClient.getConnection();
-
-            assertThat(connection.isClosed()).isFalse();
-            assertThat(connection.isValid(5)).isTrue();
-        } finally {
-            closeConnection(walletClient);
-        }
-    }
-
-    /**
      * Test: Uses an admin {@link OracleDataSource} to create a unique local user, connects to a
      * second DataSource as that user, creates a unique {@code (id NUMBER)} table, inserts
      * {@code 100}, and selects it back.
@@ -540,12 +514,12 @@ class ConnectionIT extends IntegrationTestFixture {
      * user connections/resources are cleaned up.
      */
     @Test
-    void test10123DataSourceCreatesUserAndTable() throws Exception {
+    void test10122DataSourceCreatesUserAndTable() throws Exception {
         String localPassword = dbConfig.getDbPassword();
         String username = uniqueIdentifier("JSAI_IT_DS_USER_");
         String tableName = uniqueIdentifier("JSAI_IT_DS_TBL_");
 
-        OracleDataSource adminDataSource = oracleDataSource();
+        OracleDataSource adminDataSource = oracleDataSource(adminDbConfig());
         SelectAI dataSourceClient = SelectAI.create(adminDataSource);
         Connection adminConnection = null;
         Connection localConnection = null;
@@ -591,8 +565,6 @@ class ConnectionIT extends IntegrationTestFixture {
         }
     }
 
-
-
     /**
      * Test: Obtains and retains the client connection, closes the {@link SelectAI} client,
      * retrieves the connection again, attempts {@code SELECT 1 FROM DUAL}, and then calls
@@ -603,7 +575,7 @@ class ConnectionIT extends IntegrationTestFixture {
      * reopen the connection.
      */
     @Test
-    void test10124CloseClosesAndDoesNotReopenRetainedConnection() throws Exception {
+    void test10123CloseClosesAndDoesNotReopenRetainedConnection() throws Exception {
         SelectAI client = SelectAI.create(dbConfig);
         Connection connection = client.getConnection();
 
@@ -634,7 +606,7 @@ class ConnectionIT extends IntegrationTestFixture {
      * after the client is automatically closed.
      */
     @Test
-    void test10125TryWithResourcesClosesSelectAIConnection() throws Exception {
+    void test10124TryWithResourcesClosesSelectAIConnection() throws Exception {
         Connection connection;
 
         try (SelectAI client = SelectAI.create(dbConfig)) {
@@ -645,33 +617,330 @@ class ConnectionIT extends IntegrationTestFixture {
         assertThat(connection.isClosed()).isTrue();
     }
 
-    // /**
-    //  * Test: Attempts to open the configured wallet with the configured wallet password plus
-    //  * {@code _INVALID}.
-    //  * Expected: Construction should throw {@link SelectAIException} with a {@link SQLException}
-    //  * cause rather than returning a usable connection.
-    //  *
-    //  * This remains commented because auto-login wallets (cwallet.sso) ignore the wallet
-    //  * password, so the test is environment-dependent and does not fail consistently.
-    //  */
-    // @Test
-    // void test10126PasswordProtectedWalletRejectsWrongPassword() {
-    //     String walletPassword = requiredFeatureValue(
-    //             "SELECT_AI_IT_WALLET_PASSWORD",
-    //             "Password-protected wallet coverage requires a wallet password");
-    //
-    //     assertThatThrownBy(() -> SelectAI.create(
-    //             passwordProtectedWalletConnectionConfig(walletPassword + "_INVALID")))
-    //             .isInstanceOf(SelectAIException.class)
-    //             .hasCauseInstanceOf(SQLException.class);
-    // }
+    /**
+     * Test: Opens a wallet-backed JDBC connection using explicit JKS keystore and truststore
+     * properties from the isolated {@code SELECT_AI_IT_JKS_WALLET_LOCATION} directory.
+     * Expected: The SDK forwards the caller-supplied JDBC properties to the driver and the
+     * retained JDBC connection opens successfully and is valid.
+     */
+    @Test
+    void test10125ConnectionWithJksKeystoreProperties() throws Exception {
+        String walletLocation = requiredWalletValue("SELECT_AI_IT_JKS_WALLET_LOCATION");
+        String dbName = requiredWalletValue("SELECT_AI_IT_DB_NAME");
+        String walletPassword = requiredFeatureValue(
+                "SELECT_AI_IT_WALLET_PASSWORD",
+                "JKS wallet coverage requires a wallet password");
 
+        Properties jdbcProperties = new Properties();
+
+        // 1. CRITICAL OVERRIDE: Neutralise the implicit ojdbc.properties file layout
+        jdbcProperties.setProperty("oracle.net.wallet_location", "");
+        jdbcProperties.setProperty("oracle.net.tns_admin", "");
+
+        // 2. Map standard Keystore settings explicitly to standard Java layouts
+        jdbcProperties.setProperty(
+                "javax.net.ssl.keyStore",
+                Path.of(walletLocation, "keystore.jks").toString());
+        jdbcProperties.setProperty(
+                "javax.net.ssl.keyStorePassword",
+                walletPassword);
+        jdbcProperties.setProperty(
+                "javax.net.ssl.keyStoreType",
+                "JKS");
+        jdbcProperties.setProperty(
+                "javax.net.ssl.trustStore",
+                Path.of(walletLocation, "truststore.jks").toString());
+        jdbcProperties.setProperty(
+                "javax.net.ssl.trustStorePassword",
+                walletPassword);
+        jdbcProperties.setProperty(
+                "javax.net.ssl.trustStoreType",
+                "JKS");
+
+        // Explicitly force the driver back to standard Java parsing rules
+        jdbcProperties.setProperty("oracle.net.ssl_key_store_type", "JKS");
+        jdbcProperties.setProperty("oracle.net.ssl_trust_store_type", "JKS");
+        jdbcProperties.setProperty("oracle.net.authentication_services", "(TCPS)");
+
+        DbConnectionConfig config = DbConnectionConfig.builder()
+                .dbUser(dbConfig.getDbUser())
+                .dbPassword(dbConfig.getDbPassword())
+                .jdbcUrl(walletJdbcUrl(dbName, walletLocation))
+                .jdbcProperties(jdbcProperties)
+                .build();
+
+        SelectAI client = null;
+        try {
+            client = SelectAI.create(config);
+
+            assertThat(client.getConnection().isClosed()).isFalse();
+            assertThat(client.getConnection().isValid(5)).isTrue();
+        } finally {
+            closeConnection(client);
+        }
+    }
+
+    /**
+     * Test: Opens a wallet-backed JDBC connection using an isolated auto-login cWallet
+     * directory supplied through {@code SELECT_AI_IT_CWALLET_LOCATION}.
+     * Expected: The SDK forwards the explicit Oracle wallet properties, the connection is
+     * valid, and a basic {@code SELECT 1 FROM DUAL} query succeeds.
+     */
+    @Test
+    void test10126ConnectionWithCwalletProperties() throws Exception {
+        String walletLocation = requiredWalletValue("SELECT_AI_IT_CWALLET_LOCATION");
+        String dbName = requiredWalletValue("SELECT_AI_IT_DB_NAME");
+
+        Properties props = new Properties();
+        props.setProperty(
+            "oracle.net.wallet_location",
+            "(SOURCE=(METHOD=FILE)(METHOD_DATA=(DIRECTORY="
+                    + walletLocation + ")))");
+        // 1. Override and force Oracle's Auto-Login (SSO) parsing rules
+        props.setProperty("oracle.net.ssl_key_store_type", "SSO");
+        props.setProperty("oracle.net.ssl_trust_store_type", "SSO");
+        props.setProperty("oracle.net.authentication_services", "(TCPS)");
+
+        // Ensure standard JVM keys are not accidentally lingering
+        props.remove("javax.net.ssl.keyStore");
+        props.remove("javax.net.ssl.trustStore");
+
+        DbConnectionConfig config = DbConnectionConfig.builder()
+                .dbUser(dbConfig.getDbUser())
+                .dbPassword(dbConfig.getDbPassword())
+                .jdbcUrl(walletJdbcUrl(dbName, walletLocation))
+                .jdbcProperties(props)
+                .build();
+
+        SelectAI client = null;
+        try {
+            client = SelectAI.create(config);
+            Connection connection = client.getConnection();
+
+            assertThat(connection.isClosed()).isFalse();
+            assertThat(connection.isValid(5)).isTrue();
+
+            try (Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery("SELECT 1 FROM DUAL")) {
+                assertThat(resultSet.next()).isTrue();
+                assertThat(resultSet.getInt(1)).isEqualTo(1);
+            }
+        } finally {
+            closeConnection(client);
+        }
+    }
+
+    /**
+     * Test: Opens a wallet-backed JDBC connection using an isolated password-protected
+     * eWallet directory supplied through {@code SELECT_AI_IT_EWALLET_LOCATION}.
+     * Expected: The SDK forwards both the wallet password and caller-supplied JDBC
+     * properties, the connection is valid, and a basic {@code SELECT 1 FROM DUAL} query
+     * succeeds.
+     */
+    @Test
+    void test10127ConnectionWithEwalletProperties() throws Exception {
+        String walletLocation = requiredWalletValue("SELECT_AI_IT_EWALLET_LOCATION");
+        String dbName = requiredWalletValue("SELECT_AI_IT_DB_NAME");
+        String walletPassword = requiredFeatureValue(
+                "SELECT_AI_IT_WALLET_PASSWORD",
+                "Ewallet coverage requires a wallet password");
+
+        Properties props = new Properties();
+        props.setProperty(
+            "oracle.net.wallet_location",
+            "(SOURCE=(METHOD=FILE)(METHOD_DATA=(DIRECTORY="
+                    + walletLocation + ")))");
+        props.setProperty("oracle.net.authentication_services", "(TCPS)");
+
+        // Ensure standard JVM keys are not accidentally lingering
+        props.remove("javax.net.ssl.keyStore");
+        props.remove("javax.net.ssl.trustStore");
+
+        DbConnectionConfig config = DbConnectionConfig.builder()
+                .dbUser(dbConfig.getDbUser())
+                .dbPassword(dbConfig.getDbPassword())
+                .walletPassword(walletPassword)
+                .jdbcUrl(walletJdbcUrl(dbName, walletLocation))
+                .jdbcProperties(props)
+                .build();
+
+        boolean oraclePkiAdded = Security.getProvider("OraclePKI") == null;
+        if (oraclePkiAdded) {
+            // JDBC resolves ewallet.p12 as PKCS12. Put OraclePKI first so the
+            // Oracle provider parses the wallet key entry instead of SunPKCS12.
+            Security.insertProviderAt(new OraclePKIProvider(), 1);
+        }
+
+        SelectAI client = null;
+        try {
+            client = SelectAI.create(config);
+            Connection connection = client.getConnection();
+
+            assertThat(connection.isClosed()).isFalse();
+            assertThat(connection.isValid(5)).isTrue();
+
+            try (Statement statement = connection.createStatement();
+                ResultSet resultSet = statement.executeQuery("SELECT 1 FROM DUAL")) {
+                assertThat(resultSet.next()).isTrue();
+                assertThat(resultSet.getInt(1)).isEqualTo(1);
+            }
+        } finally {
+            closeConnection(client);
+            if (oraclePkiAdded) {
+                Security.removeProvider("OraclePKI");
+            }
+        }
+    }
+
+    /**
+     * Test: Attempts a JKS wallet connection while pointing the Java keystore and truststore
+     * properties at a missing store file.
+     * Expected: JDBC rejects the invalid store configuration and the SDK surfaces the failure
+     * as {@link SelectAIException}.
+     */
+    @Test
+    void test10128ConnectionWithWrongJksKeystoreProperties() throws Exception {
+        String walletLocation = requiredWalletValue("SELECT_AI_IT_JKS_WALLET_LOCATION");
+        String dbName = requiredWalletValue("SELECT_AI_IT_DB_NAME");
+        String missingStore = Path.of(walletLocation, "missing-keystore.jks").toString();
+
+        Properties jdbcProperties = new Properties();
+
+        // 1. CRITICAL OVERRIDE: Neutralise the implicit ojdbc.properties file layout
+        jdbcProperties.setProperty("oracle.net.wallet_location", "");
+        jdbcProperties.setProperty("oracle.net.tns_admin", "");
+
+        // 2. Map standard Keystore settings explicitly to standard Java layouts
+        jdbcProperties.setProperty(
+                "javax.net.ssl.keyStore",
+                missingStore);
+        jdbcProperties.setProperty(
+                "javax.net.ssl.keyStorePassword",
+                "unused");
+        jdbcProperties.setProperty(
+                "javax.net.ssl.keyStoreType",
+                "JKS");
+        jdbcProperties.setProperty(
+                "javax.net.ssl.trustStore",
+                missingStore);
+        jdbcProperties.setProperty(
+                "javax.net.ssl.trustStorePassword",
+                "unused");
+        jdbcProperties.setProperty(
+                "javax.net.ssl.trustStoreType",
+                "JKS");
+
+        // Explicitly force the driver back to standard Java parsing rules
+        jdbcProperties.setProperty("oracle.net.ssl_key_store_type", "JKS");
+        jdbcProperties.setProperty("oracle.net.ssl_trust_store_type", "JKS");
+        jdbcProperties.setProperty("oracle.net.authentication_services", "(TCPS)");
+
+        DbConnectionConfig config = DbConnectionConfig.builder()
+                .dbUser(dbConfig.getDbUser())
+                .dbPassword(dbConfig.getDbPassword())
+                .jdbcUrl(walletJdbcUrl(dbName, walletLocation))
+                .jdbcProperties(jdbcProperties)
+                .build();
+
+        assertThatThrownBy(() -> SelectAI.create(config))
+                .isInstanceOf(SelectAIException.class)
+                .hasCauseInstanceOf(SQLException.class);
+    }
+
+    /**
+     * Test: Attempts a cWallet connection while pointing Oracle wallet properties at a
+     * missing wallet directory below the staged cWallet root.
+     * Expected: JDBC rejects the invalid wallet location and the SDK surfaces the failure as
+     * {@link SelectAIException}.
+     */
+    @Test
+    void test10129ConnectionWithWrongCwalletProperties() throws Exception {
+        String stagedWalletLocation = requiredWalletValue("SELECT_AI_IT_CWALLET_LOCATION");
+        String walletLocation = Path.of(stagedWalletLocation, "missing-wallet").toString();
+        String dbName = requiredWalletValue("SELECT_AI_IT_DB_NAME");
+
+        Properties props = new Properties();
+        props.setProperty(
+            "oracle.net.wallet_location",
+            "(SOURCE=(METHOD=FILE)(METHOD_DATA=(DIRECTORY="
+                    + walletLocation + ")))");
+        // 1. Override and force Oracle's Auto-Login (SSO) parsing rules
+        props.setProperty("oracle.net.ssl_key_store_type", "SSO");
+        props.setProperty("oracle.net.ssl_trust_store_type", "SSO");
+        props.setProperty("oracle.net.authentication_services", "(TCPS)");
+
+        // Ensure standard JVM keys are not accidentally lingering
+        props.remove("javax.net.ssl.keyStore");
+        props.remove("javax.net.ssl.trustStore");
+
+        DbConnectionConfig config = DbConnectionConfig.builder()
+                .dbUser(dbConfig.getDbUser())
+                .dbPassword(dbConfig.getDbPassword())
+                .jdbcUrl(walletJdbcUrl(dbName, walletLocation))
+                .jdbcProperties(props)
+                .build();
+
+        assertThatThrownBy(() -> SelectAI.create(config))
+                .isInstanceOf(SelectAIException.class)
+                .hasCauseInstanceOf(SQLException.class);
+    }
+
+    /**
+    * Test: Attempts an eWallet connection with an incorrect wallet password.
+    * Expected: JDBC rejects the password-protected wallet and the SDK surfaces the
+    * failure as {@link SelectAIException}.
+    */
+    @Test
+    void test10130ConnectionWithWrongEwalletPassword() throws Exception {
+        String walletLocation = requiredWalletValue("SELECT_AI_IT_EWALLET_LOCATION");
+        String dbName = requiredWalletValue("SELECT_AI_IT_DB_NAME");
+        String walletPassword = requiredFeatureValue(
+                "SELECT_AI_IT_WALLET_PASSWORD",
+                "Ewallet password coverage requires a wallet password");
+
+        Properties props = new Properties();
+        props.setProperty(
+                "oracle.net.wallet_location",
+                "(SOURCE=(METHOD=FILE)(METHOD_DATA=(DIRECTORY="
+                        + walletLocation + ")))");
+        props.setProperty("oracle.net.authentication_services", "(TCPS)");
+
+        DbConnectionConfig config = DbConnectionConfig.builder()
+                .dbUser(dbConfig.getDbUser())
+                .dbPassword(dbConfig.getDbPassword())
+                .walletPassword(walletPassword + "-wrong")
+                .jdbcUrl(walletJdbcUrl(dbName, walletLocation))
+                .jdbcProperties(props)
+                .build();
+
+        boolean oraclePkiAdded = Security.getProvider("OraclePKI") == null;
+        if (oraclePkiAdded) {
+            // Use the Oracle wallet parser so this test validates the wrong password,
+            // rather than failing earlier in the JDK SunPKCS12 parser.
+            Security.insertProviderAt(new OraclePKIProvider(), 1);
+        }
+
+        try {
+            assertThatThrownBy(() -> SelectAI.create(config))
+                    .isInstanceOf(SelectAIException.class)
+                    .hasCauseInstanceOf(SQLException.class);
+        } finally {
+            if (oraclePkiAdded) {
+                Security.removeProvider("OraclePKI");
+            }
+        }
+    }
 
     private OracleDataSource oracleDataSource() throws SQLException {
+        return oracleDataSource(dbConfig);
+    }
+
+    private OracleDataSource oracleDataSource(DbConnectionConfig config)
+        throws SQLException {
         OracleDataSource dataSource = new OracleDataSource();
-        dataSource.setURL(dbConfig.getJdbcUrl());
-        dataSource.setUser(dbConfig.getDbUser());
-        dataSource.setPassword(dbConfig.getDbPassword());
+        dataSource.setURL(config.getJdbcUrl());
+        dataSource.setUser(config.getDbUser());
+        dataSource.setPassword(config.getDbPassword());
         return dataSource;
     }
 
@@ -731,27 +1000,17 @@ class ConnectionIT extends IntegrationTestFixture {
     }
 
     private String requiredWalletValue(String name) {
-        String value = env(name);
-        if (value == null) {
-            throw new IllegalStateException(
-                    "Wallet-based connection requires " + name + " in the environment.");
-        }
-        return value;
+        return requiredFeatureValue(name,
+                "Wallet-based connection requires " + name + " in the environment");
     }
 
     private String requiredValue(String name, String message) {
-        String value = env(name);
-        if (value == null) {
-            throw new IllegalStateException(message);
-        }
-        return value;
+        return requiredFeatureValue(name, message);
     }
 
     private void switchToAdminConnection() throws SelectAIException, SQLException {
-        String adminUser = dbConfig.getDbUser();
-        String adminPassword = dbConfig.getDbPassword();
         closeConnection(selectAI);
-        selectAI = SelectAI.create(connectionConfigWithCredentials(adminUser, adminPassword));
+        selectAI = SelectAI.create(adminDbConfig());
     }
 
     private static void createUser(Connection connection, String username, String password) throws SQLException {

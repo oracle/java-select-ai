@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.oracle.database.selectai</groupId>
-    <artifactId>select-ai-java</artifactId>
+    <artifactId>select-ai</artifactId>
     <version>1.0.0</version>
     <name>Oracle Select AI for Java</name>
     <description>Java SDK for Oracle Autonomous AI Database's Select AI operations backed by DBMS_CLOUD_AI.</description>
@@ -28,6 +28,8 @@
 
     <developers>
         <developer>
+            <name>Dhavalkumar M. Patel</name>
+            <email>dhavalkumar.m.patel@oracle.com</email>
             <organization>Oracle</organization>
             <organizationUrl>https://www.oracle.com</organizationUrl>
         </developer>
@@ -48,6 +50,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.plugin.version>3.11.0</maven.compiler.plugin.version>
+        <maven.source.plugin.version>3.3.1</maven.source.plugin.version>
         <slf4j.version>2.0.17</slf4j.version>
         <ojdbc11.version>23.26.1.0.0</ojdbc11.version>
         <jackson-databind-core>2.22.2</jackson-databind-core>
@@ -56,7 +59,10 @@
         <assertj.version>3.27.7</assertj.version>
         <maven.surefire.plugin.version>3.2.5</maven.surefire.plugin.version>
         <maven.javadoc.plugin.version>3.12.0</maven.javadoc.plugin.version>
+        <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>
         <java.release.version>17</java.release.version>
+        <org.slf4j.simpleLogger.log.com.oracle.database.selectai.impl>off</org.slf4j.simpleLogger.log.com.oracle.database.selectai.impl>
+        <org.slf4j.simpleLogger.log.com.oracle.database.selectai.integration>off</org.slf4j.simpleLogger.log.com.oracle.database.selectai.integration>
     </properties>
 
     <dependencies>
@@ -130,8 +136,29 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <version>${maven.source.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-sources</id>
+                        <goals>
+                            <goal>jar-no-fork</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>${maven.javadoc.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <doclint>none</doclint>
                     <quiet>true</quiet>
@@ -156,8 +183,67 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <version>${maven.antrun.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>copy-legal-documents-to-main-jar</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${project.build.outputDirectory}/META-INF"/>
+                                <copy file="${project.basedir}/LICENSE.txt"
+                                      tofile="${project.build.outputDirectory}/META-INF/LICENSE"/>
+                                <copy file="${project.basedir}/THIRD_PARTY_LICENSES.txt"
+                                      tofile="${project.build.outputDirectory}/META-INF/THIRD-PARTY_LICENSE"/>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-legal-documents-to-classifier-jars</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <mkdir dir="${project.build.directory}/legal/META-INF"/>
+                                <copy file="${project.basedir}/LICENSE.txt"
+                                      tofile="${project.build.directory}/legal/META-INF/LICENSE"/>
+                                <copy file="${project.basedir}/THIRD_PARTY_LICENSES.txt"
+                                      tofile="${project.build.directory}/legal/META-INF/THIRD-PARTY_LICENSE"/>
+                                <zip destfile="${project.build.directory}/${project.build.finalName}-sources.jar"
+                                     update="true">
+                                    <zipfileset dir="${project.build.directory}/legal/META-INF"
+                                                 prefix="META-INF"/>
+                                </zip>
+                                <zip destfile="${project.build.directory}/${project.build.finalName}-javadoc.jar"
+                                     update="true">
+                                    <zipfileset dir="${project.build.directory}/legal/META-INF"
+                                                 prefix="META-INF"/>
+                                </zip>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${maven.surefire.plugin.version}</version>
+                <configuration>
+                    <systemPropertyVariables>
+                        <org.slf4j.simpleLogger.log.com.oracle.database.selectai.impl>
+                            ${org.slf4j.simpleLogger.log.com.oracle.database.selectai.impl}
+                        </org.slf4j.simpleLogger.log.com.oracle.database.selectai.impl>
+                        <org.slf4j.simpleLogger.log.com.oracle.database.selectai.integration>
+                            ${org.slf4j.simpleLogger.log.com.oracle.database.selectai.integration}
+                        </org.slf4j.simpleLogger.log.com.oracle.database.selectai.integration>
+                    </systemPropertyVariables>
+                </configuration>
             </plugin>
         </plugins>
     </build>

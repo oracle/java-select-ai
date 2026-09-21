@@ -9,7 +9,6 @@ package com.oracle.database.selectai.integration.credential;
 
 import com.oracle.database.selectai.Credential;
 import com.oracle.database.selectai.SelectAI;
-import com.oracle.database.selectai.integration.IntegrationTestFixture;
 import com.oracle.database.selectai.model.CredentialConfig;
 import com.oracle.database.selectai.model.SelectAIException;
 import org.junit.jupiter.api.AfterEach;
@@ -34,7 +33,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
  *
  * <p>The Java SDK exposes synchronous {@link Credential#create()},
  * {@link Credential#drop()}, and {@link Credential#drop(boolean)} operations.
- * Credential names are unique per test. The shared fixture reads
+ * Credential names are unique per test. The common integration support reads
  * {@code SELECT_AI_IT_*} environment variables and provides JDBC setup. Optional
  * credential-specific keys include {@code SELECT_AI_IT_CRED_USERNAME},
  * {@code SELECT_AI_IT_CRED_PASSWORD}, {@code SELECT_AI_IT_OCI_USER_OCID},

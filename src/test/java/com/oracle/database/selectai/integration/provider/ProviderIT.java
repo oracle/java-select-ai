@@ -60,7 +60,7 @@ class ProviderIT extends ProviderIntegrationFixture {
 
     /**
      * Provider tests create their own provider credential and profile, so the
-     * shared fixture does not create an unrelated default profile first.
+     * base fixture does not create an unrelated default profile first.
      *
      * @return false because each test creates its own provider resources
      */
@@ -141,8 +141,12 @@ void test30001OpenAiProfileChatUsingProviderProfile() throws Exception {
 void test30002OpenAiCompatibleProfilePersistsProviderEndpoint() throws Exception {
     String apiKey = env("SELECT_AI_IT_PROVIDER_OPENAI_COMPATIBLE_API_KEY");
     String endpoint = env("SELECT_AI_IT_PROVIDER_OPENAI_COMPATIBLE_ENDPOINT");
-    assumeTrue(apiKey != null && endpoint != null,
-            "OpenAI-compatible API key and endpoint are required for provider_endpoint coverage");
+    if (apiKey == null || endpoint == null) {
+        logSkipped("SELECT_AI_IT_PROVIDER_OPENAI_COMPATIBLE_API_KEY or "
+                + "SELECT_AI_IT_PROVIDER_OPENAI_COMPATIBLE_ENDPOINT");
+        assumeTrue(false,
+                "OpenAI-compatible API key and endpoint are required for provider_endpoint coverage");
+    }
     String model = envOrDefault(
             "SELECT_AI_IT_PROVIDER_OPENAI_COMPATIBLE_MODEL", DEFAULT_OPENAI_COMPATIBLE_MODEL);
     String credentialName = uniqueName("OPENAI_COMPATIBLE");

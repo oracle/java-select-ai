@@ -37,7 +37,7 @@ import java.util.Map;
  */
 final class DefaultVectorIndex implements VectorIndex {
     /** Logger for vector index lifecycle and attribute operations. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(VectorIndex.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultVectorIndex.class);
 
     /** Provider that controls connection lifecycle for vector-index operations. */
     private final ConnectionProvider connectionProvider;

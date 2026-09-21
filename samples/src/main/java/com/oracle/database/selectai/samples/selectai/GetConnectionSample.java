@@ -21,7 +21,7 @@ import java.sql.Statement;
  *
  * <p>This sample demonstrates how to create a {@link SelectAI} client, obtain
  * the SDK-owned JDBC {@link Connection} by calling {@link SelectAI#getConnection()},
- * execute {@code SELECT 1 FROM DUAL}, and close the client by using
+ * execute {@code SELECT 1 FROM SYS.DUAL}, and close the client by using
  * try-with-resources.</p>
  *
  * <p>{@link SelectAI#getConnection()} is available only when the client was
@@ -50,14 +50,14 @@ import java.sql.Statement;
  *
  * <p>Compile this sample:</p>
  * <pre>{@code
- * javac --release 17 -cp "target/select-ai-java-1.0.0.jar:target/dependency/*" \
+ * javac --release 17 -cp "target/select-ai-1.0.0.jar:target/dependency/*" \
  *   -d samples/out \
  *   samples/src/main/java/com/oracle/database/selectai/samples/selectai/GetConnectionSample.java
  * }</pre>
  *
  * <p>Run this sample:</p>
  * <pre>{@code
- * java -cp "samples/out:target/select-ai-java-1.0.0.jar:target/dependency/*" \
+ * java -cp "samples/out:target/select-ai-1.0.0.jar:target/dependency/*" \
  *   com.oracle.database.selectai.samples.selectai.GetConnectionSample
  * }</pre>
  *
@@ -79,7 +79,7 @@ public final class GetConnectionSample {
                 .build())) {
             Connection connection = selectAI.getConnection();
             try (Statement statement = connection.createStatement();
-                 ResultSet resultSet = statement.executeQuery("SELECT 1 FROM DUAL")) {
+                 ResultSet resultSet = statement.executeQuery("SELECT 1 FROM SYS.DUAL")) {
                 if (resultSet.next()) {
                     System.out.printf("Custom SQL result: %d%n", resultSet.getInt(1));
                 }

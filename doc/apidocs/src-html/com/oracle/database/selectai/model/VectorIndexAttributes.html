@@ -277,7 +277,7 @@
 <span class="source-line-no">264</span><span id="line-264">        ObjectMapper mapper = new ObjectMapper();</span>
 <span class="source-line-no">265</span><span id="line-265">        try {</span>
 <span class="source-line-no">266</span><span id="line-266">            mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);</span>
-<span class="source-line-no">267</span><span id="line-267">            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);</span>
+<span class="source-line-no">267</span><span id="line-267">            mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);</span>
 <span class="source-line-no">268</span><span id="line-268">            return mapper.writeValueAsString(this);</span>
 <span class="source-line-no">269</span><span id="line-269">        } catch (Exception e) {</span>
 <span class="source-line-no">270</span><span id="line-270">            throw new IllegalStateException("Failed to serialize VectorIndexAttributes to JSON", e);</span>
