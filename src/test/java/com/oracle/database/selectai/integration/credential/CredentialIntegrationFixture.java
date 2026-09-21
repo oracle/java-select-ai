@@ -13,7 +13,9 @@ import com.oracle.database.selectai.integration.IntegrationTestFixture;
 import com.oracle.database.selectai.model.CredentialConfig;
 import com.oracle.database.selectai.model.SelectAIException;
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -34,13 +36,14 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
  *
  * <p>The Java SDK exposes synchronous {@link Credential#create()},
  * {@link Credential#drop()}, and {@link Credential#drop(boolean)} operations.
- * Credential names are unique per test. The shared fixture reads
+ * Credential names are unique per test. The common integration support reads
  * {@code SELECT_AI_IT_*} environment variables and provides JDBC setup. Optional
  * credential-specific keys include {@code SELECT_AI_IT_CRED_USERNAME},
  * {@code SELECT_AI_IT_CRED_PASSWORD}, {@code SELECT_AI_IT_OCI_USER_OCID},
  * {@code SELECT_AI_IT_OCI_TENANCY_OCID}, {@code SELECT_AI_IT_OCI_PRIVATE_KEY},
  * and {@code SELECT_AI_IT_OCI_FINGERPRINT}. Local-user scenarios use the
- * configured database password for the temporary user.</p>
+ * dedicated admin connection to create the temporary user, then exercise
+ * credential operations through that user's connection.</p>
  */
 abstract class CredentialIntegrationFixture extends IntegrationTestFixture {
 
@@ -54,21 +57,30 @@ abstract class CredentialIntegrationFixture extends IntegrationTestFixture {
 
     protected final List<Credential> credentialsToCleanUp = new ArrayList<>();
 
+    @BeforeEach
+    final void setUpConnection(TestInfo testInfo) throws Exception {
+        openIsolatedConnection(testInfo);
+    }
+
     @Override
     protected boolean requiresProfile() {
         return false;
     }
 
     @AfterEach
-    void cleanUpCredentials() {
-        for (Credential credential : credentialsToCleanUp) {
-            try {
-                credential.drop();
-            } catch (Exception ignored) {
-                // Preserve the primary test result; names are unique per test.
+    void cleanUpCredentials() throws Exception {
+        try {
+            for (Credential credential : credentialsToCleanUp) {
+                try {
+                    credential.drop();
+                } catch (Exception ignored) {
+                    // Preserve the primary test result; names are unique per test.
+                }
             }
+            credentialsToCleanUp.clear();
+        } finally {
+            closeIsolatedConnection();
         }
-        credentialsToCleanUp.clear();
     }
 
 
@@ -103,8 +115,6 @@ abstract class CredentialIntegrationFixture extends IntegrationTestFixture {
     }
 
     protected void runLocalUserCredentialRoundTrip() throws Exception {
-        String adminUser = dbConfig.getDbUser();
-        String adminPassword = dbConfig.getDbPassword();
         String localPassword = dbConfig.getDbPassword();
         String localUser = uniqueIdentifier("JSAI_IT_USER_");
         String credentialName = uniqueCredentialName();
@@ -113,7 +123,7 @@ abstract class CredentialIntegrationFixture extends IntegrationTestFixture {
         boolean userCreated = false;
 
         try {
-            adminClient = SelectAI.create(connectionConfigFor(adminUser, adminPassword));
+            adminClient = SelectAI.create(adminDbConfig());
             try {
                 createLocalUser(adminClient.getConnection(), localUser, localPassword);
                 userCreated = true;

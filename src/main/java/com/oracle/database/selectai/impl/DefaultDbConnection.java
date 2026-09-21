@@ -22,7 +22,7 @@ import java.util.Properties;
  */
 final class DefaultDbConnection implements DbConnection {
     /** Logger for JDBC connection initialization diagnostics. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(DbConnection.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultDbConnection.class);
     /** JDBC URL used to create the connection. */
     private final String jdbcUrl;
     /** Database username used to create the connection. */

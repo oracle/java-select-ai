@@ -86,11 +86,7 @@ public final class ProfileAttributeUtils {
             LOGGER.error("connection must not be null when fetching profile attributes for {}", profileName);
             throw new IllegalArgumentException("connection must not be null");
         }
-        final String sql = "SELECT attribute_name, attribute_value " +
-                "FROM USER_CLOUD_AI_PROFILE_ATTRIBUTES " +
-                "WHERE profile_name = ?";
-
-        try (PreparedStatement ps = connection.prepareStatement(sql)) {
+        try (PreparedStatement ps = connection.prepareStatement(Sql.GET_PROFILE_ATTRIBUTES.get())) {
             ps.setString(1, profileName);
             ProfileAttributes.Builder builder = ProfileAttributes.builder();
 

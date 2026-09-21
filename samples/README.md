@@ -101,6 +101,25 @@ Some samples change database state. Review the class comments before running
 samples that create, update, enable, disable, drop, grant, revoke, submit
 feedback, or generate data.
 
+## Using the Published SDK
+
+Applications can consume the released SDK from Maven Central instead of
+building the SDK source repository:
+
+```xml
+<dependency>
+    <groupId>com.oracle.database.selectai</groupId>
+    <artifactId>select-ai</artifactId>
+    <version>1.0.0</version>
+</dependency>
+```
+
+The build commands later in this document use the locally built project JAR
+because they are intended for running samples from the source repository. The
+SDK does not include an SLF4J logging provider. The `samples` Maven profile adds
+`slf4j-simple` for standalone sample execution; application projects should
+configure their own SLF4J 2.x provider.
+
 ### External dependencies by sample area
 
 Some samples require database objects, cloud credentials, provider access, or
@@ -146,7 +165,7 @@ ALTER USER AI_TEST1 QUOTA UNLIMITED ON USERS;
 ALTER USER AI_TEST2 QUOTA UNLIMITED ON USERS;
 
 BEGIN
-  DBMS_CLOUD.CREATE_CREDENTIAL (
+  C##CLOUD$SERVICE.DBMS_CLOUD.CREATE_CREDENTIAL (
       credential_name => 'OCI_GEN_AI_CRED',
       user_ocid       => '<oci-user-ocid>',
       tenancy_ocid    => '<oci-tenancy-ocid>',
@@ -222,7 +241,7 @@ using the SDK should choose their own SLF4J logging backend.
 Compile all active samples:
 
 ```bash
-javac --release 17 -cp "target/select-ai-java-1.0.0.jar:target/dependency/*" -d samples/out $(find samples/src/main/java -name "*.java")
+javac --release 17 -cp "target/select-ai-1.0.0.jar:target/dependency/*" -d samples/out $(find samples/src/main/java -name "*.java")
 ```
 
 PowerShell:
@@ -230,7 +249,7 @@ PowerShell:
 ```powershell
 $sampleSources = Get-ChildItem samples/src/main/java -Recurse -Filter *.java |
     ForEach-Object { $_.FullName }
-javac --release 17 -cp "target/select-ai-java-1.0.0.jar;target/dependency/*" `
+javac --release 17 -cp "target/select-ai-1.0.0.jar;target/dependency/*" `
     -d samples/out $sampleSources
 ```
 
@@ -239,38 +258,38 @@ javac --release 17 -cp "target/select-ai-java-1.0.0.jar;target/dependency/*" `
 Run a sample by using its fully qualified class name:
 
 ```bash
-java -cp "samples/out:target/select-ai-java-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.profile.ListProfilesSample
+java -cp "samples/out:target/select-ai-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.profile.ListProfilesSample
 ```
 
 PowerShell:
 
 ```powershell
-java -cp "samples/out;target/select-ai-java-1.0.0.jar;target/dependency/*" `
+java -cp "samples/out;target/select-ai-1.0.0.jar;target/dependency/*" `
     com.oracle.database.selectai.samples.profile.ListProfilesSample
 ```
 
 More examples:
 
 ```bash
-java -cp "samples/out:target/select-ai-java-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.credential.CreateCredentialSample
-java -cp "samples/out:target/select-ai-java-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.conversation.ListConversationsSample
-java -cp "samples/out:target/select-ai-java-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.conversation.ListConversationPromptsSample
-java -cp "samples/out:target/select-ai-java-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.vectorindex.ListVectorIndexesSample
-java -cp "samples/out:target/select-ai-java-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.profile.SummarizeProfileSample
-java -cp "samples/out:target/select-ai-java-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.profile.ChatSessionProfileSample
-java -cp "samples/out:target/select-ai-java-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.datasource.ListProfilesWithDataSourceSample
+java -cp "samples/out:target/select-ai-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.credential.CreateCredentialSample
+java -cp "samples/out:target/select-ai-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.conversation.ListConversationsSample
+java -cp "samples/out:target/select-ai-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.conversation.ListConversationPromptsSample
+java -cp "samples/out:target/select-ai-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.vectorindex.ListVectorIndexesSample
+java -cp "samples/out:target/select-ai-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.profile.SummarizeProfileSample
+java -cp "samples/out:target/select-ai-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.profile.ChatSessionProfileSample
+java -cp "samples/out:target/select-ai-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.datasource.ListProfilesWithDataSourceSample
 ```
 
 PowerShell:
 
 ```powershell
-java -cp "samples/out;target/select-ai-java-1.0.0.jar;target/dependency/*" com.oracle.database.selectai.samples.credential.CreateCredentialSample
-java -cp "samples/out;target/select-ai-java-1.0.0.jar;target/dependency/*" com.oracle.database.selectai.samples.conversation.ListConversationsSample
-java -cp "samples/out;target/select-ai-java-1.0.0.jar;target/dependency/*" com.oracle.database.selectai.samples.conversation.ListConversationPromptsSample
-java -cp "samples/out;target/select-ai-java-1.0.0.jar;target/dependency/*" com.oracle.database.selectai.samples.vectorindex.ListVectorIndexesSample
-java -cp "samples/out;target/select-ai-java-1.0.0.jar;target/dependency/*" com.oracle.database.selectai.samples.profile.SummarizeProfileSample
-java -cp "samples/out;target/select-ai-java-1.0.0.jar;target/dependency/*" com.oracle.database.selectai.samples.profile.ChatSessionProfileSample
-java -cp "samples/out;target/select-ai-java-1.0.0.jar;target/dependency/*" com.oracle.database.selectai.samples.datasource.ListProfilesWithDataSourceSample
+java -cp "samples/out;target/select-ai-1.0.0.jar;target/dependency/*" com.oracle.database.selectai.samples.credential.CreateCredentialSample
+java -cp "samples/out;target/select-ai-1.0.0.jar;target/dependency/*" com.oracle.database.selectai.samples.conversation.ListConversationsSample
+java -cp "samples/out;target/select-ai-1.0.0.jar;target/dependency/*" com.oracle.database.selectai.samples.conversation.ListConversationPromptsSample
+java -cp "samples/out;target/select-ai-1.0.0.jar;target/dependency/*" com.oracle.database.selectai.samples.vectorindex.ListVectorIndexesSample
+java -cp "samples/out;target/select-ai-1.0.0.jar;target/dependency/*" com.oracle.database.selectai.samples.profile.SummarizeProfileSample
+java -cp "samples/out;target/select-ai-1.0.0.jar;target/dependency/*" com.oracle.database.selectai.samples.profile.ChatSessionProfileSample
+java -cp "samples/out;target/select-ai-1.0.0.jar;target/dependency/*" com.oracle.database.selectai.samples.datasource.ListProfilesWithDataSourceSample
 ```
 
 ## Runtime Classpath
@@ -279,13 +298,13 @@ The runtime classpath must include the compiled sample classes, the SDK jar, and
 runtime dependencies copied by Maven:
 
 ```bash
-samples/out:target/select-ai-java-1.0.0.jar:target/dependency/*
+samples/out:target/select-ai-1.0.0.jar:target/dependency/*
 ```
 
 On PowerShell and Windows, use semicolons as classpath separators:
 
 ```text
-samples/out;target/select-ai-java-1.0.0.jar;target/dependency/*
+samples/out;target/select-ai-1.0.0.jar;target/dependency/*
 ```
 
 Key runtime libraries include:

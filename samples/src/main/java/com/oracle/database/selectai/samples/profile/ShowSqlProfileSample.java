@@ -50,12 +50,12 @@ import org.slf4j.LoggerFactory;
  *
  * <p>Compile this sample:</p>
  * <pre>{@code
- * javac --release 17 -cp "target/select-ai-java-1.0.0.jar:target/dependency/*" -d samples/out samples/src/main/java/com/oracle/database/selectai/samples/profile/ShowSqlProfileSample.java
+ * javac --release 17 -cp "target/select-ai-1.0.0.jar:target/dependency/*" -d samples/out samples/src/main/java/com/oracle/database/selectai/samples/profile/ShowSqlProfileSample.java
  * }</pre>
  *
  * <p>Run this sample:</p>
  * <pre>{@code
- * java -cp "samples/out:target/select-ai-java-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.profile.ShowSqlProfileSample
+ * java -cp "samples/out:target/select-ai-1.0.0.jar:target/dependency/*" com.oracle.database.selectai.samples.profile.ShowSqlProfileSample
  * }</pre>
  *
  * <p>This sample prints normal result data to standard output so it is easy to

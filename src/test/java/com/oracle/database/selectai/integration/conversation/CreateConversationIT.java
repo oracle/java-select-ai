@@ -7,7 +7,6 @@
 package com.oracle.database.selectai.integration.conversation;
 
 import com.oracle.database.selectai.Conversation;
-import com.oracle.database.selectai.integration.IntegrationTestFixture;
 import com.oracle.database.selectai.model.ConversationAttributes;
 import com.oracle.database.selectai.model.ConversationPrompt;
 import com.oracle.database.selectai.model.GenerateAction;

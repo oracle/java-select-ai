@@ -30,6 +30,7 @@ import com.oracle.database.selectai.model.VectorIndexConfig;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -56,12 +57,16 @@ abstract class VectorIndexIntegrationFixture extends IntegrationTestFixture {
     protected String listPrefix;
     protected String listVectorPrefix;
 
+    @BeforeEach
+    final void setUpConnection(TestInfo testInfo) throws Exception {
+        openIsolatedConnection(testInfo);
+    }
+
     @Override
     protected String profileObjectList() {
         return null;
     }
 
-    @BeforeEach
     @Override
     protected void createIsolatedProfile() throws Exception {
         super.createIsolatedProfile();
@@ -73,20 +78,24 @@ abstract class VectorIndexIntegrationFixture extends IntegrationTestFixture {
 
     @AfterEach
     void cleanVectorIndexResources() throws Exception {
-        for (String name : new ArrayList<>(managedIndexNames)) {
-            try {
-                selectAI.vectorIndex(name).drop(true);
-            } catch (Exception ignored) {
-                // A test may already have removed the index; cleanup is best effort.
+        try {
+            for (String name : new ArrayList<>(managedIndexNames)) {
+                try {
+                    selectAI.vectorIndex(name).drop(true);
+                } catch (Exception ignored) {
+                    // A test may already have removed the index; cleanup is best effort.
+                }
             }
-        }
-        managedIndexNames.clear();
-        if (objectStorageCredential != null) {
-            try {
-                objectStorageCredential.drop();
-            } catch (Exception ignored) {
-                // Preserve the original test failure when asynchronous DB cleanup lags.
+            managedIndexNames.clear();
+            if (objectStorageCredential != null) {
+                try {
+                    objectStorageCredential.drop();
+                } catch (Exception ignored) {
+                    // Preserve the original test failure when asynchronous DB cleanup lags.
+                }
             }
+        } finally {
+            closeIsolatedConnection();
         }
     }
 

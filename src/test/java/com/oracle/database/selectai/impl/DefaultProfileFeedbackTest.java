@@ -35,7 +35,7 @@ class DefaultProfileFeedbackTest {
 
     private static final String PROFILE_ATTRIBUTES_SQL =
             "SELECT attribute_name, attribute_value "
-                    + "FROM USER_CLOUD_AI_PROFILE_ATTRIBUTES "
+                    + "FROM C##CLOUD$SERVICE.USER_CLOUD_AI_PROFILE_ATTRIBUTES "
                     + "WHERE profile_name = ?";
 
     @Mock
@@ -412,6 +412,41 @@ class DefaultProfileFeedbackTest {
                 .isInstanceOf(SelectAIException.class)
                 .hasMessageContaining("FEEDBACK")
                 .hasCause(sqlException);
+    }
+
+    /**
+     * Test: Verifies feedback failure diagnostics do not expose SQL text, response, or comments.
+     * Expected: Sensitive markers are absent from the SDK exception text and captured logs.
+     */
+    @Test
+    void feedbackFailureDoesNotExposeSqlTextResponseOrFeedbackContentInExceptionOrLogs()
+            throws Exception {
+        DefaultProfile profile = loadedProfile();
+        String sensitiveSqlText = "select 'SEC_FEEDBACK_SQL_MARKER' from dual";
+        String sensitiveResponse = "SEC_FEEDBACK_RESPONSE_MARKER expected response";
+        String sensitiveContent = "SEC_FEEDBACK_CONTENT_MARKER reviewer comments";
+        SQLException sqlException = new SQLException("database rejected request", "42000", 942);
+        Feedback feedback = Feedback.builder()
+                .sqlText(sensitiveSqlText)
+                .feedbackType(Feedback.FeedbackType.NEGATIVE)
+                .response(sensitiveResponse)
+                .feedbackContent(sensitiveContent)
+                .operation("add")
+                .build();
+        when(connection.prepareCall(Sql.FEEDBACK_SQL_TEXT.get())).thenReturn(callableStatement);
+        when(callableStatement.execute()).thenThrow(sqlException);
+
+        LogCapture.CapturedFailure failure = LogCapture.captureFailure(
+                () -> profile.feedback(feedback));
+
+        assertThat(failure.throwable())
+                .isInstanceOf(SelectAIException.class)
+                .hasMessageContaining("FEEDBACK")
+                .hasCause(sqlException);
+        LogCapture.assertFailureDoesNotExpose(failure,
+                sensitiveSqlText, sensitiveResponse, sensitiveContent,
+                "SEC_FEEDBACK_SQL_MARKER", "SEC_FEEDBACK_RESPONSE_MARKER",
+                "SEC_FEEDBACK_CONTENT_MARKER");
     }
 
     private DefaultProfile loadedProfile() throws Exception {

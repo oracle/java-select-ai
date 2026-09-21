@@ -1,0 +1,529 @@
+name: select_ai_java_tests
+
+on:
+  push:
+    branches:
+      - main
+      - 'dev/**'
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  unit-tests:
+    name: Unit tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+
+      - name: Verify runner Java and Maven
+        shell: bash
+        run: |
+          set -euo pipefail
+          java -version
+          mvn --version
+
+      - name: Run unit tests
+        run: mvn --batch-mode --no-transfer-progress clean verify
+
+  integration-tests:
+    name: Database integration tests
+    needs: unit-tests
+    if: github.event_name == 'workflow_dispatch' || github.event_name == 'workflow_call'
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    environment: database-integration
+
+    services:
+      adb:
+        image: ghcr.io/oracle/adb-free:latest-26ai
+        env:
+          WORKLOAD_TYPE: ATP
+          START_ORDS: "False"
+          ENABLE_ARCHIVE_LOG: "False"
+          DATABASE_NAME: ${{ vars.SELECT_AI_IT_DB_NAME }}
+          ADMIN_PASSWORD: ${{ secrets.SELECT_AI_IT_ADMIN_DB_PASSWORD }}
+          WALLET_PASSWORD: ${{ secrets.SELECT_AI_IT_WALLET_PASSWORD }}
+        ports:
+          - 1521:1521
+          - 1522:1522
+          - 8443:8443
+          - 27017:27017
+        options: >-
+          --cap-add SYS_ADMIN
+          --device /dev/fuse
+
+    env:
+      SELECT_AI_IT_DB_USER: ${{ secrets.SELECT_AI_IT_DB_USER }}
+      SELECT_AI_IT_DB_PASSWORD: ${{ secrets.SELECT_AI_IT_DB_PASSWORD }}
+      SELECT_AI_IT_DB_URL: ${{ vars.SELECT_AI_IT_DB_URL }}
+      SELECT_AI_IT_DB_NAME: ${{ vars.SELECT_AI_IT_DB_NAME }}
+      SELECT_AI_IT_DB_SERVICE: ${{ vars.SELECT_AI_IT_DB_SERVICE }}
+      SELECT_AI_IT_WALLET_LOCATION: ${{ vars.SELECT_AI_IT_WALLET_LOCATION }}
+      SELECT_AI_IT_WALLET_PASSWORD: ${{ secrets.SELECT_AI_IT_WALLET_PASSWORD }}
+
+      SELECT_AI_IT_ADMIN_DB_USER: ${{ secrets.SELECT_AI_IT_ADMIN_DB_USER }}
+      SELECT_AI_IT_ADMIN_DB_PASSWORD: ${{ secrets.SELECT_AI_IT_ADMIN_DB_PASSWORD }}
+
+      SELECT_AI_IT_OCI_USER_OCID: ${{ secrets.SELECT_AI_IT_OCI_USER_OCID }}
+      SELECT_AI_IT_OCI_TENANCY_OCID: ${{ secrets.SELECT_AI_IT_OCI_TENANCY_OCID }}
+      SELECT_AI_IT_OCI_PRIVATE_KEY: ${{ secrets.SELECT_AI_IT_OCI_PRIVATE_KEY }}
+      SELECT_AI_IT_OCI_FINGERPRINT: ${{ secrets.SELECT_AI_IT_OCI_FINGERPRINT }}
+      SELECT_AI_IT_OCI_COMPARTMENT_ID: ${{ secrets.SELECT_AI_IT_OCI_COMPARTMENT_ID }}
+      SELECT_AI_IT_OCI_MODEL: ${{ vars.SELECT_AI_IT_OCI_MODEL }}
+      SELECT_AI_IT_OCI_CREDENTIAL_NAME: ${{ vars.SELECT_AI_IT_OCI_CREDENTIAL_NAME }}
+      SELECT_AI_IT_OCI_APIFORMAT: ${{ vars.SELECT_AI_IT_OCI_APIFORMAT }}
+      SELECT_AI_IT_OCI_ENDPOINT_ID: ${{ vars.SELECT_AI_IT_OCI_ENDPOINT_ID }}
+      SELECT_AI_IT_OCI_RUNTIMETYPE: ${{ vars.SELECT_AI_IT_OCI_RUNTIMETYPE }}
+
+      SELECT_AI_IT_PROVIDER: ${{ vars.SELECT_AI_IT_PROVIDER }}
+      SELECT_AI_IT_REGION: ${{ vars.SELECT_AI_IT_REGION }}
+
+      SELECT_AI_IT_CRED_USERNAME: ${{ secrets.SELECT_AI_IT_CRED_USERNAME }}
+      SELECT_AI_IT_CRED_PASSWORD: ${{ secrets.SELECT_AI_IT_CRED_PASSWORD }}
+
+      SELECT_AI_IT_PROVIDER_OPENAI_API_KEY: ${{ secrets.SELECT_AI_IT_PROVIDER_OPENAI_API_KEY }}
+      SELECT_AI_IT_PROVIDER_OPENAI_MODEL: ${{ vars.SELECT_AI_IT_PROVIDER_OPENAI_MODEL }}
+      SELECT_AI_IT_PROVIDER_OPENAI_COMPATIBLE_API_KEY: ${{ secrets.SELECT_AI_IT_PROVIDER_OPENAI_COMPATIBLE_API_KEY }}
+      SELECT_AI_IT_PROVIDER_OPENAI_COMPATIBLE_ENDPOINT: ${{ vars.SELECT_AI_IT_PROVIDER_OPENAI_COMPATIBLE_ENDPOINT }}
+      SELECT_AI_IT_PROVIDER_OPENAI_COMPATIBLE_MODEL: ${{ vars.SELECT_AI_IT_PROVIDER_OPENAI_COMPATIBLE_MODEL }}
+
+      SELECT_AI_IT_PROVIDER_COHERE_API_KEY: ${{ secrets.SELECT_AI_IT_PROVIDER_COHERE_API_KEY }}
+      SELECT_AI_IT_PROVIDER_COHERE_MODEL: ${{ vars.SELECT_AI_IT_PROVIDER_COHERE_MODEL }}
+
+      SELECT_AI_IT_PROVIDER_AZURE_API_KEY: ${{ secrets.SELECT_AI_IT_PROVIDER_AZURE_API_KEY }}
+      SELECT_AI_IT_PROVIDER_AZURE_RESOURCE_NAME: ${{ vars.SELECT_AI_IT_PROVIDER_AZURE_RESOURCE_NAME }}
+      SELECT_AI_IT_PROVIDER_AZURE_DEPLOYMENT_NAME: ${{ vars.SELECT_AI_IT_PROVIDER_AZURE_DEPLOYMENT_NAME }}
+      SELECT_AI_IT_PROVIDER_AZURE_EMBEDDING_DEPLOYMENT_NAME: ${{ vars.SELECT_AI_IT_PROVIDER_AZURE_EMBEDDING_DEPLOYMENT_NAME }}
+
+      SELECT_AI_IT_PROVIDER_AWS_ACCESS_KEY_ID: ${{ secrets.SELECT_AI_IT_PROVIDER_AWS_ACCESS_KEY_ID }}
+      SELECT_AI_IT_PROVIDER_AWS_SECRET_ACCESS_KEY: ${{ secrets.SELECT_AI_IT_PROVIDER_AWS_SECRET_ACCESS_KEY }}
+      SELECT_AI_IT_PROVIDER_AWS_REGION: ${{ vars.SELECT_AI_IT_PROVIDER_AWS_REGION }}
+      SELECT_AI_IT_PROVIDER_AWS_MODEL: ${{ vars.SELECT_AI_IT_PROVIDER_AWS_MODEL }}
+
+      SELECT_AI_IT_PROVIDER_GOOGLE_API_KEY: ${{ secrets.SELECT_AI_IT_PROVIDER_GOOGLE_API_KEY }}
+      SELECT_AI_IT_PROVIDER_GOOGLE_MODEL: ${{ vars.SELECT_AI_IT_PROVIDER_GOOGLE_MODEL }}
+
+      SELECT_AI_IT_PROVIDER_ANTHROPIC_API_KEY: ${{ secrets.SELECT_AI_IT_PROVIDER_ANTHROPIC_API_KEY }}
+      SELECT_AI_IT_PROVIDER_ANTHROPIC_MODEL: ${{ vars.SELECT_AI_IT_PROVIDER_ANTHROPIC_MODEL }}
+
+      SELECT_AI_IT_PROVIDER_HUGGINGFACE_API_KEY: ${{ secrets.SELECT_AI_IT_PROVIDER_HUGGINGFACE_API_KEY }}
+      SELECT_AI_IT_PROVIDER_HUGGINGFACE_MODEL: ${{ vars.SELECT_AI_IT_PROVIDER_HUGGINGFACE_MODEL }}
+
+      SELECT_AI_IT_VECTOR_INDEX_EMBEDDING_LOCATION: ${{ secrets.SELECT_AI_IT_VECTOR_INDEX_EMBEDDING_LOCATION }}
+      SELECT_AI_IT_SUMMARIZE_LOCATION_URI: ${{ secrets.SELECT_AI_IT_SUMMARIZE_LOCATION_URI }}
+      SELECT_AI_IT_SUMMARIZE_CREDENTIAL_NAME: ${{ vars.SELECT_AI_IT_SUMMARIZE_CREDENTIAL_NAME }}
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+
+      - name: Verify runner Java and Maven
+        shell: bash
+        run: |
+          set -euo pipefail
+          java -version
+          mvn --version
+
+      - name: Set ADB Free service container ID
+        run: echo "ADB_CONTAINER_NAME=${{ job.services.adb.id }}" >> "${GITHUB_ENV}"
+
+      - name: Verify required integration-test configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          required_configuration=(
+            SELECT_AI_IT_DB_USER
+            SELECT_AI_IT_DB_PASSWORD
+            SELECT_AI_IT_ADMIN_DB_PASSWORD
+            SELECT_AI_IT_WALLET_PASSWORD
+            SELECT_AI_IT_OCI_USER_OCID
+            SELECT_AI_IT_OCI_TENANCY_OCID
+            SELECT_AI_IT_OCI_PRIVATE_KEY
+            SELECT_AI_IT_OCI_FINGERPRINT
+            SELECT_AI_IT_OCI_COMPARTMENT_ID
+            SELECT_AI_IT_DB_NAME
+            SELECT_AI_IT_DB_SERVICE
+          )
+
+          missing=()
+          for variable_name in "${required_configuration[@]}"; do
+            if [[ -z "${!variable_name:-}" ]]; then
+              missing+=("${variable_name}")
+            fi
+          done
+
+          if (( ${#missing[@]} > 0 )); then
+            printf 'Missing integration-test configuration: %s\n' "${missing[*]}" >&2
+            exit 1
+          fi
+
+      - name: Verify runner resources for ADB Free
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          required_cpu_count=4
+          required_memory_kb=$((8 * 1024 * 1024))
+          required_disk_kb=$((30 * 1024 * 1024))
+
+          cpu_count="$(nproc)"
+          available_memory_kb="$(awk '/MemAvailable:/ { print $2; exit }' /proc/meminfo)"
+          available_disk_kb="$(df -Pk / | awk 'NR == 2 { print $4 }')"
+
+          echo "Available CPUs: ${cpu_count}"
+          echo "Available memory: $((available_memory_kb / 1024 / 1024)) GiB"
+          echo "Available disk: $((available_disk_kb / 1024 / 1024)) GiB"
+          df -h /
+
+          echo "Top-level filesystem usage:"
+          sudo du -xhd1 / 2>/dev/null | sort -h | tail -n 20 || true
+
+          for directory in \
+            /var/lib/docker \
+            /home/runner/work \
+            /opt/hostedtoolcache \
+            /usr/local \
+            /usr/share; do
+            if [[ -d "${directory}" ]]; then
+              echo "Usage under ${directory}:"
+              sudo du -xhd1 "${directory}" 2>/dev/null | sort -h | tail -n 20 || true
+            fi
+          done
+
+          echo "Docker disk usage before pulling ADB Free:"
+          docker system df -v || true
+
+          if (( cpu_count < required_cpu_count )); then
+            echo "ADB Free requires at least ${required_cpu_count} CPUs." >&2
+            exit 1
+          fi
+
+          if (( available_memory_kb < required_memory_kb )); then
+            echo "ADB Free requires at least 8 GiB of available memory." >&2
+            exit 1
+          fi
+
+          if (( available_disk_kb < required_disk_kb )); then
+            echo "ADB Free requires at least 30 GiB of available disk space." >&2
+            echo "Use a larger or self-hosted runner for database integration tests." >&2
+            exit 1
+          fi
+
+      - name: Wait for ADB Free container
+        shell: bash
+        run: |
+          set -u
+
+          if command -v nc >/dev/null 2>&1; then
+            echo "Using netcat at $(command -v nc) to check port 1522."
+            port_is_open() {
+              nc -z -w 5 127.0.0.1 1522
+            }
+          else
+            echo "netcat is not installed; using Bash TCP probing instead."
+            port_is_open() {
+              (echo > /dev/tcp/127.0.0.1/1522) >/dev/null 2>&1
+            }
+          fi
+
+          container_id="${ADB_CONTAINER_NAME}"
+          database_services_are_ready() {
+            local listener_services
+            listener_services="$(docker exec "${container_id}" bash -lc \
+              'lsnrctl services LISTENER 2>&1' || true)"
+
+            local service_name
+            for service_name in \
+              "${SELECT_AI_IT_DB_SERVICE}" \
+              "${SELECT_AI_IT_DB_NAME}_high"; do
+              if ! grep -Fqi -- "${service_name}" <<< "${listener_services}"; then
+                return 1
+              fi
+            done
+
+            return 0
+          }
+
+          for attempt in {1..120}; do
+            container_status="$(docker inspect \
+              --format '{{.State.Status}}' \
+              "${container_id}" 2>/dev/null || true)"
+            container_health="$(docker inspect \
+              --format '{{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' \
+              "${container_id}" 2>/dev/null || true)"
+
+            if [[ "${container_status}" != "running" ]]; then
+              echo "ADB Free container stopped unexpectedly: status=${container_status:-unknown}." >&2
+              docker logs "${container_id}" || true
+              exit 1
+            fi
+
+            if [[ "${container_health}" == "unhealthy" ]]; then
+              echo "ADB Free container became unhealthy." >&2
+              docker logs --tail 300 "${container_id}" || true
+              exit 1
+            fi
+
+            if port_is_open; then
+              echo "ADB Free is listening on TCPS port 1522."
+              if database_services_are_ready; then
+                echo "ADB Free has registered the configured and high-priority database services."
+                exit 0
+              fi
+              echo "The listener is reachable, but one or more required database services are not registered yet."
+            else
+              echo "ADB Free is not listening on TCPS port 1522 yet."
+            fi
+            echo "Waiting for ADB Free on TCPS port 1522 (attempt ${attempt}/120)..."
+            sleep 10
+          done
+
+          echo "ADB Free container state:"
+          docker inspect \
+            --format='status={{.State.Status}} health={{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' \
+            "${ADB_CONTAINER_NAME}" || true
+
+          echo "ADB Free container logs:"
+          docker logs "${ADB_CONTAINER_NAME}" || true
+          exit 1
+
+      - name: Verify ADB Free services
+        shell: bash
+        run: |
+          set -u
+
+          container_id="${ADB_CONTAINER_NAME}"
+
+          echo "Docker container:"
+          docker ps --filter "name=^/${container_id}$" \
+            --format 'name={{.Names}} image={{.Image}} status={{.Status}} ports={{.Ports}}' || true
+
+          echo
+          echo "Listener status and endpoints:"
+          docker exec "${container_id}" bash -lc \
+            'lsnrctl status LISTENER 2>&1' || true
+
+          echo
+          echo "Registered database services:"
+          docker exec "${container_id}" bash -lc \
+            'lsnrctl services LISTENER 2>&1' || true
+
+          echo
+          echo "Listening ports inside the container:"
+          docker exec "${container_id}" bash -lc '
+            if command -v ss >/dev/null 2>&1; then
+              ss -ltnp
+            elif command -v netstat >/dev/null 2>&1; then
+              netstat -lntp
+            else
+              echo "Neither ss nor netstat is available."
+            fi
+          ' || true
+
+          echo
+          echo "ADB Free wallet TNS aliases:"
+          docker exec "${container_id}" bash -lc '
+            tnsnames="/u01/app/oracle/wallets/tls_wallet/tnsnames.ora"
+            if [[ -f "${tnsnames}" ]]; then
+              awk -F= '\''/^[[:alnum:]_.-]+[[:space:]]*=/ {
+                alias=$1
+                gsub(/[[:space:]]/, "", alias)
+                print alias
+              }'\'' "${tnsnames}" | sort -u
+            else
+              echo "Wallet TNS file not found: ${tnsnames}"
+            fi
+          ' || true
+
+          echo
+          echo "Host port checks:"
+          if command -v nc >/dev/null 2>&1; then
+            port_is_open() {
+              nc -z -w 5 127.0.0.1 "$1"
+            }
+          else
+            port_is_open() {
+              (echo > "/dev/tcp/127.0.0.1/$1") >/dev/null 2>&1
+            }
+          fi
+
+          for port in 1521 1522 8443 27017; do
+            if port_is_open "${port}"; then
+              echo "OPEN   localhost:${port}"
+            else
+              echo "CLOSED localhost:${port}"
+            fi
+          done
+
+      - name: Extract ADB Free wallet
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          container_id="${ADB_CONTAINER_NAME}"
+          wallet_root="${RUNNER_TEMP}/adb-wallet"
+          wallet_location="${wallet_root}/tls_wallet"
+
+          rm -rf "${wallet_root}"
+          mkdir -p "${wallet_root}"
+
+          docker cp \
+            "${container_id}:/u01/app/oracle/wallets/tls_wallet" \
+            "${wallet_root}/"
+
+          for wallet_file in \
+            tnsnames.ora \
+            sqlnet.ora \
+            ojdbc.properties \
+            cwallet.sso \
+            ewallet.p12; do
+            if [[ ! -f "${wallet_location}/${wallet_file}" ]]; then
+              echo "Required wallet file is missing: ${wallet_file}" >&2
+              exit 1
+            fi
+          done
+
+          if ! grep -Fqi -- "${SELECT_AI_IT_DB_SERVICE}" "${wallet_location}/tnsnames.ora"; then
+            echo "Configured TNS alias ${SELECT_AI_IT_DB_SERVICE} was not found in tnsnames.ora." >&2
+            exit 1
+          fi
+
+          export TNS_ADMIN="${wallet_location}"
+          export SELECT_AI_IT_DB_URL="jdbc:oracle:thin:@${SELECT_AI_IT_DB_SERVICE}"
+
+          echo "ADB wallet extracted to ${wallet_location}."
+          echo "TNS_ADMIN=${wallet_location}" >> "${GITHUB_ENV}"
+          echo "ADB_WALLET_LOCATION=${wallet_location}" >> "${GITHUB_ENV}"
+          echo "SELECT_AI_IT_DB_URL=${SELECT_AI_IT_DB_URL}" >> "${GITHUB_ENV}"
+          echo "SELECT_AI_IT_WALLET_LOCATION=${wallet_location}" >> "${GITHUB_ENV}"
+          echo "SELECT_AI_IT_CWALLET_LOCATION=${wallet_location}" >> "${GITHUB_ENV}"
+          echo "SELECT_AI_IT_EWALLET_LOCATION=${wallet_location}" >> "${GITHUB_ENV}"
+
+          echo "Wallet files:"
+          find "${wallet_location}" -maxdepth 1 -type f -exec basename {} \; | sort
+          echo "Configured TNS alias: ${SELECT_AI_IT_DB_SERVICE}"
+
+      - name: Verify wallet-based integration-test configuration
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          if [[ -z "${TNS_ADMIN:-}" || ! -d "${TNS_ADMIN}" ]]; then
+            echo "TNS_ADMIN does not point to an extracted wallet directory." >&2
+            exit 1
+          fi
+
+          if [[ -z "${SELECT_AI_IT_DB_URL:-}" || \
+                -z "${SELECT_AI_IT_DB_NAME:-}" || \
+                -z "${SELECT_AI_IT_DB_SERVICE:-}" || \
+                -z "${SELECT_AI_IT_WALLET_LOCATION:-}" || \
+                -z "${SELECT_AI_IT_CWALLET_LOCATION:-}" || \
+                -z "${SELECT_AI_IT_EWALLET_LOCATION:-}" ]]; then
+            echo "Wallet-based database configuration is incomplete." >&2
+            exit 1
+          fi
+
+          echo "Using database name: ${SELECT_AI_IT_DB_NAME}"
+          echo "Using TNS alias: ${SELECT_AI_IT_DB_SERVICE}"
+          echo "Using JDBC URL: ${SELECT_AI_IT_DB_URL}"
+          echo "Using TNS_ADMIN: ${TNS_ADMIN}"
+          echo "Using extracted wallet directory: ${SELECT_AI_IT_WALLET_LOCATION}"
+
+      - name: Run database integration tests
+        run: mvn --batch-mode --no-transfer-progress -Dtest='**/*IT' clean verify test
+
+      - name: Collect ADB Free diagnostics
+        if: always()
+        shell: bash
+        run: |
+          set -u
+
+          container_id="${ADB_CONTAINER_NAME:-${{ job.services.adb.id }}}"
+          diagnostic_dir="${RUNNER_TEMP}/adb-diagnostics"
+          mkdir -p \
+            "${diagnostic_dir}/container_state" \
+            "${diagnostic_dir}/oracle_diag/rdbms" \
+            "${diagnostic_dir}/oracle_diag/tnslsnr"
+
+          df -h / > "${diagnostic_dir}/runner-disk.txt" 2>&1 || true
+          docker system df > "${diagnostic_dir}/docker-disk.txt" 2>&1 || true
+
+          if docker inspect "${container_id}" >/tmp/adb-free-inspect.json 2>/dev/null; then
+            if command -v jq >/dev/null 2>&1; then
+              jq 'map(.Config.Env |= map(
+                if startswith("ADMIN_PASSWORD=") then "ADMIN_PASSWORD=<redacted>"
+                elif startswith("WALLET_PASSWORD=") then "WALLET_PASSWORD=<redacted>"
+                else . end
+              ))' \
+                /tmp/adb-free-inspect.json \
+                > "${diagnostic_dir}/container-inspect.json"
+            else
+              docker inspect --format='status={{.State.Status}} exit_code={{.State.ExitCode}} started={{.State.StartedAt}} finished={{.State.FinishedAt}} restart_count={{.RestartCount}} health={{if .State.Health}}{{.State.Health.Status}}{{else}}none{{end}}' \
+                "${container_id}" \
+                > "${diagnostic_dir}/container-inspect.json"
+            fi
+          fi
+
+          docker logs "${container_id}" > "${diagnostic_dir}/container.log" 2>&1 || true
+
+          docker cp \
+            "${container_id}:/u01/container_state/." \
+            "${diagnostic_dir}/container_state/" 2>&1 || true
+
+          input_file="${diagnostic_dir}/container_state/input.json"
+          if [[ -f "${input_file}" ]]; then
+            if command -v jq >/dev/null 2>&1 && \
+               jq empty "${input_file}" >/dev/null 2>&1; then
+              jq 'with_entries(
+                if (.key | test("password|key"; "i"))
+                then .value = "<redacted>"
+                else .
+                end
+              )' "${input_file}" > "${input_file}.redacted"
+              mv "${input_file}.redacted" "${input_file}"
+            else
+              rm -f "${input_file}"
+            fi
+          fi
+
+          {
+            for file in "${diagnostic_dir}"/container_state/plug_my_container_pdb_*.log; do
+              if [[ -f "${file}" ]]; then
+                echo "===== ${file} ====="
+                cat "${file}"
+              fi
+            done
+          } > "${diagnostic_dir}/pdb-plug.log" 2>&1 || true
+
+          docker cp \
+            "${container_id}:/u01/app/oracle/diag/rdbms/." \
+            "${diagnostic_dir}/oracle_diag/rdbms/" 2>&1 || true
+
+          docker cp \
+            "${container_id}:/u01/app/oracle/diag/tnslsnr/." \
+            "${diagnostic_dir}/oracle_diag/tnslsnr/" 2>&1 || true
+
+          echo "ADB diagnostics collected in ${diagnostic_dir}."
+
+      - name: Upload ADB Free diagnostics
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+        with:
+          name: adb-free-diagnostics-${{ github.run_id }}
+          path: ${{ runner.temp }}/adb-diagnostics/
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Stop ADB Free container
+        if: always()
+        shell: bash
+        run: docker rm --force "${ADB_CONTAINER_NAME:-${{ job.services.adb.id }}}" || true

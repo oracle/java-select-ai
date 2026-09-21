@@ -69,7 +69,40 @@ mvn clean install
 ```
 
 This compiles the SDK, runs unit tests, packages the JAR, and installs it in the
-local Maven repository.
+local Maven repository. The package also attaches
+`target/select-ai-1.0.0-sources.jar` and
+`target/select-ai-1.0.0-javadoc.jar`.
+
+Applications using the published release do not need to build or install the
+SDK locally. This workflow is for SDK development, testing, Javadoc generation,
+and source-based sample verification.
+
+Each generated JAR includes `META-INF/LICENSE` and
+`META-INF/THIRD-PARTY_LICENSE`. The third-party notice covers the runtime
+dependencies and the sample-only logging provider. Keep these files current
+when dependency versions or licenses change.
+
+Verify the packaged Javadoc and all local sample-source links with:
+
+```bash
+scripts/verify-javadoc-artifacts.sh
+```
+
+The verification script requires the JDK `jar` command and the standard
+`find`, `grep`, and `sort` commands.
+
+To generate publication-named POM, JAR, and checksum files locally without
+uploading anything, run:
+
+```bash
+mvn clean package
+scripts/generate-checksums.sh
+```
+
+The script writes a publication-named POM and generates MD5, SHA1, SHA256, and
+SHA512 checksum sidecars for the POM, main JAR, sources JAR, and Javadoc JAR
+under `target/`. It does not publish or upload anything. GPG signatures are a
+separate release requirement and are not created by this local workflow.
 
 The project targets Java 17. Do not use language features newer than Java 17.
 
@@ -92,6 +125,41 @@ mvn -Dtest='DefaultProfileTest#testName' test
 Unit tests should cover validation, model serialization, JDBC binding behavior,
 exception wrapping, connection ownership, logging-sensitive behavior, and
 resource lifecycle changes as applicable.
+
+Some unit tests intentionally exercise failure paths. The production
+implementation logs caught database exceptions at `ERROR`, so enabling test
+logging may print exception stack traces even when those tests pass. The
+test-only configuration in `src/test/resources/simplelogger.properties` sets
+the default log level to `off`, keeping normal test output quiet. A final
+`BUILD SUCCESS` means the tests passed; a final `BUILD FAILURE` requires
+investigating the first failing test and its report under
+`target/surefire-reports`.
+
+To enable implementation logs at `WARN` for a full unit-test/build run:
+
+```bash
+mvn -Dorg.slf4j.simpleLogger.log.com.oracle.database.selectai.impl=warn clean install
+```
+
+For one unit-test class or method, use the same option with Surefire:
+
+```bash
+mvn -Dorg.slf4j.simpleLogger.log.com.oracle.database.selectai.impl=warn \
+    -Dtest='DefaultProfileTest' test
+```
+
+For an integration test, enable both implementation and integration-test logs
+when needed:
+
+```bash
+mvn -Dorg.slf4j.simpleLogger.log.com.oracle.database.selectai.impl=warn \
+    -Dorg.slf4j.simpleLogger.log.com.oracle.database.selectai.integration=warn \
+    -Dtest='ProviderIT' test
+```
+
+These options only change test output. Production error logging should remain
+enabled so that real database failures retain their diagnostic cause. Do not
+use `-DskipTests` to hide the output because it also skips test execution.
 
 ## Integration tests
 
@@ -147,7 +215,7 @@ set. Build the SDK, copy the sample runtime dependencies, and compile samples:
 ```bash
 mvn clean install
 mvn -Psamples -DincludeScope=runtime -DoutputDirectory=target/dependency dependency:copy-dependencies
-javac --release 17 -cp "target/select-ai-java-1.0.0.jar:target/dependency/*" \
+javac --release 17 -cp "target/select-ai-1.0.0.jar:target/dependency/*" \
   -d samples/out $(find samples/src/main/java -name "*.java")
 ```
 

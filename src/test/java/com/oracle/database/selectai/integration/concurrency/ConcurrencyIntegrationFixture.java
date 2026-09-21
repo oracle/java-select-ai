@@ -8,11 +8,30 @@
 package com.oracle.database.selectai.integration.concurrency;
 
 import com.oracle.database.selectai.integration.IntegrationTestFixture;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 
 /**
  * Shared defaults for concurrency integration tests.
  */
 abstract class ConcurrencyIntegrationFixture extends IntegrationTestFixture {
+
+    @BeforeAll
+    static void createConcurrencySchema(TestInfo testInfo) throws Exception {
+        createFreshIntegrationSchema(testClassName(testInfo));
+    }
+
+    @BeforeEach
+    final void setUpConnection(TestInfo testInfo) throws Exception {
+        openIsolatedConnection(testInfo);
+    }
+
+    @AfterEach
+    final void tearDownConnection() throws Exception {
+        closeIsolatedConnection();
+    }
 
     protected static final String TRANSLATE_TEXT = "Thank you";
     protected static final String SOURCE_LANGUAGE = "en";

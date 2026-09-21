@@ -69,7 +69,7 @@ The retained JDBC connection can be accessed for custom SQL or PL/SQL:
 ```java
 try (SelectAI selectAI = SelectAI.create(dbConnectionConfig);
      Statement statement = selectAI.getConnection().createStatement();
-     ResultSet resultSet = statement.executeQuery("SELECT 1 FROM dual")) {
+     ResultSet resultSet = statement.executeQuery("SELECT 1 FROM SYS.DUAL")) {
     // process resultSet
 }
 ```

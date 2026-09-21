@@ -60,7 +60,7 @@ Example setup SQL. Replace masked values before running in your database:
   ALTER USER AI_TEST2 QUOTA UNLIMITED ON USERS;
 
   BEGIN
-    DBMS_CLOUD.CREATE_CREDENTIAL (
+    C##CLOUD$SERVICE.DBMS_CLOUD.CREATE_CREDENTIAL (
         credential_name => 'OCI_GEN_AI_CRED',
         user_ocid       => '<oci-user-ocid>',
         tenancy_ocid    => '<oci-tenancy-ocid>',
@@ -206,7 +206,7 @@ fi
 
 POM_FILE="${POM_FILE:-pom.xml}"
 SDK_VERSION="1.0.0"
-SDK_JAR="target/select-ai-java-${SDK_VERSION}.jar"
+SDK_JAR="target/select-ai-${SDK_VERSION}.jar"
 COMPILE_CP="${SDK_JAR}:target/dependency/*"
 RUNTIME_CP="samples/out:${SDK_JAR}:target/dependency/*"
 REPORT_DIR="target/integration-sample-reports/$(date +%Y%m%d-%H%M%S)"

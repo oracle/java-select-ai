@@ -264,7 +264,7 @@ public final class VectorIndexAttributes {
         ObjectMapper mapper = new ObjectMapper();
         try {
             mapper.setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
-            mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+            mapper.setDefaultPropertyInclusion(JsonInclude.Include.NON_NULL);
             return mapper.writeValueAsString(this);
         } catch (Exception e) {
             throw new IllegalStateException("Failed to serialize VectorIndexAttributes to JSON", e);

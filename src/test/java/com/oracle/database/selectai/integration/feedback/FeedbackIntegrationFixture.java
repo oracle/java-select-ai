@@ -8,11 +8,30 @@
 package com.oracle.database.selectai.integration.feedback;
 
 import com.oracle.database.selectai.integration.IntegrationTestFixture;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 
 /**
  * Shared defaults and expected values for feedback integration tests.
  */
 abstract class FeedbackIntegrationFixture extends IntegrationTestFixture {
+
+    @BeforeAll
+    static void createFeedbackSchema(TestInfo testInfo) throws Exception {
+        createFreshIntegrationSchema(testClassName(testInfo));
+    }
+
+    @BeforeEach
+    final void setUpConnection(TestInfo testInfo) throws Exception {
+        openIsolatedConnection(testInfo);
+    }
+
+    @AfterEach
+    final void tearDownConnection() throws Exception {
+        closeIsolatedConnection();
+    }
 
     protected static final String PROMPT = "Total points of each gymnasts";
     protected static final String SHOWSQL_SQL_ID = "ahgttusrvh9x5";

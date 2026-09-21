@@ -1,0 +1,26 @@
+name: macaron_security_analysis
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  analyze:
+    name: Macaron security analysis
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source
+        uses: actions/checkout@93cb6efe18208431cddfb8368fd83d5badbf9bfd # v5.0.1
+
+      - name: Run Macaron security analysis
+        uses: oracle/macaron@794eec32782979f577efb5ff71d585f683a3550f # v0.25.0
+        with:
+          repo_path: ./
+          policy_file: check-github-actions
+          policy_purl: 'pkg:github.com/oracle/java-select-ai@.*'
+          reports_retention_days: 90

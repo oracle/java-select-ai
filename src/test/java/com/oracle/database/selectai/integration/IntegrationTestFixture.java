@@ -10,24 +10,25 @@ import com.oracle.database.selectai.Credential;
 import com.oracle.database.selectai.Profile;
 import com.oracle.database.selectai.SelectAI;
 import com.oracle.database.selectai.model.CredentialConfig;
+import com.oracle.database.selectai.DatabaseAdmin;
+import java.util.List;
 import com.oracle.database.selectai.model.DbConnectionConfig;
 import com.oracle.database.selectai.model.ProfileAttributes;
 import com.oracle.database.selectai.model.ProfileStatus;
 import com.oracle.database.selectai.model.SelectAIException;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Locale;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import org.junit.jupiter.api.TestInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
@@ -35,18 +36,36 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
  * Shared lifecycle and configuration fixture for live Select AI integration tests.
  *
  * <p>The fixture reads {@code SELECT_AI_IT_*} values from the process
- * environment inherited by the Maven test JVM. Profile-based suites create an
- * isolated OCI signing-key GenAI credential from the four SELECT_AI_IT_OCI_*
- * key fields, use it when creating the profile, and drop it after the profile
- * is removed.</p>
+ * environment inherited by the Maven test JVM. The shared database connection
+ * is intended for ordinary feature tests. Table-backed feature fixtures create
+ * the shared tables in the {@code ADMIN} schema through the admin connection.
+ * Suites that perform database-wide administration or create users must explicitly call
+ * {@link #adminDbConfig()} to obtain the separate admin connection configuration.
+ * Profile-based suites create an isolated OCI signing-key GenAI credential
+ * from the four
+ * SELECT_AI_IT_OCI_* key fields, use it when creating the profile, and drop it
+ * after the profile is removed.</p>
  */
 public abstract class IntegrationTestFixture {
 
+    private static final Logger LOG = LoggerFactory.getLogger(IntegrationTestFixture.class);
+
     private static final String PROFILE_PREFIX = "JSAI_IT";
     private static final String PROFILE_DESCRIPTION = "Java Select AI integration test profile";
+    private static final String TEST_SCHEMA_OWNER = "ADMIN";
     protected static final String DEFAULT_PROVIDER = "oci";
+    private static final String[] SHARED_TABLE_NAMES = {
+        "gymnast", "movie", "actor", "people", "director"
+    };
+    private static final String[] SELECT_AI_PACKAGES = {
+        "DBMS_CLOUD",
+        "DBMS_CLOUD_AI",
+        "DBMS_CLOUD_AI_AGENT",
+        "DBMS_CLOUD_PIPELINE"
+    };
 
-    private Map<String, String> environment;
+    protected final Logger logger = LoggerFactory.getLogger(getClass());
+    private String currentTestMethod = "<setup>";
     protected SelectAI selectAI;
     protected Profile profile;
     protected String profileName;
@@ -57,29 +76,44 @@ public abstract class IntegrationTestFixture {
     private final Set<Credential> managedCredentials = new HashSet<>();
 
     /**
-     * Recreates the common integration schema once before each concrete
-     * integration test class, matching the shared integration schema setup step.
+     * Recreates the common integration schema for a table-backed feature
+     * fixture. A table-backed feature fixture calls this once before its
+     * concrete integration test class.
      *
+     * @param testClassName concrete integration test class being initialized
      * @throws Exception when the configured database cannot be initialized
      */
-    @BeforeAll
-    static void createFreshIntegrationSchema() throws Exception {
-        Map<String, String> environment = loadEnvironment();
-        assumeTrue(!environment.isEmpty(),
-                "Set SELECT_AI_IT_* environment variables to run integration tests.");
+    protected static void createFreshIntegrationSchema(String testClassName) throws Exception {
+        if (!hasConfiguredEnvironment()) {
+            LOG.warn("SKIPPED {}: missing SELECT_AI_IT_* environment variables", testClassName);
+            assumeTrue(false,
+                    "Set SELECT_AI_IT_* environment variables to run integration tests.");
+        }
 
-        SelectAI schemaClient = SelectAI.create(dbConfigFromEnvironment(environment));
+        DbConnectionConfig adminConfig = adminDbConfigFromEnvironment(testClassName);
+        DbConnectionConfig featureConfig = dbConfigFromEnvironmentForSchema(testClassName);
+
+        SelectAI schemaClient = SelectAI.create(adminConfig);
         try (Connection connection = schemaClient.getConnection()) {
+            ensureFeatureUser(connection, adminConfig, featureConfig);
             recreateIntegrationSchema(connection);
+            grantFeatureUserPrivileges(connection, featureConfig.getDbUser());
         } finally {
             schemaClient.close();
+        }
+        
+        try (DatabaseAdmin adminClient = DatabaseAdmin.create(adminConfig)) {
+            grantProviderHttpAccess(
+                    adminClient,
+                    featureConfig.getDbUser());
         }
     }
 
     private static void recreateIntegrationSchema(Connection connection) throws SQLException {
-        for (String tableName : new String[]{"gymnast", "movie", "actor", "people", "director"}) {
+        for (String tableName : SHARED_TABLE_NAMES) {
             try (Statement statement = connection.createStatement()) {
-                statement.executeUpdate("DROP TABLE " + tableName + " CASCADE CONSTRAINTS");
+                statement.executeUpdate("DROP TABLE " + qualifiedTestTable(tableName)
+                        + " CASCADE CONSTRAINTS");
             } catch (SQLException ignored) {
                 // Match shared setup behavior when the table does not exist.
             }
@@ -87,7 +121,7 @@ public abstract class IntegrationTestFixture {
 
         try (Statement statement = connection.createStatement()) {
             statement.executeUpdate("""
-                    CREATE TABLE people (
+                    CREATE TABLE ADMIN.people (
                         id NUMBER PRIMARY KEY,
                         name VARCHAR2(50),
                         age NUMBER,
@@ -96,34 +130,34 @@ public abstract class IntegrationTestFixture {
                     )
                     """);
             statement.executeUpdate("""
-                    CREATE TABLE gymnast (
+                    CREATE TABLE ADMIN.gymnast (
                         id NUMBER PRIMARY KEY,
                         floor_ex_points NUMBER,
                         rings_points NUMBER,
                         parallel_bars_points NUMBER,
                         horizontal_bar_points NUMBER,
                         total_points NUMBER,
-                        FOREIGN KEY (id) REFERENCES people (id)
+                        FOREIGN KEY (id) REFERENCES ADMIN.people (id)
                     )
                     """);
             statement.executeUpdate("""
-                    CREATE TABLE director (
+                    CREATE TABLE ADMIN.director (
                         director_id INT PRIMARY KEY,
                         name VARCHAR(10)
                     )
                     """);
             statement.executeUpdate("""
-                    CREATE TABLE movie (
+                    CREATE TABLE ADMIN.movie (
                         movie_id INT PRIMARY KEY,
                         title VARCHAR(100),
                         release_date DATE,
                         genre VARCHAR(50),
                         director_id INT,
-                        FOREIGN KEY (director_id) REFERENCES director (director_id)
+                        FOREIGN KEY (director_id) REFERENCES ADMIN.director (director_id)
                     )
                     """);
             statement.executeUpdate("""
-                    CREATE TABLE actor (
+                    CREATE TABLE ADMIN.actor (
                         actor_id INT PRIMARY KEY,
                         name VARCHAR(100)
                     )
@@ -131,7 +165,8 @@ public abstract class IntegrationTestFixture {
         }
 
         try (PreparedStatement peopleInsert = connection.prepareStatement(
-                "INSERT INTO people (id, name, age, height, hometown) VALUES (?, ?, ?, ?, ?)")) {
+                "INSERT INTO ADMIN.people (id, name, age, height, hometown) "
+                        + "VALUES (?, ?, ?, ?, ?)")) {
             addPeopleRow(peopleInsert, 1, "John Smith", 22, 170, "New York");
             addPeopleRow(peopleInsert, 2, "Emma Johnson", 20, 165, "Los Angeles");
             addPeopleRow(peopleInsert, 3, "Michael Brown", 24, 180, "Chicago");
@@ -141,7 +176,7 @@ public abstract class IntegrationTestFixture {
         }
 
         try (PreparedStatement gymnastInsert = connection.prepareStatement(
-                "INSERT INTO gymnast (id, floor_ex_points, rings_points, "
+                "INSERT INTO ADMIN.gymnast (id, floor_ex_points, rings_points, "
                         + "parallel_bars_points, horizontal_bar_points, total_points) "
                         + "VALUES (?, ?, ?, ?, ?, ?)")) {
             addGymnastRow(gymnastInsert, 1, 9.5, 8.8, 9.2, 9.0, 36.5);
@@ -152,6 +187,108 @@ public abstract class IntegrationTestFixture {
             gymnastInsert.executeBatch();
         }
 
+    }
+
+    private static void ensureFeatureUser(Connection connection,
+                                        DbConnectionConfig adminConfig,
+                                        DbConnectionConfig featureConfig)
+            throws SQLException {
+        String adminUser = sqlIdentifier(adminConfig.getDbUser());
+        String featureUser = sqlIdentifier(featureConfig.getDbUser());
+
+        // ADMIN already has the required privileges.
+        if (adminUser.equalsIgnoreCase(featureUser)) {
+            return;
+        }
+
+        boolean userExists;
+        try (PreparedStatement statement = connection.prepareStatement(
+                "SELECT COUNT(*) FROM ALL_USERS WHERE USERNAME = ?")) {
+            statement.setString(1, featureUser.toUpperCase(Locale.ROOT));
+            try (ResultSet resultSet = statement.executeQuery()) {
+                resultSet.next();
+                userExists = resultSet.getInt(1) > 0;
+            }
+        }
+
+        try (Statement statement = connection.createStatement()) {
+            if (userExists) {
+                statement.execute(
+                        "ALTER USER " + featureUser + " ACCOUNT UNLOCK");
+            } else {
+                String escapedPassword = featureConfig.getDbPassword()
+                        .replace("\"", "\"\"");
+                statement.execute(
+                        "CREATE USER " + featureUser
+                                + " IDENTIFIED BY \"" + escapedPassword + "\"");
+            }
+
+            statement.execute(
+                    "GRANT CREATE SESSION, CREATE TABLE, UNLIMITED TABLESPACE TO "
+                            + featureUser);
+        }
+    }
+
+    private static void grantFeatureUserPrivileges(Connection connection,
+                                                   String featureUser)
+            throws SQLException {
+        String user = sqlIdentifier(featureUser);
+
+        if ("ADMIN".equalsIgnoreCase(user)) {
+            return;
+        }
+
+        try (Statement statement = connection.createStatement()) {
+            for (String packageName : SELECT_AI_PACKAGES) {
+                statement.execute(
+                        "GRANT EXECUTE ON " + packageName + " TO " + user);
+            }
+
+            for (String tableName : SHARED_TABLE_NAMES) {
+                statement.execute(
+                        "GRANT SELECT, INSERT, UPDATE, DELETE ON "
+                                + qualifiedTestTable(tableName)
+                                + " TO " + user);
+            }
+        }
+    }
+
+    private static void grantProviderHttpAccess(
+            DatabaseAdmin databaseAdmin,
+            String featureUser)
+            throws SelectAIException {
+
+        List<String> users = List.of(featureUser);
+
+        String awsRegion = configuredEnvironmentValue(
+                "SELECT_AI_IT_PROVIDER_AWS_REGION");
+        if (awsRegion == null) {
+            awsRegion = "us-east-1";
+        }
+
+        String azureResource = configuredEnvironmentValue(
+                "SELECT_AI_IT_PROVIDER_AZURE_RESOURCE_NAME");
+        if (azureResource == null) {
+            azureResource = "ADBST-AI-RESOURCE-JAPAN-EAST";
+        }
+
+        databaseAdmin.grantHttpAccess(
+                users,
+                "bedrock-runtime."
+                        + awsRegion.toLowerCase(Locale.ROOT)
+                        + ".amazonaws.com");
+
+        databaseAdmin.grantHttpAccess(users, "api.openai.com");
+        databaseAdmin.grantHttpAccess(users, "api.anthropic.com");
+
+        databaseAdmin.grantHttpAccess(
+                users,
+                azureResource.toLowerCase(Locale.ROOT)
+                        + ".openai.azure.com");
+
+        databaseAdmin.grantHttpAccess(
+                users,
+                "generativelanguage.googleapis.com");
     }
 
     private static void addPeopleRow(PreparedStatement statement, int id, String name,
@@ -177,12 +314,7 @@ public abstract class IntegrationTestFixture {
         statement.addBatch();
     }
 
-    @BeforeEach
     protected void createIsolatedProfile() throws Exception {
-        environment = loadEnvironment();
-        assumeTrue(!environment.isEmpty(),
-                "Set SELECT_AI_IT_* environment variables to run integration tests.");
-
         dbConfig = dbConfigFromEnvironment();
         selectAI = SelectAI.create(dbConfig);
         if (requiresProfile()) {
@@ -198,9 +330,45 @@ public abstract class IntegrationTestFixture {
                 throw e;
             }
         }
+        logger.info("Initialized integration fixture for {}", testId());
     }
 
-    @AfterEach
+    /**
+     * Opens the connection and resources required by a feature fixture.
+     * Feature fixtures call this explicitly from their own {@code @BeforeEach}
+     * method so suites without this dependency do not pay for it.
+     *
+     * @param testInfo current JUnit test information
+     * @throws Exception when the configured database or profile cannot be initialized
+     */
+    protected final void openIsolatedConnection(TestInfo testInfo) throws Exception {
+        setCurrentTestMethod(testInfo.getTestMethod()
+                .map(method -> method.getName())
+                .orElse("<setup>"));
+        createIsolatedProfile();
+    }
+
+    /**
+     * Closes the connection and resources opened by {@link #openIsolatedConnection(TestInfo)}.
+     *
+     * @throws Exception when managed resources cannot be removed
+     */
+    protected final void closeIsolatedConnection() throws Exception {
+        dropIsolatedProfile();
+    }
+
+    /**
+     * Returns the concrete test class name supplied by JUnit.
+     *
+     * @param testInfo current JUnit test information
+     * @return concrete test class name, or a fallback when unavailable
+     */
+    protected static final String testClassName(TestInfo testInfo) {
+        return testInfo.getTestClass()
+                .map(testClass -> testClass.getSimpleName())
+                .orElse("integration suite");
+    }
+
     protected void dropIsolatedProfile() throws Exception {
         try {
             dropManagedProfiles();
@@ -214,10 +382,16 @@ public abstract class IntegrationTestFixture {
                 try {
                     dropIsolatedGenAiCredential();
                 } finally {
-                    selectAI.close();
+                    if (selectAI != null) {
+                        selectAI.close();
+                    }
                 }
             }
         }
+        selectAI = null;
+        dbConfig = null;
+        profile = null;
+        profileName = null;
     }
 
     /**
@@ -333,9 +507,19 @@ public abstract class IntegrationTestFixture {
      * @return configured value
      */
     protected final String env(String name) {
-        String value = environment == null ? null : environment.get(name);
-        return value == null || value.isBlank() || "<set>".equalsIgnoreCase(value)
-                ? null : value;
+        return configuredEnvironmentValue(name);
+    }
+
+    protected final void setCurrentTestMethod(String testMethod) {
+        currentTestMethod = testMethod;
+    }
+
+    protected final String testId() {
+        return getClass().getSimpleName() + "#" + currentTestMethod;
+    }
+
+    protected final void logSkipped(String missingRequirement) {
+        logger.warn("SKIPPED {}: missing {}", testId(), missingRequirement);
     }
 
     /**
@@ -347,7 +531,10 @@ public abstract class IntegrationTestFixture {
      */
     protected final String requiredFeatureValue(String name, String reason) {
         String value = env(name);
-        assumeTrue(value != null, reason + " (missing " + name + ")");
+        if (value == null) {
+            logSkipped(name + " (" + reason + ")");
+            assumeTrue(false, reason + " (missing " + name + ")");
+        }
         return value;
     }
 
@@ -364,7 +551,7 @@ public abstract class IntegrationTestFixture {
     }
 
     /**
-     * Allows a feature suite to use the shared connection fixture without
+     * Allows a feature suite to use the common integration support without
      * creating an unrelated profile resource.
      *
      * @return {@code true} when the default isolated profile should be created
@@ -390,15 +577,14 @@ public abstract class IntegrationTestFixture {
     }
 
     /**
-     * Builds an object list owned by the configured integration database user.
+     * Builds an object list for the common tables owned by the ADMIN schema.
      *
      * @param objectNames object names; an empty list creates an owner-only
      *                    descriptor
-     * @return object-list JSON
+     * @return object-list JSON referencing the ADMIN-owned common tables
      */
     protected final String objectListFor(String... objectNames) {
-        assumeTrue(dbConfig != null, "The shared database configuration is not initialized.");
-        return objectListForOwner(dbConfig.getDbUser(), objectNames);
+        return objectListForOwner(TEST_SCHEMA_OWNER, objectNames);
     }
 
     /**
@@ -472,11 +658,34 @@ public abstract class IntegrationTestFixture {
     }
 
     /**
+     * Loads the connection configuration reserved for database administration
+     * integration tests.
+     *
+     * <p>The admin credentials are deliberately separate from the shared
+     * feature-test credentials. Both accounts use the shared JDBC URL because
+     * the admin operations and feature operations target the same database.</p>
+     *
+     * @return admin-capable database connection configuration
+     */
+    protected final DbConnectionConfig adminDbConfig() {
+        assumeTrue(dbConfig != null,
+                "The shared database configuration is not initialized.");
+
+        return DbConnectionConfig.builder()
+                .dbUser(required("SELECT_AI_IT_ADMIN_DB_USER"))
+                .dbPassword(required("SELECT_AI_IT_ADMIN_DB_PASSWORD"))
+                .jdbcUrl(dbConfig.getJdbcUrl())
+                .build();
+    }
+
+    /**
      * Returns the live JDBC connection used by the Select AI client.
      *
      * @return active JDBC connection
      */
     protected final Connection jdbcConnection() {
+        assumeTrue(selectAI != null,
+                "Integration tests require an active Select AI client.");
         Connection connection = selectAI.getConnection();
         assumeTrue(connection != null, "Integration tests require an active JDBC connection.");
         return connection;
@@ -517,20 +726,24 @@ public abstract class IntegrationTestFixture {
         if (dbUrl != null) {
             builder.jdbcUrl(dbUrl);
         } else {
-            assumeTrue(dbName != null && walletLocation != null,
-                    "Set SELECT_AI_IT_DB_URL or both SELECT_AI_IT_DB_NAME and "
-                            + "SELECT_AI_IT_WALLET_LOCATION.");
+            if (dbName == null || walletLocation == null) {
+                logSkipped("SELECT_AI_IT_DB_URL or both SELECT_AI_IT_DB_NAME and "
+                        + "SELECT_AI_IT_WALLET_LOCATION");
+                assumeTrue(false,
+                        "Set SELECT_AI_IT_DB_URL or both SELECT_AI_IT_DB_NAME and "
+                                + "SELECT_AI_IT_WALLET_LOCATION.");
+            }
             builder.jdbcUrl(walletJdbcUrl(dbName, walletLocation));
         }
         return builder.build();
     }
 
-    private static DbConnectionConfig dbConfigFromEnvironment(Map<String, String> environment) {
-        String dbUser = requiredEnvironmentValue(environment, "SELECT_AI_IT_DB_USER");
-        String dbPassword = requiredEnvironmentValue(environment, "SELECT_AI_IT_DB_PASSWORD");
-        String dbUrl = configuredEnvironmentValue(environment, "SELECT_AI_IT_DB_URL");
-        String dbName = configuredEnvironmentValue(environment, "SELECT_AI_IT_DB_NAME");
-        String walletLocation = configuredEnvironmentValue(environment, "SELECT_AI_IT_WALLET_LOCATION");
+    private static DbConnectionConfig dbConfigFromEnvironmentForSchema(String testClassName) {
+        String dbUser = requiredEnvironmentValue("SELECT_AI_IT_DB_USER", testClassName);
+        String dbPassword = requiredEnvironmentValue("SELECT_AI_IT_DB_PASSWORD", testClassName);
+        String dbUrl = configuredEnvironmentValue("SELECT_AI_IT_DB_URL");
+        String dbName = configuredEnvironmentValue("SELECT_AI_IT_DB_NAME");
+        String walletLocation = configuredEnvironmentValue("SELECT_AI_IT_WALLET_LOCATION");
 
         DbConnectionConfig.Builder builder = DbConnectionConfig.builder()
                 .dbUser(dbUser)
@@ -538,27 +751,68 @@ public abstract class IntegrationTestFixture {
         if (dbUrl != null) {
             builder.jdbcUrl(dbUrl);
         } else {
-            assumeTrue(dbName != null && walletLocation != null,
-                    "Set SELECT_AI_IT_DB_URL or both SELECT_AI_IT_DB_NAME and "
-                            + "SELECT_AI_IT_WALLET_LOCATION.");
+            if (dbName == null || walletLocation == null) {
+                LOG.warn("SKIPPED {}: missing SELECT_AI_IT_DB_URL or both "
+                        + "SELECT_AI_IT_DB_NAME and SELECT_AI_IT_WALLET_LOCATION",
+                        testClassName);
+                assumeTrue(false,
+                        "Set SELECT_AI_IT_DB_URL or both SELECT_AI_IT_DB_NAME and "
+                                + "SELECT_AI_IT_WALLET_LOCATION.");
+            }
             builder.jdbcUrl(walletJdbcUrl(dbName, walletLocation));
         }
         return builder.build();
+    }
+
+    private static DbConnectionConfig adminDbConfigFromEnvironment(String testClassName) {
+        String dbUser = requiredEnvironmentValue("SELECT_AI_IT_ADMIN_DB_USER", testClassName);
+        String dbPassword = requiredEnvironmentValue("SELECT_AI_IT_ADMIN_DB_PASSWORD", testClassName);
+        String dbUrl = configuredEnvironmentValue("SELECT_AI_IT_DB_URL");
+        String dbName = configuredEnvironmentValue("SELECT_AI_IT_DB_NAME");
+        String walletLocation = configuredEnvironmentValue("SELECT_AI_IT_WALLET_LOCATION");
+
+        DbConnectionConfig.Builder builder = DbConnectionConfig.builder()
+                .dbUser(dbUser)
+                .dbPassword(dbPassword);
+        if (dbUrl != null) {
+            builder.jdbcUrl(dbUrl);
+        } else {
+            if (dbName == null || walletLocation == null) {
+                LOG.warn("SKIPPED {}: missing SELECT_AI_IT_DB_URL or both "
+                        + "SELECT_AI_IT_DB_NAME and SELECT_AI_IT_WALLET_LOCATION",
+                        testClassName);
+                assumeTrue(false,
+                        "Set SELECT_AI_IT_DB_URL or both SELECT_AI_IT_DB_NAME and "
+                                + "SELECT_AI_IT_WALLET_LOCATION.");
+            }
+            builder.jdbcUrl(walletJdbcUrl(dbName, walletLocation));
+        }
+        return builder.build();
+    }
+
+    private static String qualifiedTestTable(String tableName) {
+        return TEST_SCHEMA_OWNER + "." + tableName;
     }
 
     private static String walletJdbcUrl(String dbName, String walletLocation) {
         return "jdbc:oracle:thin:@" + dbName + "_high?TNS_ADMIN=" + walletLocation;
     }
 
-    private static String requiredEnvironmentValue(Map<String, String> environment, String name) {
-        String value = configuredEnvironmentValue(environment, name);
-        assumeTrue(value != null, "Set " + name + " in the environment.");
+    private static String requiredEnvironmentValue(String name, String testClassName) {
+        String value = configuredEnvironmentValue(name);
+        if (value == null) {
+            LOG.warn("SKIPPED {}: missing {}", testClassName, name);
+            assumeTrue(false, "Set " + name + " in the environment.");
+        }
         return value;
     }
 
-    private static String configuredEnvironmentValue(Map<String, String> environment, String name) {
-        String value = environment.get(name);
-        return isConfiguredValue(value) ? value : null;
+    private static String configuredEnvironmentValue(String name) {
+        String value = System.getenv(name);
+        if (!isConfiguredValue(value)) {
+            return null;
+        }
+        return normalizeEnvironmentValue(name, value);
     }
 
     private ProfileAttributes profileAttributesFromEnvironment() {
@@ -583,13 +837,16 @@ public abstract class IntegrationTestFixture {
         if (objectList != null) {
             builder.objectList(objectList).enforceObjectList(true);
         }
-        builder.comments(false).constraints(false);
+        builder.comments(false).constraints(true);
         return builder.build();
     }
 
     private String required(String name) {
         String value = env(name);
-        assumeTrue(value != null, "Set " + name + " in the environment.");
+        if (value == null) {
+            logSkipped(name);
+            assumeTrue(false, "Set " + name + " in the environment.");
+        }
         return value;
     }
 
@@ -604,14 +861,10 @@ public abstract class IntegrationTestFixture {
         return value != null && value.matches("[A-Za-z][A-Za-z0-9_$#]*");
     }
 
-    private static Map<String, String> loadEnvironment() {
-        Map<String, String> values = new HashMap<>();
-        System.getenv().forEach((key, value) -> {
-            if (key.startsWith("SELECT_AI_IT_") && isConfiguredValue(value)) {
-                values.put(key, normalizeEnvironmentValue(key, value));
-            }
-        });
-        return values;
+    private static boolean hasConfiguredEnvironment() {
+        return System.getenv().entrySet().stream()
+                .anyMatch(entry -> entry.getKey().startsWith("SELECT_AI_IT_")
+                        && isConfiguredValue(entry.getValue()));
     }
 
     private static boolean isConfiguredValue(String value) {

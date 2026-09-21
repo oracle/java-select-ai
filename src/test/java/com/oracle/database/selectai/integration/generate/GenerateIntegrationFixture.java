@@ -8,11 +8,24 @@
 package com.oracle.database.selectai.integration.generate;
 
 import com.oracle.database.selectai.integration.IntegrationTestFixture;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.TestInfo;
 
 /**
  * Shared defaults for generation and chat-session integration tests.
  */
 abstract class GenerateIntegrationFixture extends IntegrationTestFixture {
+
+    @BeforeEach
+    final void setUpConnection(TestInfo testInfo) throws Exception {
+        openIsolatedConnection(testInfo);
+    }
+
+    @AfterEach
+    final void tearDownConnection() throws Exception {
+        closeIsolatedConnection();
+    }
 
     protected static final String GENERATE_MODEL = "openai.gpt-5.6-luna";
     protected static final String TRANSLATE_TEXT = "Thank you";

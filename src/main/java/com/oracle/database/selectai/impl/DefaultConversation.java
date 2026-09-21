@@ -38,7 +38,7 @@ import java.util.List;
  */
 final class DefaultConversation implements Conversation {
     /** Logger for conversation lifecycle and metadata operations. */
-    private static final Logger LOGGER = LoggerFactory.getLogger(Conversation.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DefaultConversation.class);
 
     /** Provider that controls connection lifecycle for conversation operations. */
     private final ConnectionProvider connectionProvider;
