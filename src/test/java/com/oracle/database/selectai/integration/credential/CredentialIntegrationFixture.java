@@ -39,7 +39,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
  * Credential names are unique per test. The common integration support reads
  * {@code SELECT_AI_IT_*} environment variables and provides JDBC setup. Optional
  * credential-specific keys include {@code SELECT_AI_IT_CRED_USERNAME},
- * {@code SELECT_AI_IT_CRED_PASSWORD}, {@code SELECT_AI_IT_OCI_USER_OCID},
+ * {@code SELECT_AI_IT_CRED_PASS}, {@code SELECT_AI_IT_OCI_USER_OCID},
  * {@code SELECT_AI_IT_OCI_TENANCY_OCID}, {@code SELECT_AI_IT_OCI_PRIVATE_KEY},
  * and {@code SELECT_AI_IT_OCI_FINGERPRINT}. Local-user scenarios use the
  * dedicated admin connection to create the temporary user, then exercise
@@ -48,8 +48,8 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
 abstract class CredentialIntegrationFixture extends IntegrationTestFixture {
 
     protected static final String DEFAULT_CREDENTIAL_USERNAME = "OCI credential username";
-    protected static final String DEFAULT_CREDENTIAL_PASSWORD = "OCI credential password";
-    protected static final String DEFAULT_INVALID_PASSWORD = "invalid_password";
+    protected static final String DEFAULT_CRED_PASS = "test-cred-pass";
+    protected static final String DEFAULT_INVALID_CRED_PASS = "test-invalid-cred-pass";
     protected static final String DEFAULT_OCI_USER_OCID = "user ocid";
     protected static final String DEFAULT_OCI_TENANCY_OCID = "tenancy ocid";
     protected static final String DEFAULT_OCI_PRIVATE_KEY = "private key";
@@ -101,7 +101,7 @@ abstract class CredentialIntegrationFixture extends IntegrationTestFixture {
     protected CredentialConfig usernameCredential(String credentialName) {
         return CredentialConfig.builder(credentialName)
                 .username(envOrDefault("SELECT_AI_IT_CRED_USERNAME", DEFAULT_CREDENTIAL_USERNAME))
-                .password(envOrDefault("SELECT_AI_IT_CRED_PASSWORD", DEFAULT_CREDENTIAL_PASSWORD))
+                .password(envOrDefault("SELECT_AI_IT_CRED_PASS", DEFAULT_CRED_PASS))
                 .build();
     }
 

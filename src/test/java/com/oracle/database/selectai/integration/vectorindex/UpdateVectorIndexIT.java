@@ -637,14 +637,17 @@ class UpdateVectorIndexIT extends VectorIndexIntegrationFixture {
 
     /**
      * Test: Send a 500-character profile_name value through the string update overload.
-     * Expected: the database rejects the oversized value with SelectAIException and ORA-20008.
+     * Expected: The database rejects the oversized value with {@code SelectAIException}.
+     * Oracle error codes can vary by environment, so the test accepts the applicable expected code.
      */
     @Test
     void test52031UpdateWithExcessivelyLargeValue() throws Exception {
         assertThatThrownBy(() -> existingIndex("UPDATE_5236").update("profile_name", "X".repeat(500)))
                 .isInstanceOfSatisfying(SelectAIException.class,
-                        exception -> assertThat(exception.getCause())
-                                .hasMessageContaining("ORA-20008:"));
+                        exception -> assertThat(exception.getCause().getMessage())
+                                .containsAnyOf(
+                                        "ORA-20008:",
+                                        "ORA-20048: Value is too long for vector index attribute - profile_name"));
     }
 
     /**
@@ -678,8 +681,6 @@ class UpdateVectorIndexIT extends VectorIndexIntegrationFixture {
         assertThat(recreated.update("match_limit", "10")).isTrue();
     }
 
-    // Bug [39920685](https://bug.oraclecorp.com/pls/bug/webbug_edit.edit_info_top?rptno=39920685)
-    // - JAVA SDK REJECTS VALID MATCH_LIMIT = 0 VALUES RETURNED BY THE DATABASE.
     @Test
     void test52034UpdateMatchLimitZero() throws Exception {
         assertThat(existingIndex("UPDATE_5235").update("match_limit", "0")).isTrue();

@@ -35,7 +35,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
  * Credential names are unique per test. The common integration support reads
  * {@code SELECT_AI_IT_*} environment variables and provides JDBC setup. Optional
  * credential-specific keys include {@code SELECT_AI_IT_CRED_USERNAME},
- * {@code SELECT_AI_IT_CRED_PASSWORD}, {@code SELECT_AI_IT_OCI_USER_OCID},
+ * {@code SELECT_AI_IT_CRED_PASS}, {@code SELECT_AI_IT_OCI_USER_OCID},
  * {@code SELECT_AI_IT_OCI_TENANCY_OCID}, {@code SELECT_AI_IT_OCI_PRIVATE_KEY},
  * and {@code SELECT_AI_IT_OCI_FINGERPRINT}. Local-user scenarios use the
  * configured database password for the temporary user.</p>
@@ -118,7 +118,7 @@ class CreateCredentialIT extends CredentialIntegrationFixture {
 
     /**
      * Test: Creates a credential with username {@code "invalid_username"} and the configured or
-     * fallback password, then sends it to the database.
+     * fallback credential password, then sends it to the database.
      * Expected: The SDK passes the username value through and the database creation call returns
      * {@code true}; the test does not impose Java-side username-format validation.
      */
@@ -126,15 +126,15 @@ class CreateCredentialIT extends CredentialIntegrationFixture {
     void test22005CredentialCreationAcceptsInvalidUsername() throws Exception {
         Credential credential = track(CredentialConfig.builder(uniqueCredentialName())
                 .username("invalid_username")
-                .password(envOrDefault("SELECT_AI_IT_CRED_PASSWORD", DEFAULT_INVALID_PASSWORD))
+                .password(envOrDefault("SELECT_AI_IT_CRED_PASS", DEFAULT_INVALID_CRED_PASS))
                 .build());
 
         assertThat(credential.create()).isTrue();
     }
 
     /**
-     * Test: Creates a credential with the configured or fallback username and literal password
-     * {@code "invalid_password"}, then calls {@code create()}.
+     * Test: Creates a credential with the configured or fallback username and an invalid
+     * credential password, then calls {@code create()}.
      * Expected: The supplied password is sent to the database without Java-side password-format
      * rejection and credential creation returns {@code true}.
      */
@@ -142,7 +142,7 @@ class CreateCredentialIT extends CredentialIntegrationFixture {
     void test22006CredentialCreationAcceptsInvalidPassword() throws Exception {
         Credential credential = track(CredentialConfig.builder(uniqueCredentialName())
                 .username(envOrDefault("SELECT_AI_IT_CRED_USERNAME", DEFAULT_CREDENTIAL_USERNAME))
-                .password("invalid_password")
+                .password(DEFAULT_INVALID_CRED_PASS)
                 .build());
 
         assertThat(credential.create()).isTrue();
