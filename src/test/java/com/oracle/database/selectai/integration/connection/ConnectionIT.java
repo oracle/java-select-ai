@@ -128,15 +128,16 @@ class ConnectionIT extends ConnectionIntegrationFixture {
      * Test: Creates a client with the deliberately invalid URL
      * {@code jdbc:oracle:thin:@invalid_dsn} and the configured username and password.
      * Expected: Client creation throws {@link SelectAIException} with a {@link SQLException}
-     * cause containing {@code ORA-12154:}.
+     * cause containing either {@code ORA-12154:} or {@code ORA-17868:}, depending on how the
+     * Oracle JDBC driver resolves the deliberately invalid data source name.
      */
     @Test
     void test10104ConnectionRejectsBadJdbcUrl() {
         assertThatThrownBy(() -> SelectAI.create(connectionConfigWithUrl(INVALID_JDBC_URL)))
                 .isInstanceOf(SelectAIException.class)
                 .hasCauseInstanceOf(SQLException.class)
-                .satisfies(exception -> assertThat(exception.getCause())
-                        .hasMessageContaining("ORA-12154:"));
+                .satisfies(exception -> assertThat(exception.getCause().getMessage())
+                        .containsAnyOf("ORA-12154:", "ORA-17868:"));
     }
 
     /**

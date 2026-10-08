@@ -26,6 +26,7 @@ import java.sql.Statement;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.TestInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,6 +77,18 @@ public abstract class IntegrationTestFixture {
     private final Set<Credential> managedCredentials = new HashSet<>();
 
     /**
+     * Provisions the configured feature user before every concrete integration-test class.
+     * This allows any individual suite to run with a non-admin database user.
+     *
+     * @param testInfo concrete integration test class being initialized
+     * @throws Exception when the configured database cannot be initialized
+     */
+    @BeforeAll
+    static void provisionIntegrationFeatureUser(TestInfo testInfo) throws Exception {
+        provisionIntegrationFeatureUser(testClassName(testInfo));
+    }
+
+    /**
      * Recreates the common integration schema for a table-backed feature
      * fixture. A table-backed feature fixture calls this once before its
      * concrete integration test class.
@@ -84,6 +97,21 @@ public abstract class IntegrationTestFixture {
      * @throws Exception when the configured database cannot be initialized
      */
     protected static void createFreshIntegrationSchema(String testClassName) throws Exception {
+        provisionIntegrationFeatureUser(testClassName);
+
+        DbConnectionConfig adminConfig = adminDbConfigFromEnvironment(testClassName);
+        DbConnectionConfig featureConfig = dbConfigFromEnvironmentForSchema(testClassName);
+
+        SelectAI schemaClient = SelectAI.create(adminConfig);
+        try (Connection connection = schemaClient.getConnection()) {
+            recreateIntegrationSchema(connection);
+            grantFeatureUserTablePrivileges(connection, featureConfig.getDbUser());
+        } finally {
+            schemaClient.close();
+        }
+    }
+
+    private static void provisionIntegrationFeatureUser(String testClassName) throws Exception {
         if (!hasConfiguredEnvironment()) {
             LOG.warn("SKIPPED {}: missing SELECT_AI_IT_* environment variables", testClassName);
             assumeTrue(false,
@@ -96,8 +124,7 @@ public abstract class IntegrationTestFixture {
         SelectAI schemaClient = SelectAI.create(adminConfig);
         try (Connection connection = schemaClient.getConnection()) {
             ensureFeatureUser(connection, adminConfig, featureConfig);
-            recreateIntegrationSchema(connection);
-            grantFeatureUserPrivileges(connection, featureConfig.getDbUser());
+            grantFeatureUserBaselinePrivileges(connection, featureConfig.getDbUser());
         } finally {
             schemaClient.close();
         }
@@ -142,8 +169,10 @@ public abstract class IntegrationTestFixture {
                     """);
             statement.executeUpdate("""
                     CREATE TABLE ADMIN.director (
-                        director_id INT PRIMARY KEY,
-                        name VARCHAR(10)
+                        name VARCHAR2(100),
+                        age NUMBER,
+                        years_experience NUMBER,
+                        specialty VARCHAR2(50)
                     )
                     """);
             statement.executeUpdate("""
@@ -152,14 +181,15 @@ public abstract class IntegrationTestFixture {
                         title VARCHAR(100),
                         release_date DATE,
                         genre VARCHAR(50),
-                        director_id INT,
-                        FOREIGN KEY (director_id) REFERENCES ADMIN.director (director_id)
+                        director_id INT
                     )
                     """);
             statement.executeUpdate("""
                     CREATE TABLE ADMIN.actor (
-                        actor_id INT PRIMARY KEY,
-                        name VARCHAR(100)
+                        name VARCHAR2(100),
+                        age NUMBER,
+                        height NUMBER,
+                        hometown VARCHAR2(100)
                     )
                     """);
         }
@@ -185,6 +215,23 @@ public abstract class IntegrationTestFixture {
             addGymnastRow(gymnastInsert, 4, 8.5, 8.0, 8.7, 8.3, 33.5);
             addGymnastRow(gymnastInsert, 5, 9.2, 8.5, 8.9, 9.1, 35.7);
             gymnastInsert.executeBatch();
+        }
+
+        try (PreparedStatement directorInsert = connection.prepareStatement(
+                "INSERT INTO ADMIN.director (name, age, years_experience, specialty) "
+                        + "VALUES (?, ?, ?, ?)")) {
+            addDirectorRow(directorInsert, "Maya Chen", 43, 18, "Drama");
+            addDirectorRow(directorInsert, "Daniel Ruiz", 51, 24, "Documentary");
+            addDirectorRow(directorInsert, "Priya Nair", 38, 12, "Comedy");
+            directorInsert.executeBatch();
+        }
+
+        try (PreparedStatement actorInsert = connection.prepareStatement(
+                "INSERT INTO ADMIN.actor (name, age, height, hometown) VALUES (?, ?, ?, ?)")) {
+            addActorRow(actorInsert, "Jordan Lee", 31, 178, "Seattle");
+            addActorRow(actorInsert, "Avery Patel", 27, 165, "Austin");
+            addActorRow(actorInsert, "Morgan Davis", 36, 172, "Boston");
+            actorInsert.executeBatch();
         }
 
     }
@@ -213,8 +260,7 @@ public abstract class IntegrationTestFixture {
 
         try (Statement statement = connection.createStatement()) {
             if (userExists) {
-                statement.execute(
-                        "ALTER USER " + featureUser + " ACCOUNT UNLOCK");
+                statement.execute("ALTER USER " + featureUser + " ACCOUNT UNLOCK");
             } else {
                 String escapedPassword = featureConfig.getDbPassword()
                         .replace("\"", "\"\"");
@@ -227,10 +273,11 @@ public abstract class IntegrationTestFixture {
                     "GRANT CREATE SESSION, CREATE TABLE, UNLIMITED TABLESPACE TO "
                             + featureUser);
         }
+
     }
 
-    private static void grantFeatureUserPrivileges(Connection connection,
-                                                   String featureUser)
+    private static void grantFeatureUserBaselinePrivileges(Connection connection,
+                                                            String featureUser)
             throws SQLException {
         String user = sqlIdentifier(featureUser);
 
@@ -243,7 +290,19 @@ public abstract class IntegrationTestFixture {
                 statement.execute(
                         "GRANT EXECUTE ON " + packageName + " TO " + user);
             }
+        }
+    }
 
+    private static void grantFeatureUserTablePrivileges(Connection connection,
+                                                        String featureUser)
+            throws SQLException {
+        String user = sqlIdentifier(featureUser);
+
+        if ("ADMIN".equalsIgnoreCase(user)) {
+            return;
+        }
+
+        try (Statement statement = connection.createStatement()) {
             for (String tableName : SHARED_TABLE_NAMES) {
                 statement.execute(
                         "GRANT SELECT, INSERT, UPDATE, DELETE ON "
@@ -311,6 +370,24 @@ public abstract class IntegrationTestFixture {
         statement.setDouble(4, parallelBarsPoints);
         statement.setDouble(5, horizontalBarPoints);
         statement.setDouble(6, totalPoints);
+        statement.addBatch();
+    }
+
+    private static void addDirectorRow(PreparedStatement statement, String name, int age,
+                                       int yearsExperience, String specialty) throws SQLException {
+        statement.setString(1, name);
+        statement.setInt(2, age);
+        statement.setInt(3, yearsExperience);
+        statement.setString(4, specialty);
+        statement.addBatch();
+    }
+
+    private static void addActorRow(PreparedStatement statement, String name, int age,
+                                    int height, String hometown) throws SQLException {
+        statement.setString(1, name);
+        statement.setInt(2, age);
+        statement.setInt(3, height);
+        statement.setString(4, hometown);
         statement.addBatch();
     }
 

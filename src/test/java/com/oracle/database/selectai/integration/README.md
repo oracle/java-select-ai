@@ -52,7 +52,7 @@ Maven passes the process environment to the test JVM, and the integration
 fixture reads those variables directly with `System.getenv()`. The fixture does
 not read a project-local `.env` file.
 
-Keep real secrets in your shell environment, ADE setup, CI secret store, or
+Keep real secrets in your shell environment, CI secret store, or
 another approved secret-management mechanism. Do not commit local files that
 contain real credentials. `SELECT_AI_IT_OCI_PRIVATE_KEY` may contain either
 real multiline PEM text or escaped `\n`/`\r` sequences; the fixture converts
@@ -60,9 +60,12 @@ escaped newlines for that private-key variable.
 
 ## Required Configuration
 
-Every integration test needs database connectivity. Only suites whose feature
-fixture explicitly calls `createFreshIntegrationSchema()` initialize the common
-live test schema; connection-only suites do not create the shared tables.
+Every integration test needs database connectivity. The shared fixture provisions
+the configured feature user and baseline privileges before each concrete test
+class, so individual suites can run with a non-admin feature user. Only suites
+whose feature fixture explicitly calls `createFreshIntegrationSchema()` initialize
+the common live test schema; connection-only suites do not create the shared
+tables.
 
 Set these for any integration run. These values identify the feature-test
 user that the fixture creates or reconfigures before running integration tests:
@@ -189,7 +192,7 @@ Add these when running username/password credential scenarios with real values:
 
 ```bash
 export SELECT_AI_IT_CRED_USERNAME=<credential username>
-export SELECT_AI_IT_CRED_PASSWORD=<credential password>
+export SELECT_AI_IT_CRED_PASS=<credential password>
 ```
 
 Local-user credential coverage uses the admin connection to create and remove a
@@ -328,7 +331,7 @@ credential scenarios.
 | Variable | Description |
 | --- | --- |
 | `SELECT_AI_IT_CRED_USERNAME` | Username stored in created username/password credentials. |
-| `SELECT_AI_IT_CRED_PASSWORD` | Password stored in created username/password credentials. |
+| `SELECT_AI_IT_CRED_PASS` | Password for the created username/password credential. |
 
 ### Provider tests
 
@@ -368,7 +371,7 @@ From the repository root, run all integration test classes explicitly:
 mvn -Dtest='**/*IT' test
 ```
 
-If Maven or Java is not on `PATH` in the ADE environment:
+If Maven or Java is not on `PATH`:
 
 ```bash
 export JAVA_HOME=<path to JDK 17>
