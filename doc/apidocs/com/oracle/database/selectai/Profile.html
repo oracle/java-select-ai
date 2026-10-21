@@ -93,7 +93,7 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-48">Profile</a></span></div>
+<div class="type-signature"><span class="modifiers">public interface </span><span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-55">Profile</a></span></div>
 <div class="block">Contract for Select AI profile lifecycle, prompt execution, and attribute
  management.
  <p>
@@ -109,6 +109,13 @@ loadScripts(document, 'script');</script>
  in memory, but it is not persisted until <a href="#create()"><code>create()</code></a> succeeds. A
  database-backed profile is opened from the database, listed from metadata, or
  successfully created through this SDK.
+ <p>
+ Profile attributes supplied through creation or update builders are validated
+ against values known by this SDK release. Attributes hydrated from an
+ existing database profile are treated as database metadata: known values keep
+ the existing normalization behavior, while values introduced by a newer
+ database release are preserved instead of causing profile loading or listing
+ to fail.
  <p>
  Metadata getters can return configured values before creation. Operations
  that execute against an existing database profile, such as prompt
@@ -386,7 +393,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="create()">
 <h3>create</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-60">create</a></span>()
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-67">create</a></span>()
         throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Creates this configured profile in the database.
  <p>
@@ -405,7 +412,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="drop(boolean)">
 <h3>drop</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-77">drop</a></span><wbr><span class="parameters">(boolean&nbsp;force)</span>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-84">drop</a></span><wbr><span class="parameters">(boolean&nbsp;force)</span>
       throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Drops this profile from the database.
  <p>
@@ -429,7 +436,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="enable()">
 <h3>enable</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-91">enable</a></span>()
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-98">enable</a></span>()
         throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Enables this profile so it can be used for Select AI operations.
  <p>
@@ -449,7 +456,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="disable()">
 <h3>disable</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-106">disable</a></span>()
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-113">disable</a></span>()
          throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Disables this profile so callers cannot use it for Select AI operations
  until it is enabled again.
@@ -470,7 +477,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="generate(java.lang.String,com.oracle.database.selectai.model.GenerateAction)">
 <h3>generate</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-127">generate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-134">generate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
  <a href="model/GenerateAction.html" title="enum class in com.oracle.database.selectai.model">GenerateAction</a>&nbsp;generateAction)</span>
          throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Sends a natural-language prompt to Select AI using this profile.
@@ -499,7 +506,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="generate(java.lang.String,com.oracle.database.selectai.model.GenerateAction,com.oracle.database.selectai.model.ProfileAttributes)">
 <h3>generate</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-149">generate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-156">generate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
  <a href="model/GenerateAction.html" title="enum class in com.oracle.database.selectai.model">GenerateAction</a>&nbsp;generateAction,
  <a href="model/ProfileAttributes.html" title="class in com.oracle.database.selectai.model">ProfileAttributes</a>&nbsp;profileAttributes)</span>
          throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
@@ -530,7 +537,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="generate(java.lang.String,com.oracle.database.selectai.model.GenerateAction,com.oracle.database.selectai.model.GenerateParams)">
 <h3>generate</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-172">generate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-179">generate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
  <a href="model/GenerateAction.html" title="enum class in com.oracle.database.selectai.model">GenerateAction</a>&nbsp;generateAction,
  <a href="model/GenerateParams.html" title="class in com.oracle.database.selectai.model">GenerateParams</a>&nbsp;generateParams)</span>
          throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
@@ -562,7 +569,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="generate(java.lang.String,com.oracle.database.selectai.model.GenerateAction,com.oracle.database.selectai.model.ProfileAttributes,com.oracle.database.selectai.model.GenerateParams)">
 <h3>generate</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-197">generate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-204">generate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
  <a href="model/GenerateAction.html" title="enum class in com.oracle.database.selectai.model">GenerateAction</a>&nbsp;generateAction,
  <a href="model/ProfileAttributes.html" title="class in com.oracle.database.selectai.model">ProfileAttributes</a>&nbsp;profileAttributes,
  <a href="model/GenerateParams.html" title="class in com.oracle.database.selectai.model">GenerateParams</a>&nbsp;generateParams)</span>
@@ -597,7 +604,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="runsql(java.lang.String)">
 <h3>runsql</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-217">runsql</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt)</span>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-224">runsql</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt)</span>
        throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Generates SQL from the prompt and runs it.
  <p>
@@ -628,7 +635,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="runsql(java.lang.String,com.oracle.database.selectai.model.GenerateParams)">
 <h3>runsql</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-236">runsql</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-243">runsql</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
  <a href="model/GenerateParams.html" title="class in com.oracle.database.selectai.model">GenerateParams</a>&nbsp;generateParams)</span>
        throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Generates SQL from the prompt and runs it using optional generate
@@ -660,7 +667,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="showsql(java.lang.String)">
 <h3>showsql</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-255">showsql</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt)</span>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-262">showsql</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt)</span>
         throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Generates SQL from the prompt without running it.
  <p>
@@ -691,7 +698,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="showsql(java.lang.String,com.oracle.database.selectai.model.GenerateParams)">
 <h3>showsql</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-274">showsql</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-281">showsql</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
  <a href="model/GenerateParams.html" title="class in com.oracle.database.selectai.model">GenerateParams</a>&nbsp;generateParams)</span>
         throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Generates SQL from the prompt without running it using optional generate
@@ -723,7 +730,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="explainsql(java.lang.String)">
 <h3>explainsql</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-291">explainsql</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt)</span>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-298">explainsql</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt)</span>
            throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Generates SQL and returns a natural-language explanation.
  <p>
@@ -752,7 +759,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="explainsql(java.lang.String,com.oracle.database.selectai.model.GenerateParams)">
 <h3>explainsql</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-310">explainsql</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-317">explainsql</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
  <a href="model/GenerateParams.html" title="class in com.oracle.database.selectai.model">GenerateParams</a>&nbsp;generateParams)</span>
            throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Generates SQL and returns a natural-language explanation using optional
@@ -784,7 +791,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="narrate(java.lang.String)">
 <h3>narrate</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-329">narrate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt)</span>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-336">narrate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt)</span>
         throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Generates and runs SQL, then asks the model to narrate the result.
  <p>
@@ -815,7 +822,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="narrate(java.lang.String,com.oracle.database.selectai.model.GenerateParams)">
 <h3>narrate</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-348">narrate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-355">narrate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
  <a href="model/GenerateParams.html" title="class in com.oracle.database.selectai.model">GenerateParams</a>&nbsp;generateParams)</span>
         throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Generates and runs SQL, then asks the model to narrate the result using
@@ -847,7 +854,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="showprompt(java.lang.String)">
 <h3>showprompt</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-367">showprompt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt)</span>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-374">showprompt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt)</span>
            throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Returns the augmented prompt that Select AI would send to the provider.
  <p>
@@ -878,7 +885,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="showprompt(java.lang.String,com.oracle.database.selectai.model.GenerateParams)">
 <h3>showprompt</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-386">showprompt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-393">showprompt</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
  <a href="model/GenerateParams.html" title="class in com.oracle.database.selectai.model">GenerateParams</a>&nbsp;generateParams)</span>
            throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Returns the augmented prompt that Select AI would send to the provider
@@ -910,7 +917,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="chat(java.lang.String)">
 <h3>chat</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-403">chat</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt)</span>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-410">chat</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt)</span>
      throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Sends the prompt as a chat-style request using this profile.
  <p>
@@ -939,7 +946,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="chat(java.lang.String,com.oracle.database.selectai.model.GenerateParams)">
 <h3>chat</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-422">chat</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-429">chat</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;prompt,
  <a href="model/GenerateParams.html" title="class in com.oracle.database.selectai.model">GenerateParams</a>&nbsp;generateParams)</span>
      throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Sends the prompt as a chat-style request using optional generate
@@ -971,7 +978,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="chatSession(com.oracle.database.selectai.Conversation)">
 <h3>chatSession</h3>
-<div class="member-signature"><span class="return-type"><a href="Session.html" title="interface in com.oracle.database.selectai">Session</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-441">chatSession</a></span><wbr><span class="parameters">(<a href="Conversation.html" title="interface in com.oracle.database.selectai">Conversation</a>&nbsp;conversation)</span>
+<div class="member-signature"><span class="return-type"><a href="Session.html" title="interface in com.oracle.database.selectai">Session</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-448">chatSession</a></span><wbr><span class="parameters">(<a href="Conversation.html" title="interface in com.oracle.database.selectai">Conversation</a>&nbsp;conversation)</span>
              throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Starts a Select AI chat session using the supplied conversation.
  <p>
@@ -997,7 +1004,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="chatSession(com.oracle.database.selectai.Conversation,boolean)">
 <h3>chatSession</h3>
-<div class="member-signature"><span class="return-type"><a href="Session.html" title="interface in com.oracle.database.selectai">Session</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-461">chatSession</a></span><wbr><span class="parameters">(<a href="Conversation.html" title="interface in com.oracle.database.selectai">Conversation</a>&nbsp;conversation,
+<div class="member-signature"><span class="return-type"><a href="Session.html" title="interface in com.oracle.database.selectai">Session</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-468">chatSession</a></span><wbr><span class="parameters">(<a href="Conversation.html" title="interface in com.oracle.database.selectai">Conversation</a>&nbsp;conversation,
  boolean&nbsp;deleteOnClose)</span>
              throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Starts a Select AI chat session using the supplied conversation.
@@ -1025,7 +1032,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setAttribute(java.lang.String,java.lang.String)">
 <h3>setAttribute</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-479">setAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-486">setAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeValue)</span>
               throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Updates one profile attribute using a string value.
@@ -1051,7 +1058,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setAttribute(java.lang.String,boolean)">
 <h3>setAttribute</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-495">setAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-502">setAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
  boolean&nbsp;attributeValue)</span>
               throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Updates one profile attribute using a boolean value.
@@ -1075,7 +1082,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setAttribute(java.lang.String,java.lang.Integer)">
 <h3>setAttribute</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-511">setAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-518">setAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;attributeValue)</span>
               throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Updates one profile attribute using an integer value.
@@ -1099,7 +1106,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setAttribute(java.lang.String,java.lang.Float)">
 <h3>setAttribute</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-527">setAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-534">setAttribute</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&nbsp;attributeValue)</span>
               throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Updates one profile attribute using a floating-point value.
@@ -1123,9 +1130,15 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="setAttributes(com.oracle.database.selectai.model.ProfileAttributes)">
 <h3>setAttributes</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-542">setAttributes</a></span><wbr><span class="parameters">(<a href="model/ProfileAttributes.html" title="class in com.oracle.database.selectai.model">ProfileAttributes</a>&nbsp;profileAttributes)</span>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-555">setAttributes</a></span><wbr><span class="parameters">(<a href="model/ProfileAttributes.html" title="class in com.oracle.database.selectai.model">ProfileAttributes</a>&nbsp;profileAttributes)</span>
                throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Replaces or updates multiple profile attributes in one operation.
+ <p>
+ Attributes built for creation or update are validated by the SDK where a
+ current-value constraint is known. Attributes returned by
+ <a href="#getProfileAttributes()"><code>getProfileAttributes()</code></a> can be reused to preserve database-defined
+ values introduced by a newer database release; final semantic validation
+ is performed by <code>DBMS_CLOUD_AI</code>.
  <p>
  For a complete runnable sample source, see
  <a href="../../../../src-html/com/oracle/database/selectai/samples/profile/SetProfileAttributesSample.html">
@@ -1145,7 +1158,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="feedback(com.oracle.database.selectai.model.Feedback)">
 <h3>feedback</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-564">feedback</a></span><wbr><span class="parameters">(<a href="model/Feedback.html" title="class in com.oracle.database.selectai.model">Feedback</a>&nbsp;feedbackRequest)</span>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-577">feedback</a></span><wbr><span class="parameters">(<a href="model/Feedback.html" title="class in com.oracle.database.selectai.model">Feedback</a>&nbsp;feedbackRequest)</span>
           throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Stores or removes feedback about generated SQL for this profile.
  <p>
@@ -1179,7 +1192,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="generateSyntheticData(com.oracle.database.selectai.model.SyntheticDataSingleRequest)">
 <h3>generateSyntheticData</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-584">generateSyntheticData</a></span><wbr><span class="parameters">(<a href="model/SyntheticDataSingleRequest.html" title="class in com.oracle.database.selectai.model">SyntheticDataSingleRequest</a>&nbsp;request)</span>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-597">generateSyntheticData</a></span><wbr><span class="parameters">(<a href="model/SyntheticDataSingleRequest.html" title="class in com.oracle.database.selectai.model">SyntheticDataSingleRequest</a>&nbsp;request)</span>
                        throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Generates synthetic data using this profile and a single-object request payload.
  <p>
@@ -1211,7 +1224,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="generateSyntheticData(com.oracle.database.selectai.model.SyntheticDataBatchRequest)">
 <h3>generateSyntheticData</h3>
-<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-604">generateSyntheticData</a></span><wbr><span class="parameters">(<a href="model/SyntheticDataBatchRequest.html" title="class in com.oracle.database.selectai.model">SyntheticDataBatchRequest</a>&nbsp;request)</span>
+<div class="member-signature"><span class="return-type">boolean</span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-617">generateSyntheticData</a></span><wbr><span class="parameters">(<a href="model/SyntheticDataBatchRequest.html" title="class in com.oracle.database.selectai.model">SyntheticDataBatchRequest</a>&nbsp;request)</span>
                        throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Generates synthetic data using this profile for multiple objects in one request.
  <p>
@@ -1243,7 +1256,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="summarize(java.lang.String,java.lang.String,java.lang.String,java.lang.String,com.oracle.database.selectai.model.SummaryParams)">
 <h3>summarize</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-629">summarize</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;content,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-642">summarize</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;content,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;credential_name,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;location_uri,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;userPrompt,
@@ -1284,7 +1297,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="translate(java.lang.String)">
 <h3>translate</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-652">translate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-665">translate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text)</span>
           throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Translates text using the provider configured by this profile.
  <p>
@@ -1310,7 +1323,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="translate(java.lang.String,java.lang.String)">
 <h3>translate</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-673">translate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-686">translate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetLanguage)</span>
           throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Translates text using the provider configured by this profile and an
@@ -1339,7 +1352,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="translate(java.lang.String,java.lang.String,java.lang.String)">
 <h3>translate</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-696">translate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text,
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-709">translate</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;text,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;sourceLanguage,
  <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;targetLanguage)</span>
           throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
@@ -1370,7 +1383,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getProfileName()">
 <h3>getProfileName</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-709">getProfileName</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-722">getProfileName</a></span>()</div>
 <div class="block">Returns profile name.
  <p>
  For a complete runnable sample source, see
@@ -1385,7 +1398,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getStatus()">
 <h3>getStatus</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-725">getStatus</a></span>()
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-738">getStatus</a></span>()
           throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Returns profile status.
  <p>
@@ -1407,7 +1420,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getDescription()">
 <h3>getDescription</h3>
-<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-736">getDescription</a></span>()</div>
+<div class="member-signature"><span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-749">getDescription</a></span>()</div>
 <div class="block">Returns profile description.
  <p>
  For a complete runnable sample source, see
@@ -1422,14 +1435,16 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getProfileAttributes()">
 <h3>getProfileAttributes</h3>
-<div class="member-signature"><span class="return-type"><a href="model/ProfileAttributes.html" title="class in com.oracle.database.selectai.model">ProfileAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-753">getProfileAttributes</a></span>()
+<div class="member-signature"><span class="return-type"><a href="model/ProfileAttributes.html" title="class in com.oracle.database.selectai.model">ProfileAttributes</a></span>&nbsp;<span class="element-name"><a href="../../../../src-html/com/oracle/database/selectai/Profile.html#line-768">getProfileAttributes</a></span>()
                                 throws <span class="exceptions"><a href="model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
 <div class="block">Returns profile attributes.
  <p>
  For a configured profile that has not been created yet, returns the
  caller-supplied create attributes. For a profile bound to an existing
  database profile, refreshes attributes from the database before returning
- them.
+ them. Database-defined values for provider, OCI API format, and
+ object-list mode are preserved even when they are not recognized by this
+ SDK release.
  For a complete runnable sample source, see
  <a href="../../../../src-html/com/oracle/database/selectai/samples/profile/GetProfileAttributesSample.html">
  GetProfileAttributesSample source</a>.</div>

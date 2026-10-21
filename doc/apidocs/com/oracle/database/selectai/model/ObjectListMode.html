@@ -102,9 +102,13 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="ObjectListMode.html" title="enum class in com.oracle.database.selectai.model">ObjectListMode</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/ObjectListMode.html#line-17">ObjectListMode</a></span>
+<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/ObjectListMode.html#line-21">ObjectListMode</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="ObjectListMode.html" title="enum class in com.oracle.database.selectai.model">ObjectListMode</a>&gt;</span></div>
-<div class="block">Controls how Select AI chooses database objects for prompt metadata.</div>
+<div class="block">Object-list modes currently recognized by the SDK.
+ <p>
+ This enum is used for creation and update validation. Existing database
+ profile metadata may contain a newer mode and is preserved as a string
+ during hydration.</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -200,14 +204,14 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="AUTOMATED">
 <h3>AUTOMATED</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ObjectListMode.html" title="enum class in com.oracle.database.selectai.model">ObjectListMode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/ObjectListMode.html#line-19">AUTOMATED</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ObjectListMode.html" title="enum class in com.oracle.database.selectai.model">ObjectListMode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/ObjectListMode.html#line-23">AUTOMATED</a></span></div>
 <div class="block">Let Select AI automatically choose relevant objects from metadata.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="ALL">
 <h3>ALL</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ObjectListMode.html" title="enum class in com.oracle.database.selectai.model">ObjectListMode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/ObjectListMode.html#line-21">ALL</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="ObjectListMode.html" title="enum class in com.oracle.database.selectai.model">ObjectListMode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/ObjectListMode.html#line-25">ALL</a></span></div>
 <div class="block">Consider all accessible objects unless constrained by object list.</div>
 </section>
 </li>
@@ -222,7 +226,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="values()">
 <h3>values</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ObjectListMode.html" title="enum class in com.oracle.database.selectai.model">ObjectListMode</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/ObjectListMode.html#line-17">values</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ObjectListMode.html" title="enum class in com.oracle.database.selectai.model">ObjectListMode</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/ObjectListMode.html#line-21">values</a></span>()</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 <dl class="notes">
@@ -234,7 +238,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="valueOf(java.lang.String)">
 <h3>valueOf</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ObjectListMode.html" title="enum class in com.oracle.database.selectai.model">ObjectListMode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/ObjectListMode.html#line-17">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ObjectListMode.html" title="enum class in com.oracle.database.selectai.model">ObjectListMode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/ObjectListMode.html#line-21">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the enum constant of this class with the specified name.
 The string must match <i>exactly</i> an identifier used to declare an
 enum constant in this class.  (Extraneous whitespace characters are 
@@ -253,7 +257,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="getValue()">
 <h3>getValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/ObjectListMode.html#line-35">getValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/ObjectListMode.html#line-39">getValue</a></span>()</div>
 <div class="block">Returns the value used in the JSON profile attribute payload.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -264,11 +268,11 @@ not permitted.)</div>
 <li>
 <section class="detail" id="fromValue(java.lang.String)">
 <h3>fromValue</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ObjectListMode.html" title="enum class in com.oracle.database.selectai.model">ObjectListMode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/ObjectListMode.html#line-45">fromValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="ObjectListMode.html" title="enum class in com.oracle.database.selectai.model">ObjectListMode</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/ObjectListMode.html#line-49">fromValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Parses an object-list mode using case-insensitive matching.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - attribute value to parse</dd>
+<dd><code>value</code> - object-list mode supplied to a creation or update builder</dd>
 <dt>Returns:</dt>
 <dd>matching enum constant for input value, or <code>null</code> when input is null/blank</dd>
 </dl>

@@ -6,7 +6,7 @@
 
     <groupId>com.oracle.database.selectai</groupId>
     <artifactId>select-ai</artifactId>
-    <version>1.0.0</version>
+    <version>1.1.0</version>
     <name>Oracle Select AI for Java</name>
     <description>Java SDK for Oracle Autonomous AI Database's Select AI operations backed by DBMS_CLOUD_AI.</description>
     <packaging>jar</packaging>
@@ -53,7 +53,7 @@
         <maven.source.plugin.version>3.3.1</maven.source.plugin.version>
         <slf4j.version>2.0.17</slf4j.version>
         <ojdbc11.version>23.26.1.0.0</ojdbc11.version>
-        <jackson-databind-core>2.22.2</jackson-databind-core>
+        <jackson-databind-core>2.22.3</jackson-databind-core>
         <junit.jupiter.version>5.10.3</junit.jupiter.version>
         <mockito.version>5.11.0</mockito.version>
         <assertj.version>3.27.7</assertj.version>
@@ -93,6 +93,12 @@
             <scope>test</scope>
         </dependency>
         <dependency>
+            <groupId>com.oracle.database.jdbc</groupId>
+            <artifactId>ucp</artifactId>
+            <version>${ojdbc11.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
             <version>${slf4j.version}</version>
@@ -115,6 +121,12 @@
         <profile>
             <id>samples</id>
             <dependencies>
+                <dependency>
+                    <groupId>com.oracle.database.jdbc</groupId>
+                    <artifactId>ucp</artifactId>
+                    <version>${ojdbc11.version}</version>
+                    <scope>runtime</scope>
+                </dependency>
                 <dependency>
                     <groupId>org.slf4j</groupId>
                     <artifactId>slf4j-simple</artifactId>
@@ -167,11 +179,11 @@
                     <release>${java.release.version}</release>
                     <sourcepath>${project.basedir}/src/main/java${path.separator}${project.basedir}/samples/src/main/java</sourcepath>
                     <overview>${project.basedir}/src/main/javadoc/overview.html</overview>
-                    <excludePackageNames>com.oracle.database.selectai.impl:com.oracle.database.selectai.samples*</excludePackageNames>
+                        <excludePackageNames>com.oracle.database.selectai.impl:com.oracle.database.selectai.impl.*:com.oracle.database.selectai.samples*</excludePackageNames>
                     <groups>
                         <group>
                             <title>SDK API</title>
-                            <packages>com.oracle.database.selectai:com.oracle.database.selectai.model</packages>
+                            <packages>com.oracle.database.selectai:com.oracle.database.selectai.model:com.oracle.database.selectai.agent:com.oracle.database.selectai.model.agent</packages>
                         </group>
                     </groups>
                     <doctitle>Oracle&amp;reg; Select AI for Java</doctitle>

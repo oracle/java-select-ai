@@ -52,6 +52,7 @@ import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
@@ -399,8 +400,9 @@ class DefaultSelectAITest {
     /**
      * Test: Lists profiles whose names match a regular-expression pattern and hydrates their
      * metadata and attributes from JDBC result sets.
-     * Expected: The pattern is bound to the profile query, the matching profile is mapped, and
-     * its profile name is bound when fetching attributes.
+     * Expected: The pattern is bound to the profile query, the matching profile is mapped,
+     * future database provider values are preserved, and its profile name is bound when
+     * fetching attributes.
      */
     @Test
     void listProfilesByPatternBindsPatternAndMapsRows() throws Exception {
@@ -420,15 +422,18 @@ class DefaultSelectAITest {
         when(listResultSet.getString("description")).thenReturn("Profile description");
         when(listResultSet.getString("status")).thenReturn("ENABLED");
         when(attributesStatement.executeQuery()).thenReturn(attributesResultSet);
-        when(attributesResultSet.next()).thenReturn(false);
+        when(attributesResultSet.next()).thenReturn(true, false, true, false);
+        when(attributesResultSet.getString("attribute_name")).thenReturn("provider");
+        when(attributesResultSet.getString("attribute_value")).thenReturn("vertexai");
         DefaultSelectAI selectAI = new DefaultSelectAI(dbConnectionConfig(), dbConnection);
 
         List<Profile> profiles = selectAI.listProfiles("^JSAI_PROFILE_[0-9]+$");
 
         assertThat(profiles).hasSize(1);
         assertThat(profiles.get(0).getProfileName()).isEqualTo("JSAI_PROFILE_1");
+        assertThat(profiles.get(0).getProfileAttributes().getProvider()).isEqualTo("vertexai");
         verify(listStatement).setString(1, "^JSAI_PROFILE_[0-9]+$");
-        verify(attributesStatement).setString(1, "JSAI_PROFILE_1");
+        verify(attributesStatement, times(2)).setString(1, "JSAI_PROFILE_1");
     }
 
     /**

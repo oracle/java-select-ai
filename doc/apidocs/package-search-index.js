@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.oracle.database.selectai"},{"l":"com.oracle.database.selectai.model"}];updateSearchResults();
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"com.oracle.database.selectai"},{"l":"com.oracle.database.selectai.agent"},{"l":"com.oracle.database.selectai.model"},{"l":"com.oracle.database.selectai.model.agent"}];updateSearchResults();

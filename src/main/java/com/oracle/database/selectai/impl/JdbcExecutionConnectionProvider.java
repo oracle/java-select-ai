@@ -26,7 +26,7 @@ import org.slf4j.LoggerFactory;
  * ConnectionProvider decorator that applies SDK JDBC execution options to
  * statements created by SDK operations.
  */
-final class JdbcExecutionConnectionProvider implements ConnectionProvider {
+public final class JdbcExecutionConnectionProvider implements ConnectionProvider {
     /** Logger for JDBC execution option diagnostics. */
     private static final Logger LOGGER = LoggerFactory.getLogger(JdbcExecutionConnectionProvider.class);
     /** Delegate provider that owns connection acquisition and release. */
@@ -34,7 +34,7 @@ final class JdbcExecutionConnectionProvider implements ConnectionProvider {
     /** SDK execution options applied to statements. */
     private final SelectAIOptions options;
 
-    JdbcExecutionConnectionProvider(ConnectionProvider delegate, SelectAIOptions options) {
+    public JdbcExecutionConnectionProvider(ConnectionProvider delegate, SelectAIOptions options) {
         if (delegate == null) {
             throw new IllegalArgumentException("delegate connectionProvider must not be null");
         }

@@ -9,7 +9,11 @@ package com.oracle.database.selectai.model;
 import java.util.Locale;
 
 /**
- * OCI Generative AI API formats that can be supplied in profile attributes.
+ * OCI Generative AI API formats currently recognized by the SDK.
+ * <p>
+ * This enum is used for creation and update validation. Existing database
+ * profile metadata may contain a newer format and is preserved as a string
+ * during hydration.
  *
  * @see <a href="https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/select-ai-manage-profiles.html">
  *      Select AI profile provider configuration</a>
@@ -39,7 +43,7 @@ public enum OciApiFormat {
     /**
      * Parses an OCI API format value.
      *
-     * @param value OCI API format text
+     * @param value OCI API format supplied to a creation or update builder
      * @return matching OCI API format, or {@code null} when input is null/blank
      * @throws IllegalArgumentException when value is not a supported OCI API format
      */

@@ -245,6 +245,28 @@ void fetchProfileAttributesMapsKnownDatabaseAttributes() throws Exception {
     }
 
     /**
+     * Test: Preserve profile values introduced by a newer database release.
+     * Expected: Retrieval does not apply the SDK creation allow-list.
+     */
+    @Test
+    void fetchProfileAttributesPreservesFutureDatabaseValues() throws Exception {
+        when(connection.prepareStatement(org.mockito.Mockito.anyString())).thenReturn(preparedStatement);
+        when(preparedStatement.executeQuery()).thenReturn(resultSet);
+        when(resultSet.next()).thenReturn(true, true, true, false);
+        when(resultSet.getString("attribute_name"))
+                .thenReturn("provider", "oci_apiformat", "object_list_mode");
+        when(resultSet.getString("attribute_value"))
+                .thenReturn("vertexai", "FUTURE_FORMAT", "future_mode");
+
+        ProfileAttributes attributes = ProfileAttributeUtils.fetchProfileAttributes(
+                connection, "PROFILE_FUTURE_VALUES");
+
+        assertThat(attributes.getProvider()).isEqualTo("vertexai");
+        assertThat(attributes.getOciApiformat()).isEqualTo("FUTURE_FORMAT");
+        assertThat(attributes.getObjectListMode()).isEqualTo("future_mode");
+    }
+
+    /**
      * Test: Rejects missing connection arguments before preparing SQL.
      * Expected: Both public overloads throw IllegalArgumentException for null connections.
      */

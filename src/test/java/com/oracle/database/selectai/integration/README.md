@@ -322,6 +322,70 @@ Example OCI private-key export:
 export SELECT_AI_IT_OCI_PRIVATE_KEY="<private key content>"
 ```
 
+### Agent team export
+
+`TeamExportIT` covers CLOB exports and exports to both Object Storage and
+database directory files. Configure the file destinations independently:
+
+```bash
+export SELECT_AI_IT_AGENT_TEAM_EXPORT_LOCATION="https://objectstorage.<region>.oraclecloud.com/n/<namespace>/b/<bucket>/o/selectai-agent-exports/"
+export SELECT_AI_IT_AGENT_TEAM_EXPORT_DIRECTORY_BASE_PATH="$T_WORK/selectai-agent-exports"
+```
+
+The Object Storage value is a writable URI prefix, not a complete filename.
+Tests append unique JSON filenames and create their own uniquely named OCI
+signing-key credentials using the existing `SELECT_AI_IT_OCI_USER_OCID`,
+`SELECT_AI_IT_OCI_TENANCY_OCID`, `SELECT_AI_IT_OCI_PRIVATE_KEY`, and
+`SELECT_AI_IT_OCI_FINGERPRINT` values. The OCI user needs permission to write,
+read, and delete objects under the prefix. No pre-existing `OCI_CRED` or
+`SELECT_AI_IT_AGENT_TEAM_EXPORT_CREDENTIAL_NAME` is required.
+
+Directory tests create a unique physical subfolder under the configured base
+and a unique database directory object pointing to it, then grant the feature
+user `READ, WRITE` through the existing admin connection settings. The base
+path must be accessible to the database server, as with the farm harness's
+`T_WORK` directory. Only the unique test subfolder receives shared filesystem
+permissions; existing parent permissions are not changed. No preconfigured
+database directory object is required.
+
+Cleanup removes test export objects/files and directory objects/folders before
+the shared fixture drops credentials. Missing destination settings skip only
+the affected cases; database, storage, and cleanup failures are not skipped.
+The suite also checks disabled metadata by reimporting only its uniquely named
+test components, and checks that referenced credential names are retained
+without exporting credential secrets.
+
+The execution round-trip cases first run a working team, export it, and remove
+its team/agent/task/tool definitions. They then import with `force(false)` and
+run the recreated team in a fresh conversation. CLOB imports use the inline
+specification; Object Storage and directory imports read directly from the
+exported location. Both runs must reach `SUCCEEDED`, return the expected opaque
+marker, and invoke a custom PL/SQL verification tool that records each call in
+an isolated audit table. The supporting function/table and profile/credential
+remain available during import because they are external dependencies; the
+fixture removes them during cleanup. No additional environment settings are
+needed.
+
+```bash
+mvn -Dtest=TeamExportIT test
+```
+
+`TeamImportIT` uses the same fixture and destination settings. It tests
+unforced and forced component conflicts, malformed inline/file specifications,
+missing or disabled profiles, replacement of the imported agents' AI profile,
+missing files and credentials, directory read permissions, generated tasks,
+large Unicode imports, and full supervisor/member/task/tool metadata round trips.
+Failure cases assert a database `SelectAIException` and preservation of JDBC
+error details. Conflict tests compare database definitions before and after the
+operation; forced imports also verify unrelated resources and supporting
+functions remain intact. File-content tests write only unique fixture-owned
+targets, and the directory-permission test restores its grant in a `finally`
+block. Generated and partially imported components are registered for cleanup.
+
+```bash
+mvn -Dtest=TeamImportIT test
+```
+
 ### Credential tests
 
 These values are optional in the source because the tests provide placeholder

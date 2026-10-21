@@ -14,7 +14,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 ARTIFACT_ID="${ARTIFACT_ID:-select-ai}"
-VERSION="${VERSION:-1.0.0}"
+VERSION="${VERSION:-1.1.0}"
 TARGET_DIR="${REPO_ROOT}/target"
 API_DOCS="${REPO_ROOT}/doc/apidocs"
 MAIN_JAR="${TARGET_DIR}/${ARTIFACT_ID}-${VERSION}.jar"
@@ -94,6 +94,13 @@ done < <(
 
 if [[ "${#sample_links[@]}" -eq 0 ]]; then
     echo "No sample-source Javadoc links were found in the public API sources." >&2
+    exit 1
+fi
+
+sample_index="src-html/com/oracle/database/selectai/samples/index.html"
+if [[ ! -f "${API_DOCS}/${sample_index}" ]]; then
+    echo "Generated Javadoc is missing ${sample_index}" >&2
+    echo "Run the sample-source Javadoc generator first." >&2
     exit 1
 fi
 

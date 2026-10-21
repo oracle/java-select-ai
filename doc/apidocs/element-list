@@ -1,2 +1,4 @@
 com.oracle.database.selectai
+com.oracle.database.selectai.agent
 com.oracle.database.selectai.model
+com.oracle.database.selectai.model.agent

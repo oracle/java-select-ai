@@ -96,10 +96,11 @@ loadScripts(document, 'script');</script>
 </div>
 <section class="class-description" id="class-description">
 <hr>
-<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/SelectAIOptions.html#line-17">SelectAIOptions</a></span>
+<div class="type-signature"><span class="modifiers">public final class </span><span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/SelectAIOptions.html#line-18">SelectAIOptions</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a></span></div>
-<div class="block">SDK execution settings for <a href="../SelectAI.html" title="interface in com.oracle.database.selectai"><code>SelectAI</code></a> and
- <a href="../DatabaseAdmin.html" title="interface in com.oracle.database.selectai"><code>DatabaseAdmin</code></a> clients.
+<div class="block">SDK execution settings for <a href="../SelectAI.html" title="interface in com.oracle.database.selectai"><code>SelectAI</code></a>,
+ <a href="../DatabaseAdmin.html" title="interface in com.oracle.database.selectai"><code>DatabaseAdmin</code></a>, and
+ <a href="../agent/SelectAIAgent.html" title="interface in com.oracle.database.selectai.agent"><code>SelectAIAgent</code></a> clients.
  <p>
  These options control SDK-managed JDBC execution behavior. They do not
  configure database identity, JDBC URL, passwords, wallet settings, or
@@ -170,7 +171,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="defaults()">
 <h3>defaults</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SelectAIOptions.html" title="class in com.oracle.database.selectai.model">SelectAIOptions</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/SelectAIOptions.html#line-33">defaults</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SelectAIOptions.html" title="class in com.oracle.database.selectai.model">SelectAIOptions</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/SelectAIOptions.html#line-34">defaults</a></span>()</div>
 <div class="block">Returns default SelectAI options.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -181,7 +182,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="builder()">
 <h3>builder</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SelectAIOptions.Builder.html" title="class in com.oracle.database.selectai.model">SelectAIOptions.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/SelectAIOptions.html#line-42">builder</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="SelectAIOptions.Builder.html" title="class in com.oracle.database.selectai.model">SelectAIOptions.Builder</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/SelectAIOptions.html#line-43">builder</a></span>()</div>
 <div class="block">Creates a builder for SelectAI execution options.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -192,7 +193,7 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="getQueryTimeoutSeconds()">
 <h3>getQueryTimeoutSeconds</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/SelectAIOptions.html#line-53">getQueryTimeoutSeconds</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/SelectAIOptions.html#line-54">getQueryTimeoutSeconds</a></span>()</div>
 <div class="block">Returns the configured JDBC statement query timeout.</div>
 <dl class="notes">
 <dt>Returns:</dt>

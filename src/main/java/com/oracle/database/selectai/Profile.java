@@ -32,6 +32,13 @@ import com.oracle.database.selectai.model.SyntheticDataSingleRequest;
  * database-backed profile is opened from the database, listed from metadata, or
  * successfully created through this SDK.
  * <p>
+ * Profile attributes supplied through creation or update builders are validated
+ * against values known by this SDK release. Attributes hydrated from an
+ * existing database profile are treated as database metadata: known values keep
+ * the existing normalization behavior, while values introduced by a newer
+ * database release are preserved instead of causing profile loading or listing
+ * to fail.
+ * <p>
  * Metadata getters can return configured values before creation. Operations
  * that execute against an existing database profile, such as prompt
  * generation, attribute updates, enable, disable, drop, feedback, summarize,
@@ -529,6 +536,12 @@ public interface Profile {
     /**
      * Replaces or updates multiple profile attributes in one operation.
      * <p>
+     * Attributes built for creation or update are validated by the SDK where a
+     * current-value constraint is known. Attributes returned by
+     * {@link #getProfileAttributes()} can be reused to preserve database-defined
+     * values introduced by a newer database release; final semantic validation
+     * is performed by {@code DBMS_CLOUD_AI}.
+     * <p>
      * For a complete runnable sample source, see
      * <a href="{@docRoot}/src-html/com/oracle/database/selectai/samples/profile/SetProfileAttributesSample.html">
      * SetProfileAttributesSample source</a>.
@@ -741,7 +754,9 @@ public interface Profile {
      * For a configured profile that has not been created yet, returns the
      * caller-supplied create attributes. For a profile bound to an existing
      * database profile, refreshes attributes from the database before returning
-     * them.
+     * them. Database-defined values for provider, OCI API format, and
+     * object-list mode are preserved even when they are not recognized by this
+     * SDK release.
      * For a complete runnable sample source, see
      * <a href="{@docRoot}/src-html/com/oracle/database/selectai/samples/profile/GetProfileAttributesSample.html">
      * GetProfileAttributesSample source</a>.

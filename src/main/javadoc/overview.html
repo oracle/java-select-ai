@@ -7,6 +7,7 @@
 <body>
 <p>
     Select AI for Java enables Java developers to use Oracle Autonomous AI Database Select AI from Java applications.
+    It supports operations backed by <code>DBMS_CLOUD_AI</code> and <code>DBMS_CLOUD_AI_AGENT</code>.
     It supports natural-language-to-SQL (NL2SQL) query generation over database data, also known as text-to-SQL.
     It also supports generative AI responses over trusted content through retrieval augmented generation (RAG),
     synthetic-data generation using large language models, context-aware conversations, summarization, translation, and related Select AI functionality.
@@ -15,21 +16,31 @@
 <p>
 The SDK provides public Java interfaces, typed request models, and runnable
 samples that bridge Java applications with the
-<code>DBMS_CLOUD_AI</code> PL/SQL package.
+<code>DBMS_CLOUD_AI</code> and <code>DBMS_CLOUD_AI_AGENT</code> PL/SQL packages.
 </p>
 
 <p>The public API includes:</p>
 
 <ul>
   <li>Profiles, credentials, conversations, and vector indexes</li>
-  <li>Natural-language SQL generation, SQL execution, narration, SQL explanation,
-      and context-aware chat</li>
+  <li>Agents, tasks, tools, and teams through
+      <a href="com/oracle/database/selectai/agent/SelectAIAgent.html"><code>SelectAIAgent</code></a></li>
+  <li>Resource lifecycle, attribute, status, and execution-state operations</li>
+  <li>Natural-language SQL generation, SQL execution, narration, and explanation,
+      as well as context-aware chat</li>
   <li>Retrieval-augmented generation and vector-index management</li>
   <li>Summarization, translation, feedback, and synthetic-data generation</li>
+  <li>Shared-team execution, owner-scoped access management through
+      <a href="com/oracle/database/selectai/agent/SelectAIAgent.html"><code>SelectAIAgent</code></a>
+      and <a href="com/oracle/database/selectai/agent/Team.html"><code>Team</code></a>,
+      runtime variables, and team definition import/export</li>
+  <li>Typed agent, task, tool, and team models in
+      <a href="com/oracle/database/selectai/model/agent/package-summary.html"><code>com.oracle.database.selectai.model.agent</code></a></li>
   <li>Connection management through <code>DataSource</code> or SDK-owned JDBC
       connections</li>
-  <li>Administrative package-privilege, network-ACL, and Select AI data-access
-      operations through <code>DatabaseAdmin</code></li>
+  <li>Administrative package privileges, network ACLs, and Select AI data-access
+      configuration through
+      <a href="com/oracle/database/selectai/DatabaseAdmin.html"><code>DatabaseAdmin</code></a></li>
 </ul>
 </body>
 </html>

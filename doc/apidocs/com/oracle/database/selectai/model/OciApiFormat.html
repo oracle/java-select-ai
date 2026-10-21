@@ -102,9 +102,13 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="OciApiFormat.html" title="enum class in com.oracle.database.selectai.model">OciApiFormat</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/OciApiFormat.html#line-17">OciApiFormat</a></span>
+<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/OciApiFormat.html#line-21">OciApiFormat</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="OciApiFormat.html" title="enum class in com.oracle.database.selectai.model">OciApiFormat</a>&gt;</span></div>
-<div class="block">OCI Generative AI API formats that can be supplied in profile attributes.</div>
+<div class="block">OCI Generative AI API formats currently recognized by the SDK.
+ <p>
+ This enum is used for creation and update validation. Existing database
+ profile metadata may contain a newer format and is preserved as a string
+ during hydration.</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -200,14 +204,14 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="COHERE">
 <h3>COHERE</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OciApiFormat.html" title="enum class in com.oracle.database.selectai.model">OciApiFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/OciApiFormat.html#line-19">COHERE</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OciApiFormat.html" title="enum class in com.oracle.database.selectai.model">OciApiFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/OciApiFormat.html#line-23">COHERE</a></span></div>
 <div class="block">OCI endpoint uses Cohere-compatible request/response format.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="GENERIC">
 <h3>GENERIC</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OciApiFormat.html" title="enum class in com.oracle.database.selectai.model">OciApiFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/OciApiFormat.html#line-21">GENERIC</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="OciApiFormat.html" title="enum class in com.oracle.database.selectai.model">OciApiFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/OciApiFormat.html#line-25">GENERIC</a></span></div>
 <div class="block">OCI endpoint uses the generic chat API format.</div>
 </section>
 </li>
@@ -222,7 +226,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="values()">
 <h3>values</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OciApiFormat.html" title="enum class in com.oracle.database.selectai.model">OciApiFormat</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/OciApiFormat.html#line-17">values</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OciApiFormat.html" title="enum class in com.oracle.database.selectai.model">OciApiFormat</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/OciApiFormat.html#line-21">values</a></span>()</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 <dl class="notes">
@@ -234,7 +238,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="valueOf(java.lang.String)">
 <h3>valueOf</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OciApiFormat.html" title="enum class in com.oracle.database.selectai.model">OciApiFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/OciApiFormat.html#line-17">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OciApiFormat.html" title="enum class in com.oracle.database.selectai.model">OciApiFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/OciApiFormat.html#line-21">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the enum constant of this class with the specified name.
 The string must match <i>exactly</i> an identifier used to declare an
 enum constant in this class.  (Extraneous whitespace characters are 
@@ -253,7 +257,7 @@ not permitted.)</div>
 <li>
 <section class="detail" id="getValue()">
 <h3>getValue</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/OciApiFormat.html#line-35">getValue</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/OciApiFormat.html#line-39">getValue</a></span>()</div>
 <div class="block">Returns the DBMS_CLOUD_AI OCI API format value.</div>
 <dl class="notes">
 <dt>Returns:</dt>
@@ -264,11 +268,11 @@ not permitted.)</div>
 <li>
 <section class="detail" id="fromValue(java.lang.String)">
 <h3>fromValue</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OciApiFormat.html" title="enum class in com.oracle.database.selectai.model">OciApiFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/OciApiFormat.html#line-46">fromValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="OciApiFormat.html" title="enum class in com.oracle.database.selectai.model">OciApiFormat</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/OciApiFormat.html#line-50">fromValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Parses an OCI API format value.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - OCI API format text</dd>
+<dd><code>value</code> - OCI API format supplied to a creation or update builder</dd>
 <dt>Returns:</dt>
 <dd>matching OCI API format, or <code>null</code> when input is null/blank</dd>
 <dt>Throws:</dt>

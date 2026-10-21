@@ -21,7 +21,7 @@ import java.sql.SQLException;
  * For pooled data sources, closing the connection normally returns it to the
  * pool instead of closing the physical database connection.
  */
-final class DataSourceConnectionProvider implements ConnectionProvider {
+public final class DataSourceConnectionProvider implements ConnectionProvider {
     /** DataSource used to borrow per-operation connections. */
     private final DataSource dataSource;
 
@@ -30,7 +30,7 @@ final class DataSourceConnectionProvider implements ConnectionProvider {
      *
      * @param dataSource DataSource used by SDK operations
      */
-    DataSourceConnectionProvider(DataSource dataSource) {
+    public DataSourceConnectionProvider(DataSource dataSource) {
         if (dataSource == null) {
             throw new IllegalArgumentException("dataSource must not be null");
         }

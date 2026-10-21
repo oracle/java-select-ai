@@ -270,7 +270,7 @@ public abstract class IntegrationTestFixture {
             }
 
             statement.execute(
-                    "GRANT CREATE SESSION, CREATE TABLE, UNLIMITED TABLESPACE TO "
+                    "GRANT CREATE SESSION, CREATE TABLE, CREATE PROCEDURE, UNLIMITED TABLESPACE TO "
                             + featureUser);
         }
 

@@ -28,6 +28,12 @@ import java.util.Map;
  * database-side Select AI profile settings; callers can build the payload once
  * for profile creation or reuse it for bulk updates.
  * <p>
+ * The public builder validates SDK-known provider, OCI API format, and
+ * object-list mode values when constructing a creation or update payload. Use
+ * {@link #fromDatabaseAttributeMap(Map)} when hydrating metadata from an
+ * existing database profile; that path preserves values introduced by newer
+ * database releases.
+ * <p>
  * For complete runnable sample sources that build {@code ProfileAttributes},
  * see
  * <a href="{@docRoot}/src-html/com/oracle/database/selectai/samples/profile/CreateProfileSample.html">
@@ -565,13 +571,37 @@ public final class ProfileAttributes {
      * Builds a {@link ProfileAttributes} instance from an attribute name/value map.
      * <p>
      * Recognized keys are converted to strongly-typed builder fields; unknown
-     * keys are accepted so metadata reads do not fail when the database exposes a
-     * newer attribute than this SDK version supports directly.
+     * keys are accepted so callers can retain custom attributes. Values for
+     * SDK-known provider, OCI API format, and object-list mode fields are
+     * validated as creation/update values. Use
+     * {@link #fromDatabaseAttributeMap(Map)} for database metadata when those
+     * values may have been introduced by a newer database release.
      *
-     * @param attributes attribute map (typically DB-sourced key/value pairs)
+     * @param attributes attribute map to convert using SDK validation
      * @return populated {@link ProfileAttributes} instance
      */
     public static ProfileAttributes fromAttributeMap(Map<String, String> attributes) {
+        return fromAttributeMap(attributes, false);
+    }
+
+    /**
+     * Builds profile attributes from values read from the database.
+     * <p>
+     * Database metadata may contain values introduced by a newer database
+     * release. Unlike the public builder methods used to create or update a
+     * profile, this hydration path preserves database-defined values for
+     * {@code provider}, {@code oci_apiformat}, and {@code object_list_mode}
+     * without applying the SDK's current-value allow-list.
+     *
+     * @param attributes attribute map read from database metadata
+     * @return profile attributes containing the database values
+     */
+    public static ProfileAttributes fromDatabaseAttributeMap(Map<String, String> attributes) {
+        return fromAttributeMap(attributes, true);
+    }
+
+    private static ProfileAttributes fromAttributeMap(Map<String, String> attributes,
+                                                      boolean databaseHydration) {
         Builder builder = ProfileAttributes.builder();
         if (attributes == null || attributes.isEmpty()) {
             return builder.build();
@@ -592,26 +622,47 @@ public final class ProfileAttributes {
                 case "comments" -> builder.comments(Boolean.parseBoolean(v));
                 case "constraints" -> builder.constraints(Boolean.parseBoolean(v));
                 case "conversation" -> builder.conversation(Boolean.parseBoolean(v));
-                case "conversation_length" -> builder.conversationLength(Integer.parseInt(v));
+                case "conversation_length" -> builder.conversationLength(
+                        parseInteger(v, databaseHydration, "conversation_length"));
                 case "credential_name" -> builder.credentialName(v);
                 case "embedding_model" -> builder.embeddingModel(v);
                 case "enable_custom_source_uri" -> builder.enableCustomSourceUri(Boolean.parseBoolean(v));
                 case "enforce_object_list" -> builder.enforceObjectList(Boolean.parseBoolean(v));
-                case "max_tokens" -> builder.maxTokens(Integer.parseInt(v));
+                case "max_tokens" -> builder.maxTokens(
+                        parseInteger(v, databaseHydration, "max_tokens"));
                 case "model" -> builder.model(v);
                 case "object_list" -> builder.objectList(v);
-                case "object_list_mode" -> builder.objectListMode(v);
-                case "oci_apiformat" -> builder.ociApiformat(v);
+                case "object_list_mode" -> {
+                    if (databaseHydration) {
+                        builder.objectListModeFromDatabase(v);
+                    } else {
+                        builder.objectListMode(v);
+                    }
+                }
+                case "oci_apiformat" -> {
+                    if (databaseHydration) {
+                        builder.ociApiformatFromDatabase(v);
+                    } else {
+                        builder.ociApiformat(v);
+                    }
+                }
                 case "oci_compartment_id" -> builder.ociCompartmentId(v);
                 case "oci_endpoint_id" -> builder.ociEndpointId(v);
                 case "oci_runtimetype" -> builder.ociRuntimetype(v);
-                case "provider" -> builder.provider(v);
+                case "provider" -> {
+                    if (databaseHydration) {
+                        builder.providerFromDatabase(v);
+                    } else {
+                        builder.provider(v);
+                    }
+                }
                 case "provider_endpoint" -> builder.providerEndpoint(v);
                 case "region" -> builder.region(v);
                 case "role" -> builder.role(v);
-                case "seed" -> builder.seed(Long.parseLong(v));
-                case "stop_tokens" -> builder.stopTokens(parseStopTokens(v));
-                case "temperature" -> builder.temperature(Double.parseDouble(v));
+                case "seed" -> builder.seed(parseLong(v, databaseHydration, "seed"));
+                case "stop_tokens" -> builder.stopTokens(parseStopTokens(v, databaseHydration));
+                case "temperature" -> builder.temperature(
+                        parseDouble(v, databaseHydration, "temperature"));
                 case "vector_index_name" -> builder.vectorIndexName(v);
                 case "source_language" -> builder.sourceLanguage(v);
                 case "target_language" -> builder.targetLanguage(v);
@@ -619,6 +670,39 @@ public final class ProfileAttributes {
             }
         });
         return builder.build();
+    }
+
+    private static Integer parseInteger(String value, boolean databaseHydration, String attributeName) {
+        try {
+            return Integer.valueOf(value);
+        } catch (NumberFormatException e) {
+            if (databaseHydration) {
+                return null;
+            }
+            throw new IllegalArgumentException(attributeName + " must be an integer", e);
+        }
+    }
+
+    private static Long parseLong(String value, boolean databaseHydration, String attributeName) {
+        try {
+            return Long.valueOf(value);
+        } catch (NumberFormatException e) {
+            if (databaseHydration) {
+                return null;
+            }
+            throw new IllegalArgumentException(attributeName + " must be a long", e);
+        }
+    }
+
+    private static Double parseDouble(String value, boolean databaseHydration, String attributeName) {
+        try {
+            return Double.valueOf(value);
+        } catch (NumberFormatException e) {
+            if (databaseHydration) {
+                return null;
+            }
+            throw new IllegalArgumentException(attributeName + " must be a double", e);
+        }
     }
 
     /**
@@ -659,6 +743,10 @@ public final class ProfileAttributes {
      * @return parsed stop-token list
      */
     private static List<String> parseStopTokens(String value) {
+        return parseStopTokens(value, false);
+    }
+
+    private static List<String> parseStopTokens(String value, boolean databaseHydration) {
         if (value == null || value.isBlank()) {
             return null;
         }
@@ -677,8 +765,14 @@ public final class ProfileAttributes {
             }
             return parsedStopTokens;
         } catch (IllegalArgumentException e) {
+            if (databaseHydration) {
+                return null;
+            }
             throw e;
         } catch (Exception e) {
+            if (databaseHydration) {
+                return null;
+            }
             throw new IllegalArgumentException("stop_tokens must be valid JSON array text", e);
         }
     }
@@ -999,6 +1093,17 @@ public final class ProfileAttributes {
             return this;
         }
 
+        /** Stores a database-defined object-list mode without SDK allow-list validation. */
+        private Builder objectListModeFromDatabase(String objectListMode) {
+            try {
+                ObjectListMode parsed = ObjectListMode.fromValue(objectListMode);
+                this.objectListMode = parsed == null ? null : parsed.getValue();
+            } catch (IllegalArgumentException e) {
+                this.objectListMode = objectListMode;
+            }
+            return this;
+        }
+
         /**
          * Sets the OCI Generative AI API format.
          *
@@ -1019,6 +1124,17 @@ public final class ProfileAttributes {
          */
         public Builder ociApiformat(OciApiFormat ociApiFormat) {
             this.ociApiformat = ociApiFormat == null ? null : ociApiFormat.getValue();
+            return this;
+        }
+
+        /** Stores a database-defined OCI API format without SDK allow-list validation. */
+        private Builder ociApiformatFromDatabase(String ociApiformat) {
+            try {
+                OciApiFormat parsed = OciApiFormat.fromValue(ociApiformat);
+                this.ociApiformat = parsed == null ? null : parsed.getValue();
+            } catch (IllegalArgumentException e) {
+                this.ociApiformat = ociApiformat;
+            }
             return this;
         }
 
@@ -1081,6 +1197,17 @@ public final class ProfileAttributes {
             }
 
             this.provider = parsedProvider.name();
+            return this;
+        }
+
+        /** Stores a database-defined provider without SDK allow-list validation. */
+        private Builder providerFromDatabase(String provider) {
+            try {
+                Provider parsed = Provider.fromValue(provider);
+                this.provider = parsed == null ? null : parsed.name();
+            } catch (IllegalArgumentException e) {
+                this.provider = provider;
+            }
             return this;
         }
 

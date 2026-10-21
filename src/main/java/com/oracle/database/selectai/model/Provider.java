@@ -9,7 +9,12 @@ package com.oracle.database.selectai.model;
 import java.util.Arrays;
 
 /**
- * Supported Select AI provider identifiers accepted by profile attributes.
+ * Select AI provider identifiers currently recognized by the SDK.
+ * <p>
+ * This enum is used for creation and update validation. Existing database
+ * profiles may contain provider values introduced by a newer database release;
+ * profile metadata hydration preserves those values as strings instead of
+ * requiring them to be present in this enum.
  *
  * @see <a href="https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/select-ai-manage-profiles.html">
  *      Select AI profile provider configuration</a>
@@ -21,6 +26,8 @@ public enum Provider {
     cohere,
     /** Azure OpenAI provider. */
     azure,
+    /** In-database Select AI provider. */
+    database,
     /** OCI Generative AI provider. */
     oci,
     /** Google provider. */
@@ -35,7 +42,7 @@ public enum Provider {
     /**
      * Parses a provider name using case-insensitive matching.
      *
-     * @param value provider name from user input or database attributes
+     * @param value provider name supplied to a creation or update builder
      * @return matching provider enum constant, or {@code null} when input is null/blank
      */
     public static Provider fromValue(String value) {

@@ -34,6 +34,7 @@ class ProviderTest {
         assertThat(Provider.fromValue("OpEnAi")).isEqualTo(Provider.openai);
         assertThat(Provider.fromValue("CoHeRe")).isEqualTo(Provider.cohere);
         assertThat(Provider.fromValue("AzUrE")).isEqualTo(Provider.azure);
+        assertThat(Provider.fromValue("DaTaBaSe")).isEqualTo(Provider.database);
         assertThat(Provider.fromValue("OcI")).isEqualTo(Provider.oci);
         assertThat(Provider.fromValue("GoOgLe")).isEqualTo(Provider.google);
         assertThat(Provider.fromValue("AnThRoPiC")).isEqualTo(Provider.anthropic);
@@ -73,6 +74,7 @@ class ProviderTest {
                         Provider.openai,
                         Provider.cohere,
                         Provider.azure,
+                        Provider.database,
                         Provider.oci,
                         Provider.google,
                         Provider.anthropic,

@@ -13,7 +13,7 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 ARTIFACT_ID="${ARTIFACT_ID:-select-ai}"
-VERSION="${VERSION:-1.0.0}"
+VERSION="${VERSION:-1.1.0}"
 TARGET_DIR="${REPO_ROOT}/target"
 
 POM_FILE="${TARGET_DIR}/${ARTIFACT_ID}-${VERSION}.pom"

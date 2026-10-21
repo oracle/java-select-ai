@@ -21,7 +21,7 @@ import java.sql.SQLException;
  * operation because the connection is owned by the existing DbConnection
  * instance. It preserves the current single-connection behavior.
  */
-final class SingleConnectionProvider implements ConnectionProvider, AutoCloseable {
+public final class SingleConnectionProvider implements ConnectionProvider, AutoCloseable {
     /** DbConnection wrapper that owns the JDBC connection. */
     private final DbConnection dbConnection;
 
@@ -30,7 +30,7 @@ final class SingleConnectionProvider implements ConnectionProvider, AutoCloseabl
      *
      * @param dbConnection DbConnection that owns the JDBC connection
      */
-    SingleConnectionProvider(DbConnection dbConnection) {
+    public SingleConnectionProvider(DbConnection dbConnection) {
         if (dbConnection == null) {
             throw new IllegalArgumentException("dbConnection must not be null");
         }
