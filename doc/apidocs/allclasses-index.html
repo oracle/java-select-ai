@@ -61,6 +61,31 @@ loadScripts(document, 'script');</script>
 <div class="summary-table two-column-summary" aria-labelledby="all-classes-table-tab0">
 <div class="table-header col-first">Class</div>
 <div class="table-header col-last">Description</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/oracle/database/selectai/agent/Agent.html" title="interface in com.oracle.database.selectai.agent">Agent</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">Contract for Select AI agent lifecycle management and metadata access.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/AgentAttributes.html" title="class in com.oracle.database.selectai.model.agent">AgentAttributes</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Attributes used to create or update a Select AI Agent.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/AgentAttributes.Builder.html" title="class in com.oracle.database.selectai.model.agent">AgentAttributes.Builder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for <a href="com/oracle/database/selectai/model/agent/AgentAttributes.html" title="class in com.oracle.database.selectai.model.agent"><code>AgentAttributes</code></a>.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/agent/AgentObjectType.html" title="enum class in com.oracle.database.selectai.model.agent">AgentObjectType</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="block">Object types accepted by object-type parameters in <code>DBMS_CLOUD_AI_AGENT</code>.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/agent/AgentStatus.html" title="enum class in com.oracle.database.selectai.model.agent">AgentStatus</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="block">Status values for Select AI agents.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/AvailableTeam.html" title="class in com.oracle.database.selectai.model.agent">AvailableTeam</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Read-only discovery metadata for an agent team available to the current
+ database user.</div>
+</div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/oracle/database/selectai/ConnectionCallback.html" title="interface in com.oracle.database.selectai">ConnectionCallback</a>&lt;<a href="com/oracle/database/selectai/ConnectionCallback.html" title="type parameter in ConnectionCallback">T</a>&gt;</div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">Functional unit of JDBC work executed synchronously with a connection
@@ -120,6 +145,46 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Builder for <a href="com/oracle/database/selectai/model/DbConnectionConfig.html" title="class in com.oracle.database.selectai.model"><code>DbConnectionConfig</code></a>.</div>
 </div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/EmailNotificationToolParams.html" title="class in com.oracle.database.selectai.model.agent">EmailNotificationToolParams</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Immutable parameters for a built-in email notification tool.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/EmailNotificationToolParams.Builder.html" title="class in com.oracle.database.selectai.model.agent">EmailNotificationToolParams.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for immutable <a href="com/oracle/database/selectai/model/agent/EmailNotificationToolParams.html" title="class in com.oracle.database.selectai.model.agent"><code>EmailNotificationToolParams</code></a>.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ExecutionStateParams.html" title="class in com.oracle.database.selectai.model.agent">ExecutionStateParams</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Typed parameters for a <code>SET_EXECUTION_STATE</code> operation.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ExecutionStateParams.Builder.html" title="class in com.oracle.database.selectai.model.agent">ExecutionStateParams.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for immutable execution-state parameters.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ExecutionStateRequest.html" title="class in com.oracle.database.selectai.model.agent">ExecutionStateRequest</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Request used to update an agent team execution state.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ExecutionStateRequest.Builder.html" title="class in com.oracle.database.selectai.model.agent">ExecutionStateRequest.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for <a href="com/oracle/database/selectai/model/agent/ExecutionStateRequest.html" title="class in com.oracle.database.selectai.model.agent"><code>ExecutionStateRequest</code></a>.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ExportTeamParams.html" title="class in com.oracle.database.selectai.model.agent">ExportTeamParams</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Typed parameters for exporting an agent team definition to a destination.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ExportTeamParams.Builder.html" title="class in com.oracle.database.selectai.model.agent">ExportTeamParams.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for immutable export parameters.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ExportTeamRequest.html" title="class in com.oracle.database.selectai.model.agent">ExportTeamRequest</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Request used to export a team definition to a file or object-storage URI.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ExportTeamRequest.Builder.html" title="class in com.oracle.database.selectai.model.agent">ExportTeamRequest.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for <a href="com/oracle/database/selectai/model/agent/ExportTeamRequest.html" title="class in com.oracle.database.selectai.model.agent"><code>ExportTeamRequest</code></a>.</div>
+</div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/Feedback.html" title="class in com.oracle.database.selectai.model">Feedback</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Immutable request payload for <code>DBMS_CLOUD_AI.FEEDBACK</code>.</div>
@@ -149,13 +214,29 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Builder for <a href="com/oracle/database/selectai/model/GenerateParams.html" title="class in com.oracle.database.selectai.model"><code>GenerateParams</code></a>.</div>
 </div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/GenericToolParams.html" title="class in com.oracle.database.selectai.model.agent">GenericToolParams</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Immutable parameters for tools or parameter schemas not modeled by this SDK.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/GenericToolParams.Builder.html" title="class in com.oracle.database.selectai.model.agent">GenericToolParams.Builder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for <a href="com/oracle/database/selectai/model/agent/GenericToolParams.html" title="class in com.oracle.database.selectai.model.agent"><code>GenericToolParams</code></a>.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ImportTeamRequest.html" title="class in com.oracle.database.selectai.model.agent">ImportTeamRequest</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Request used to import a Select AI Agent team definition.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ImportTeamRequest.Builder.html" title="class in com.oracle.database.selectai.model.agent">ImportTeamRequest.Builder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for <a href="com/oracle/database/selectai/model/agent/ImportTeamRequest.html" title="class in com.oracle.database.selectai.model.agent"><code>ImportTeamRequest</code></a>.</div>
+</div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/ObjectListMode.html" title="enum class in com.oracle.database.selectai.model">ObjectListMode</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
-<div class="block">Controls how Select AI chooses database objects for prompt metadata.</div>
+<div class="block">Object-list modes currently recognized by the SDK.</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/OciApiFormat.html" title="enum class in com.oracle.database.selectai.model">OciApiFormat</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab3">
-<div class="block">OCI Generative AI API formats that can be supplied in profile attributes.</div>
+<div class="block">OCI Generative AI API formats currently recognized by the SDK.</div>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/oracle/database/selectai/Profile.html" title="interface in com.oracle.database.selectai">Profile</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
@@ -177,7 +258,7 @@ loadScripts(document, 'script');</script>
 </div>
 <div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
-<div class="block">Supported Select AI provider identifiers accepted by profile attributes.</div>
+<div class="block">Select AI provider identifiers currently recognized by the SDK.</div>
 </div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/ProviderProfile.html" title="class in com.oracle.database.selectai.model">ProviderProfile</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab2">
@@ -252,108 +333,252 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Builder for <a href="com/oracle/database/selectai/model/ProviderProfile.OpenAIProviderProfile.html" title="class in com.oracle.database.selectai.model"><code>ProviderProfile.OpenAIProviderProfile</code></a>.</div>
 </div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/RagToolParams.html" title="class in com.oracle.database.selectai.model.agent">RagToolParams</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Immutable parameters for a built-in RAG tool.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/RagToolParams.Builder.html" title="class in com.oracle.database.selectai.model.agent">RagToolParams.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for immutable <a href="com/oracle/database/selectai/model/agent/RagToolParams.html" title="class in com.oracle.database.selectai.model.agent"><code>RagToolParams</code></a>.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/RunTeamParams.html" title="class in com.oracle.database.selectai.model.agent">RunTeamParams</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Typed runtime parameters for <code>DBMS_CLOUD_AI_AGENT.RUN_TEAM</code>.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/RunTeamParams.Builder.html" title="class in com.oracle.database.selectai.model.agent">RunTeamParams.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for immutable team runtime parameters.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/RunTeamRequest.html" title="class in com.oracle.database.selectai.model.agent">RunTeamRequest</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Input and optional runtime parameters for <a href="com/oracle/database/selectai/agent/Team.html#run(com.oracle.database.selectai.model.agent.RunTeamRequest)"><code>Team.run(RunTeamRequest)</code></a>
+ and <a href="com/oracle/database/selectai/agent/SelectAIAgent.html#runTeam(java.lang.String,com.oracle.database.selectai.model.agent.RunTeamRequest)"><code>SelectAIAgent.runTeam(String, RunTeamRequest)</code></a>.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/RunTeamRequest.Builder.html" title="class in com.oracle.database.selectai.model.agent">RunTeamRequest.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for <a href="com/oracle/database/selectai/model/agent/RunTeamRequest.html" title="class in com.oracle.database.selectai.model.agent"><code>RunTeamRequest</code></a>.</div>
+</div>
 <div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/oracle/database/selectai/SelectAI.html" title="interface in com.oracle.database.selectai">SelectAI</a></div>
 <div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">Top-level API contract for Oracle Select AI operations.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab5"><a href="com/oracle/database/selectai/model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab5">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/oracle/database/selectai/agent/SelectAIAgent.html" title="interface in com.oracle.database.selectai.agent">SelectAIAgent</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="block">Client interface for Oracle Select AI Agent operations.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab5"><a href="com/oracle/database/selectai/model/SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab5">
 <div class="block">Checked exception used by the SDK for database, JDBC, and Select AI
  operation failures.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SelectAIOptions.html" title="class in com.oracle.database.selectai.model">SelectAIOptions</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
-<div class="block">SDK execution settings for <a href="com/oracle/database/selectai/SelectAI.html" title="interface in com.oracle.database.selectai"><code>SelectAI</code></a> and
- <a href="com/oracle/database/selectai/DatabaseAdmin.html" title="interface in com.oracle.database.selectai"><code>DatabaseAdmin</code></a> clients.</div>
-</div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SelectAIOptions.Builder.html" title="class in com.oracle.database.selectai.model">SelectAIOptions.Builder</a></div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SelectAIOptions.html" title="class in com.oracle.database.selectai.model">SelectAIOptions</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">SDK execution settings for <a href="com/oracle/database/selectai/SelectAI.html" title="interface in com.oracle.database.selectai"><code>SelectAI</code></a>,
+ <a href="com/oracle/database/selectai/DatabaseAdmin.html" title="interface in com.oracle.database.selectai"><code>DatabaseAdmin</code></a>, and
+ <a href="com/oracle/database/selectai/agent/SelectAIAgent.html" title="interface in com.oracle.database.selectai.agent"><code>SelectAIAgent</code></a> clients.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SelectAIOptions.Builder.html" title="class in com.oracle.database.selectai.model">SelectAIOptions.Builder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Builder for <a href="com/oracle/database/selectai/model/SelectAIOptions.html" title="class in com.oracle.database.selectai.model"><code>SelectAIOptions</code></a>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/oracle/database/selectai/Session.html" title="interface in com.oracle.database.selectai">Session</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/oracle/database/selectai/Session.html" title="interface in com.oracle.database.selectai">Session</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
 <div class="block">Represents a Select AI chat session that reuses conversation context across
  multiple profile generation calls.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SummaryParams.html" title="class in com.oracle.database.selectai.model">SummaryParams</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/SlackNotificationToolParams.html" title="class in com.oracle.database.selectai.model.agent">SlackNotificationToolParams</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Immutable parameters for a built-in Slack notification tool.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/SlackNotificationToolParams.Builder.html" title="class in com.oracle.database.selectai.model.agent">SlackNotificationToolParams.Builder</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for immutable <a href="com/oracle/database/selectai/model/agent/SlackNotificationToolParams.html" title="class in com.oracle.database.selectai.model.agent"><code>SlackNotificationToolParams</code></a>.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/SqlToolParams.html" title="class in com.oracle.database.selectai.model.agent">SqlToolParams</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Immutable parameters for a built-in SQL tool.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/SqlToolParams.Builder.html" title="class in com.oracle.database.selectai.model.agent">SqlToolParams.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for immutable <a href="com/oracle/database/selectai/model/agent/SqlToolParams.html" title="class in com.oracle.database.selectai.model.agent"><code>SqlToolParams</code></a>.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SummaryParams.html" title="class in com.oracle.database.selectai.model">SummaryParams</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Typed parameters payload for <code>DBMS_CLOUD_AI.SUMMARIZE</code>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SummaryParams.Builder.html" title="class in com.oracle.database.selectai.model">SummaryParams.Builder</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SummaryParams.Builder.html" title="class in com.oracle.database.selectai.model">SummaryParams.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Builder for <a href="com/oracle/database/selectai/model/SummaryParams.html" title="class in com.oracle.database.selectai.model"><code>SummaryParams</code></a>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/SummaryParams.ChunkProcessingMethod.html" title="enum class in com.oracle.database.selectai.model">SummaryParams.ChunkProcessingMethod</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/SummaryParams.ChunkProcessingMethod.html" title="enum class in com.oracle.database.selectai.model">SummaryParams.ChunkProcessingMethod</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">Method used when the source content must be split into chunks.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/SummaryParams.ExtractivenessLevel.html" title="enum class in com.oracle.database.selectai.model">SummaryParams.ExtractivenessLevel</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/SummaryParams.ExtractivenessLevel.html" title="enum class in com.oracle.database.selectai.model">SummaryParams.ExtractivenessLevel</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">Degree to which the generated summary follows source wording.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/SummaryParams.Style.html" title="enum class in com.oracle.database.selectai.model">SummaryParams.Style</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/SummaryParams.Style.html" title="enum class in com.oracle.database.selectai.model">SummaryParams.Style</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
 <div class="block">Output format style for the generated summary.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataBatchRequest.html" title="class in com.oracle.database.selectai.model">SyntheticDataBatchRequest</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataBatchRequest.html" title="class in com.oracle.database.selectai.model">SyntheticDataBatchRequest</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Request object for generating synthetic data for multiple database objects.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataBatchRequest.Builder.html" title="class in com.oracle.database.selectai.model">SyntheticDataBatchRequest.Builder</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataBatchRequest.Builder.html" title="class in com.oracle.database.selectai.model">SyntheticDataBatchRequest.Builder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Builder for <a href="com/oracle/database/selectai/model/SyntheticDataBatchRequest.html" title="class in com.oracle.database.selectai.model"><code>SyntheticDataBatchRequest</code></a>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataObjectList.html" title="class in com.oracle.database.selectai.model">SyntheticDataObjectList</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataObjectList.html" title="class in com.oracle.database.selectai.model">SyntheticDataObjectList</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Object descriptor used in synthetic data generation object lists.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataObjectList.Builder.html" title="class in com.oracle.database.selectai.model">SyntheticDataObjectList.Builder</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataObjectList.Builder.html" title="class in com.oracle.database.selectai.model">SyntheticDataObjectList.Builder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Builder for <a href="com/oracle/database/selectai/model/SyntheticDataObjectList.html" title="class in com.oracle.database.selectai.model"><code>SyntheticDataObjectList</code></a>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataParams.html" title="class in com.oracle.database.selectai.model">SyntheticDataParams</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataParams.html" title="class in com.oracle.database.selectai.model">SyntheticDataParams</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Parameters for <code>DBMS_CLOUD_AI.GENERATE_SYNTHETIC_DATA</code>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataParams.Builder.html" title="class in com.oracle.database.selectai.model">SyntheticDataParams.Builder</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataParams.Builder.html" title="class in com.oracle.database.selectai.model">SyntheticDataParams.Builder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Builder for <a href="com/oracle/database/selectai/model/SyntheticDataParams.html" title="class in com.oracle.database.selectai.model"><code>SyntheticDataParams</code></a>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/SyntheticDataParams.Priority.html" title="enum class in com.oracle.database.selectai.model">SyntheticDataParams.Priority</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/SyntheticDataParams.Priority.html" title="enum class in com.oracle.database.selectai.model">SyntheticDataParams.Priority</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">Priority values accepted by synthetic data generation parameters.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataSingleRequest.html" title="class in com.oracle.database.selectai.model">SyntheticDataSingleRequest</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataSingleRequest.html" title="class in com.oracle.database.selectai.model">SyntheticDataSingleRequest</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Request object for generating synthetic data for a single database object.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataSingleRequest.Builder.html" title="class in com.oracle.database.selectai.model">SyntheticDataSingleRequest.Builder</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/SyntheticDataSingleRequest.Builder.html" title="class in com.oracle.database.selectai.model">SyntheticDataSingleRequest.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Builder for <a href="com/oracle/database/selectai/model/SyntheticDataSingleRequest.html" title="class in com.oracle.database.selectai.model"><code>SyntheticDataSingleRequest</code></a>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/oracle/database/selectai/VectorIndex.html" title="interface in com.oracle.database.selectai">VectorIndex</a></div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/oracle/database/selectai/agent/Task.html" title="interface in com.oracle.database.selectai.agent">Task</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">Contract for Select AI agent task lifecycle management and metadata access.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/TaskAttributes.html" title="class in com.oracle.database.selectai.model.agent">TaskAttributes</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Attributes used to create or update a Select AI Agent task.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/TaskAttributes.Builder.html" title="class in com.oracle.database.selectai.model.agent">TaskAttributes.Builder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for <a href="com/oracle/database/selectai/model/agent/TaskAttributes.html" title="class in com.oracle.database.selectai.model.agent"><code>TaskAttributes</code></a>.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/agent/TaskStatus.html" title="enum class in com.oracle.database.selectai.model.agent">TaskStatus</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
+<div class="block">Status values accepted when creating a Select AI Agent task.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/oracle/database/selectai/agent/Team.html" title="interface in com.oracle.database.selectai.agent">Team</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">Contract for Select AI agent team lifecycle, orchestration, and definition
+ management operations.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/TeamAttributes.html" title="class in com.oracle.database.selectai.model.agent">TeamAttributes</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Attributes used to create a Select AI Agent team.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/TeamAttributes.Builder.html" title="class in com.oracle.database.selectai.model.agent">TeamAttributes.Builder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for <a href="com/oracle/database/selectai/model/agent/TeamAttributes.html" title="class in com.oracle.database.selectai.model.agent"><code>TeamAttributes</code></a>.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/TeamAttributes.TeamMember.html" title="class in com.oracle.database.selectai.model.agent">TeamAttributes.TeamMember</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Team member definition used in agent-team attributes.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/TeamAttributes.TeamMember.MemberBuilder.html" title="class in com.oracle.database.selectai.model.agent">TeamAttributes.TeamMember.MemberBuilder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for <a href="com/oracle/database/selectai/model/agent/TeamAttributes.TeamMember.html" title="class in com.oracle.database.selectai.model.agent"><code>TeamAttributes.TeamMember</code></a>.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/TeamDescription.html" title="class in com.oracle.database.selectai.model.agent">TeamDescription</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Database-generated description of a Select AI Agent team.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/agent/TeamExecutionState.html" title="enum class in com.oracle.database.selectai.model.agent">TeamExecutionState</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="block">Execution states supported by a Select AI Agent team.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/TeamRunResult.html" title="class in com.oracle.database.selectai.model.agent">TeamRunResult</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Result returned by a Select AI Agent team run.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/agent/TeamStatus.html" title="enum class in com.oracle.database.selectai.model.agent">TeamStatus</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="block">Status values accepted when creating a Select AI Agent team.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab1"><a href="com/oracle/database/selectai/agent/Tool.html" title="interface in com.oracle.database.selectai.agent">Tool</a></div>
 <div class="col-last odd-row-color all-classes-table all-classes-table-tab1">
+<div class="block">Contract for Select AI agent tool lifecycle, description, and execution
+ operations.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ToolAttributes.html" title="class in com.oracle.database.selectai.model.agent">ToolAttributes</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Attributes used to create or update a Select AI Agent tool.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ToolAttributes.Builder.html" title="class in com.oracle.database.selectai.model.agent">ToolAttributes.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for <a href="com/oracle/database/selectai/model/agent/ToolAttributes.html" title="class in com.oracle.database.selectai.model.agent"><code>ToolAttributes</code></a>.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ToolInput.html" title="class in com.oracle.database.selectai.model.agent">ToolInput</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Immutable metadata for one entry in a tool's <code>tool_inputs</code> array.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ToolInput.Builder.html" title="class in com.oracle.database.selectai.model.agent">ToolInput.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for <a href="com/oracle/database/selectai/model/agent/ToolInput.html" title="class in com.oracle.database.selectai.model.agent"><code>ToolInput</code></a>; semantic validation is delegated to the database.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/oracle/database/selectai/model/agent/ToolParams.html" title="interface in com.oracle.database.selectai.model.agent">ToolParams</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
+<div class="block">Configuration parameters for a built-in Select AI Agent tool.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ToolRunResult.html" title="class in com.oracle.database.selectai.model.agent">ToolRunResult</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Result returned by a Select AI Agent tool run.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/agent/ToolStatus.html" title="enum class in com.oracle.database.selectai.model.agent">ToolStatus</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="block">Status values accepted when creating a Select AI Agent tool.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/ToolType.html" title="class in com.oracle.database.selectai.model.agent">ToolType</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Immutable value object for a Select AI Agent tool type.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab1"><a href="com/oracle/database/selectai/VectorIndex.html" title="interface in com.oracle.database.selectai">VectorIndex</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab1">
 <div class="block">Contract for Select AI vector-index lifecycle and configuration operations.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/VectorIndexAttributes.html" title="class in com.oracle.database.selectai.model">VectorIndexAttributes</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/VectorIndexAttributes.html" title="class in com.oracle.database.selectai.model">VectorIndexAttributes</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Attribute payload for creating or updating a Select AI vector index.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/VectorIndexAttributes.Builder.html" title="class in com.oracle.database.selectai.model">VectorIndexAttributes.Builder</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/VectorIndexAttributes.Builder.html" title="class in com.oracle.database.selectai.model">VectorIndexAttributes.Builder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Builder for <a href="com/oracle/database/selectai/model/VectorIndexAttributes.html" title="class in com.oracle.database.selectai.model"><code>VectorIndexAttributes</code></a>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/VectorIndexConfig.html" title="class in com.oracle.database.selectai.model">VectorIndexConfig</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/VectorIndexConfig.html" title="class in com.oracle.database.selectai.model">VectorIndexConfig</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Create-time configuration for <code>DBMS_CLOUD_AI.CREATE_VECTOR_INDEX</code>.</div>
 </div>
-<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/VectorIndexConfig.Builder.html" title="class in com.oracle.database.selectai.model">VectorIndexConfig.Builder</a></div>
-<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/VectorIndexConfig.Builder.html" title="class in com.oracle.database.selectai.model">VectorIndexConfig.Builder</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
 <div class="block">Builder for <a href="com/oracle/database/selectai/model/VectorIndexConfig.html" title="class in com.oracle.database.selectai.model"><code>VectorIndexConfig</code></a>.</div>
 </div>
-<div class="col-first even-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/VectorIndexConfig.Status.html" title="enum class in com.oracle.database.selectai.model">VectorIndexConfig.Status</a></div>
-<div class="col-last even-row-color all-classes-table all-classes-table-tab3">
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab3"><a href="com/oracle/database/selectai/model/VectorIndexConfig.Status.html" title="enum class in com.oracle.database.selectai.model">VectorIndexConfig.Status</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab3">
 <div class="block">Vector index status values accepted by <code>CREATE_VECTOR_INDEX</code>.</div>
+</div>
+<div class="col-first even-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/WebSearchToolParams.html" title="class in com.oracle.database.selectai.model.agent">WebSearchToolParams</a></div>
+<div class="col-last even-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Immutable parameters for a built-in web-search tool.</div>
+</div>
+<div class="col-first odd-row-color all-classes-table all-classes-table-tab2"><a href="com/oracle/database/selectai/model/agent/WebSearchToolParams.Builder.html" title="class in com.oracle.database.selectai.model.agent">WebSearchToolParams.Builder</a></div>
+<div class="col-last odd-row-color all-classes-table all-classes-table-tab2">
+<div class="block">Builder for immutable <a href="com/oracle/database/selectai/model/agent/WebSearchToolParams.html" title="class in com.oracle.database.selectai.model.agent"><code>WebSearchToolParams</code></a>.</div>
 </div>
 </div>
 </div>

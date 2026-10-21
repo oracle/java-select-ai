@@ -308,7 +308,7 @@ class DefaultCredentialTest {
      */
     @Test
     void credentialCreateFailureDoesNotExposeCredentialSecretsInExceptionOrLogs() throws Exception {
-        String sensitivePassword = "SEC_CRED_PASSWORD_MARKER";
+        String credRedactionPass = "test-cred-redaction-pass";
         String sensitiveUserOcid = "ocid1.user.oc1..SEC_CRED_USER_OCID_MARKER";
         String sensitivePrivateKey = "SEC_CRED_PRIVATE_KEY_MARKER";
         SQLException passwordException = new SQLException("database rejected request", "42000", 942);
@@ -324,7 +324,7 @@ class DefaultCredentialTest {
         DefaultCredential passwordCredential = new DefaultCredential(new SingleConnectionProvider(dbConnection),
                 CredentialConfig.builder("USERPASS_CRED")
                         .username("service-user")
-                        .password(sensitivePassword)
+                        .password(credRedactionPass)
                         .build());
         DefaultCredential ociCredential = new DefaultCredential(new SingleConnectionProvider(dbConnection),
                 CredentialConfig.builder("OCI_CRED")
@@ -345,8 +345,7 @@ class DefaultCredentialTest {
                 .isInstanceOf(SelectAIException.class)
                 .hasMessageContaining("CREATE_CREDENTIAL")
                 .hasCause(ociException);
-        LogCapture.assertFailureDoesNotExpose(passwordFailure,
-                sensitivePassword, "SEC_CRED_PASSWORD_MARKER");
+        LogCapture.assertFailureDoesNotExpose(passwordFailure, credRedactionPass);
         LogCapture.assertFailureDoesNotExpose(ociFailure,
                 sensitiveUserOcid, sensitivePrivateKey, "SEC_CRED_USER_OCID_MARKER",
                 "SEC_CRED_PRIVATE_KEY_MARKER");

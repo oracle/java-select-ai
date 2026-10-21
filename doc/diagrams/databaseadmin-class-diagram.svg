@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg xmlns="http://www.w3.org/2000/svg" width="2500" height="1500" viewBox="0 0 2500 1500">
+<svg xmlns="http://www.w3.org/2000/svg" width="2900" height="1500" viewBox="0 0 2900 1500">
 <defs>
   <marker id="arrow" markerWidth="12" markerHeight="12" refX="10" refY="6" orient="auto" markerUnits="strokeWidth">
     <path d="M 0 0 L 12 6 L 0 12 z" fill="#334155"/>
@@ -8,7 +8,7 @@
     <path d="M 0 0 L 14 7 L 0 14 z" fill="#ffffff" stroke="#334155" stroke-width="2"/>
   </marker>
 </defs>
-<rect x="0" y="0" width="2500" height="1500" fill="#ffffff"/>
+<rect x="0" y="0" width="2900" height="1500" fill="#ffffff"/>
 <text x="60" y="60" font-family="Arial, Helvetica, sans-serif" font-size="28" font-weight="700" fill="#1f2937">DatabaseAdmin Class Diagram</text>
 <text x="60" y="96" font-family="Arial, Helvetica, sans-serif" font-size="18" font-weight="700" fill="#5b6472">Focused view of privileged Select AI administrative operations</text>
 
@@ -37,7 +37,7 @@
 
 <!-- DatabaseAdmin -->
 <g>
-  <rect x="60" y="160" width="770" height="560" rx="8" fill="#f8fafc" stroke="#334155" stroke-width="3"/>
+  <rect x="60" y="160" width="770" height="650" rx="8" fill="#f8fafc" stroke="#334155" stroke-width="3"/>
   <rect x="60" y="160" width="770" height="70" rx="8" fill="#dfe7f1" stroke="#334155" stroke-width="3"/>
   <path d="M 60 230 H 830" stroke="#334155" stroke-width="3"/>
   <text x="445" y="192" font-family="Arial, Helvetica, sans-serif" font-size="24" font-weight="700" text-anchor="middle" fill="#243244">DatabaseAdmin</text>

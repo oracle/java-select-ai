@@ -29,12 +29,12 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
 
     @Override
     protected String profileObjectList() {
-        return objectListFor("people", "gymnast");
+        return objectListFor(BATCH_OBJECT_NAMES);
     }
 
     /**
-     * Test: Uses the fixture's enforced object list containing {@code people} and
-     * {@code gymnast} to build a single-object request for {@code people} with
+     * Test: Uses the fixture's enforced object list containing {@code director} and
+     * {@code actor} to build a single-object request for {@code director} with
      * {@code record_count=5}, the prompt {@code "age must be greater than 20"},
      * and parameters {@code sample_rows=10}, {@code table_statistics=true},
      * {@code priority=HIGH}, and {@code comments=true}. It also checks the
@@ -42,7 +42,7 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
      * existing row count in the configured database schema.
      * Expected: Parameter JSON contains all four supplied values, the synchronous
      * {@code generateSyntheticData} call returns {@code true}, and the
-     * {@code people} row count increases by exactly five rows.
+     * {@code director} row count increases by exactly five rows.
      */
     @Test
     void test18000GeneratesWithFullParameterSet() throws Exception {
@@ -69,11 +69,11 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
 
     /**
      * Test: Builds the minimum single-object request for the fixture's
-     * {@code people} table: {@code record_count=1}, with no user prompt and no
+     * {@code director} table: {@code record_count=1}, with no user prompt and no
      * optional parameter object. It records the table's current row count before
      * invoking the profile's synchronous synthetic-data operation.
      * Expected: The request is accepted, {@code generateSyntheticData} returns
-     * {@code true}, and exactly one row is added to {@code people}.
+     * {@code true}, and exactly one row is added to {@code director}.
      */
     @Test
     void test18001GeneratesWithMinimumFields() throws Exception {
@@ -86,12 +86,12 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
     }
 
     /**
-     * Test: Builds a request for the fixture's {@code people} table with
+     * Test: Builds a request for the fixture's {@code director} table with
      * {@code record_count=1} and parameters {@code sample_rows=0} and
      * {@code priority=HIGH}. This checks the request's requested output count
      * separately from its sample-row parameter.
      * Expected: The database accepts {@code sample_rows=0}; the call returns
-     * {@code true}, and the {@code people} row count increases by one row.
+     * {@code true}, and the {@code director} row count increases by one row.
      */
     @Test
     void test18002GeneratesWithZeroSampleRows() throws Exception {
@@ -109,12 +109,12 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
     }
 
     /**
-     * Test: Builds a request for the fixture's {@code people} table with
+     * Test: Builds a request for the fixture's {@code director} table with
      * {@code record_count=1} and parameters {@code sample_rows=1} and
      * {@code priority=HIGH}, then compares the table row count before and after
      * the synchronous generation call.
      * Expected: The call returns {@code true} and adds exactly one row to
-     * {@code people}.
+     * {@code director}.
      */
     @Test
     void test18003GeneratesWithOneSampleRow() throws Exception {
@@ -132,11 +132,11 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
     }
 
     /**
-     * Test: Builds a one-row request for the fixture's {@code people} table with
+     * Test: Builds a one-row request for the fixture's {@code director} table with
      * {@code sample_rows=1} and {@code priority=LOW}, then invokes synthetic-data
      * generation through the profile.
      * Expected: The low-priority request is accepted, the method returns
-     * {@code true}, and the {@code people} row count increases by exactly one.
+     * {@code true}, and the {@code director} row count increases by exactly one.
      */
     @Test
     void test18004GeneratesWithLowPriority() throws Exception {
@@ -159,7 +159,7 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
      * Test: Builds a single-object request with an explicit owner and submits it
      * through the single-object overload.
      * Expected: The request is accepted and one row is generated for
-     * {@code ADMIN.people}.
+     * {@code ADMIN.director}.
      */
     @Test
     void test18005GeneratesSingleObjectForExplicitOwner() throws Exception {
@@ -172,16 +172,16 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
     }
 
     /**
-     * Test: Captures row counts for {@code ADMIN.people} and {@code ADMIN.gymnast},
+     * Test: Captures row counts for {@code ADMIN.director} and {@code ADMIN.actor},
      * then builds one batch request with {@code sample_rows=1} and
-     * {@code priority=HIGH}. The batch contains {@code record_count=2} for
-     * {@code ADMIN.people} with the prompt {@code "Use realistic person names"}
-     * and {@code record_count=3} for {@code ADMIN.gymnast} with the prompt
-     * {@code "Use realistic gymnastics scores"}; the test also inspects the
+     * {@code priority=LOW}. The batch contains {@code record_count=3} for
+     * {@code ADMIN.director} with the prompt {@code "Use realistic director names"}
+     * and {@code record_count=2} for {@code ADMIN.actor} with the prompt
+     * {@code "Use realistic actor profiles"}; the test also inspects the
      * generated object-list JSON.
      * Expected: The JSON contains both object names, both record counts, and both
      * prompts; generation returns {@code true}; and the database row counts rise
-     * by two for {@code ADMIN.people} and three for {@code ADMIN.gymnast}.
+     * by three for {@code ADMIN.director} and two for {@code ADMIN.actor}.
      */
     @Test
     void test18006GeneratesForMultipleObjectsUsingDifferentCountsAndPrompts() throws Exception {
@@ -197,19 +197,19 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
                         .build());
         request.addObject(SyntheticDataObjectList.builder(BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[0])
                 .recordCount(3)
-                .userPrompt("Use realistic person names")
+                .userPrompt("Use realistic director names")
                 .build());
         request.addObject(SyntheticDataObjectList.builder(BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[1])
                 .recordCount(2)
-                .userPrompt("Use realistic gymnastics scores")
+                .userPrompt("Use realistic actor profiles")
                 .build());
         SyntheticDataBatchRequest builtRequest = request.build();
 
         assertThat(builtRequest.getObjectListJson())
                 .contains("\"record_count\":3")
                 .contains("\"record_count\":2")
-                .contains("Use realistic person names")
-                .contains("Use realistic gymnastics scores");
+                .contains("Use realistic director names")
+                .contains("Use realistic actor profiles");
 
         assertThat(profile.generateSyntheticData(builtRequest)).isTrue();
 
@@ -224,31 +224,31 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
 
 
     /**
-     * Test: Records the initial row counts for {@code ADMIN.people} and
-     * {@code ADMIN.gymnast}, builds a batch requesting one row for each object
+     * Test: Records the initial row counts for {@code ADMIN.director} and
+     * {@code ADMIN.actor}, builds a batch requesting one row for each object
      * with {@code sample_rows=1} and {@code priority=HIGH}, and submits the same
      * batch request twice through the profile.
      * Expected: Both synchronous calls return {@code true}; each invocation adds
      * one row to each table, so the final count is the initial count plus two in
-     * both {@code ADMIN.people} and {@code ADMIN.gymnast}.
+     * both {@code ADMIN.director} and {@code ADMIN.actor}.
      */
     @Test
     void test18007RepeatedBatchGenerationAddsRowsForEachObject() throws Exception {
-        long peopleBefore = rowCount(BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[0]);
-        long gymnastBefore = rowCount(BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[1]);
+        long directorBefore = rowCount(BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[0]);
+        long actorBefore = rowCount(BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[1]);
         SyntheticDataBatchRequest request = batchRequest(1, 1);
 
         assertThat(profile.generateSyntheticData(request)).isTrue();
         assertThat(profile.generateSyntheticData(request)).isTrue();
 
         assertThat(rowCount(BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[0]))
-                .isEqualTo(peopleBefore + 2);
+                .isEqualTo(directorBefore + 2);
         assertThat(rowCount(BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[1]))
-                .isEqualTo(gymnastBefore + 2);
+                .isEqualTo(actorBefore + 2);
     }
 
     /**
-     * Test: Builds a two-object batch for {@code people} and {@code gymnast} using
+     * Test: Builds a two-object batch for {@code director} and {@code actor} using
      * the nonexistent owner {@code JSAI_IT_OWNER_DOES_NOT_EXIST}, requesting one
      * row for each object, and submits it through the profile.
      * Expected: No rows are generated; the call throws {@code SelectAIException}
@@ -259,10 +259,10 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
     @Test
     void test18008BatchGenerationRejectsWrongOwner() {
         SyntheticDataBatchRequest request = SyntheticDataBatchRequest.builder()
-                .addObject(SyntheticDataObjectList.builder("JSAI_IT_OWNER_DOES_NOT_EXIST", "people")
+                .addObject(SyntheticDataObjectList.builder("JSAI_IT_OWNER_DOES_NOT_EXIST", BATCH_OBJECT_NAMES[0])
                         .recordCount(1)
                         .build())
-                .addObject(SyntheticDataObjectList.builder("JSAI_IT_OWNER_DOES_NOT_EXIST", "gymnast")
+                .addObject(SyntheticDataObjectList.builder("JSAI_IT_OWNER_DOES_NOT_EXIST", BATCH_OBJECT_NAMES[1])
                         .recordCount(1)
                         .build())
                 .build();
@@ -295,13 +295,13 @@ class SyntheticDataIT extends SyntheticDataIntegrationFixture {
                 });
     }
 
-    private SyntheticDataBatchRequest batchRequest(int peopleCount, int gymnastCount) {
+    private SyntheticDataBatchRequest batchRequest(int directorCount, int actorCount) {
         return SyntheticDataBatchRequest.builder()
                 .addObject(SyntheticDataObjectList.builder(BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[0])
-                        .recordCount(peopleCount)
+                        .recordCount(directorCount)
                         .build())
                 .addObject(SyntheticDataObjectList.builder(BATCH_OBJECT_OWNER, BATCH_OBJECT_NAMES[1])
-                        .recordCount(gymnastCount)
+                        .recordCount(actorCount)
                         .build())
                 .params(SyntheticDataParams.builder().sampleRows(1).priority("HIGH").build())
                 .build();

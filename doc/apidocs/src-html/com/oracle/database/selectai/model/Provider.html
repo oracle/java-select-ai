@@ -22,45 +22,52 @@
 <span class="source-line-no">009</span><span id="line-9">import java.util.Arrays;</span>
 <span class="source-line-no">010</span><span id="line-10"></span>
 <span class="source-line-no">011</span><span id="line-11">/**</span>
-<span class="source-line-no">012</span><span id="line-12"> * Supported Select AI provider identifiers accepted by profile attributes.</span>
-<span class="source-line-no">013</span><span id="line-13"> *</span>
-<span class="source-line-no">014</span><span id="line-14"> * @see &lt;a href="https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/select-ai-manage-profiles.html"&gt;</span>
-<span class="source-line-no">015</span><span id="line-15"> *      Select AI profile provider configuration&lt;/a&gt;</span>
-<span class="source-line-no">016</span><span id="line-16"> */</span>
-<span class="source-line-no">017</span><span id="line-17">public enum Provider {</span>
-<span class="source-line-no">018</span><span id="line-18">    /** OpenAI provider. */</span>
-<span class="source-line-no">019</span><span id="line-19">    openai,</span>
-<span class="source-line-no">020</span><span id="line-20">    /** Cohere provider. */</span>
-<span class="source-line-no">021</span><span id="line-21">    cohere,</span>
-<span class="source-line-no">022</span><span id="line-22">    /** Azure OpenAI provider. */</span>
-<span class="source-line-no">023</span><span id="line-23">    azure,</span>
-<span class="source-line-no">024</span><span id="line-24">    /** OCI Generative AI provider. */</span>
-<span class="source-line-no">025</span><span id="line-25">    oci,</span>
-<span class="source-line-no">026</span><span id="line-26">    /** Google provider. */</span>
-<span class="source-line-no">027</span><span id="line-27">    google,</span>
-<span class="source-line-no">028</span><span id="line-28">    /** Anthropic provider. */</span>
-<span class="source-line-no">029</span><span id="line-29">    anthropic,</span>
-<span class="source-line-no">030</span><span id="line-30">    /** Hugging Face provider. */</span>
-<span class="source-line-no">031</span><span id="line-31">    huggingface,</span>
-<span class="source-line-no">032</span><span id="line-32">    /** AWS Bedrock provider. */</span>
-<span class="source-line-no">033</span><span id="line-33">    aws;</span>
-<span class="source-line-no">034</span><span id="line-34"></span>
-<span class="source-line-no">035</span><span id="line-35">    /**</span>
-<span class="source-line-no">036</span><span id="line-36">     * Parses a provider name using case-insensitive matching.</span>
-<span class="source-line-no">037</span><span id="line-37">     *</span>
-<span class="source-line-no">038</span><span id="line-38">     * @param value provider name from user input or database attributes</span>
-<span class="source-line-no">039</span><span id="line-39">     * @return matching provider enum constant, or {@code null} when input is null/blank</span>
-<span class="source-line-no">040</span><span id="line-40">     */</span>
-<span class="source-line-no">041</span><span id="line-41">    public static Provider fromValue(String value) {</span>
-<span class="source-line-no">042</span><span id="line-42">        if (value == null || value.isBlank()) {</span>
-<span class="source-line-no">043</span><span id="line-43">            return null;</span>
-<span class="source-line-no">044</span><span id="line-44">        }</span>
-<span class="source-line-no">045</span><span id="line-45">        return Arrays.stream(values())</span>
-<span class="source-line-no">046</span><span id="line-46">                .filter(provider -&gt; provider.name().equalsIgnoreCase(value))</span>
-<span class="source-line-no">047</span><span id="line-47">                .findFirst()</span>
-<span class="source-line-no">048</span><span id="line-48">                .orElseThrow(() -&gt; new IllegalArgumentException("Unsupported provider: " + value));</span>
-<span class="source-line-no">049</span><span id="line-49">    }</span>
-<span class="source-line-no">050</span><span id="line-50">}</span>
+<span class="source-line-no">012</span><span id="line-12"> * Select AI provider identifiers currently recognized by the SDK.</span>
+<span class="source-line-no">013</span><span id="line-13"> * &lt;p&gt;</span>
+<span class="source-line-no">014</span><span id="line-14"> * This enum is used for creation and update validation. Existing database</span>
+<span class="source-line-no">015</span><span id="line-15"> * profiles may contain provider values introduced by a newer database release;</span>
+<span class="source-line-no">016</span><span id="line-16"> * profile metadata hydration preserves those values as strings instead of</span>
+<span class="source-line-no">017</span><span id="line-17"> * requiring them to be present in this enum.</span>
+<span class="source-line-no">018</span><span id="line-18"> *</span>
+<span class="source-line-no">019</span><span id="line-19"> * @see &lt;a href="https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/select-ai-manage-profiles.html"&gt;</span>
+<span class="source-line-no">020</span><span id="line-20"> *      Select AI profile provider configuration&lt;/a&gt;</span>
+<span class="source-line-no">021</span><span id="line-21"> */</span>
+<span class="source-line-no">022</span><span id="line-22">public enum Provider {</span>
+<span class="source-line-no">023</span><span id="line-23">    /** OpenAI provider. */</span>
+<span class="source-line-no">024</span><span id="line-24">    openai,</span>
+<span class="source-line-no">025</span><span id="line-25">    /** Cohere provider. */</span>
+<span class="source-line-no">026</span><span id="line-26">    cohere,</span>
+<span class="source-line-no">027</span><span id="line-27">    /** Azure OpenAI provider. */</span>
+<span class="source-line-no">028</span><span id="line-28">    azure,</span>
+<span class="source-line-no">029</span><span id="line-29">    /** In-database Select AI provider. */</span>
+<span class="source-line-no">030</span><span id="line-30">    database,</span>
+<span class="source-line-no">031</span><span id="line-31">    /** OCI Generative AI provider. */</span>
+<span class="source-line-no">032</span><span id="line-32">    oci,</span>
+<span class="source-line-no">033</span><span id="line-33">    /** Google provider. */</span>
+<span class="source-line-no">034</span><span id="line-34">    google,</span>
+<span class="source-line-no">035</span><span id="line-35">    /** Anthropic provider. */</span>
+<span class="source-line-no">036</span><span id="line-36">    anthropic,</span>
+<span class="source-line-no">037</span><span id="line-37">    /** Hugging Face provider. */</span>
+<span class="source-line-no">038</span><span id="line-38">    huggingface,</span>
+<span class="source-line-no">039</span><span id="line-39">    /** AWS Bedrock provider. */</span>
+<span class="source-line-no">040</span><span id="line-40">    aws;</span>
+<span class="source-line-no">041</span><span id="line-41"></span>
+<span class="source-line-no">042</span><span id="line-42">    /**</span>
+<span class="source-line-no">043</span><span id="line-43">     * Parses a provider name using case-insensitive matching.</span>
+<span class="source-line-no">044</span><span id="line-44">     *</span>
+<span class="source-line-no">045</span><span id="line-45">     * @param value provider name supplied to a creation or update builder</span>
+<span class="source-line-no">046</span><span id="line-46">     * @return matching provider enum constant, or {@code null} when input is null/blank</span>
+<span class="source-line-no">047</span><span id="line-47">     */</span>
+<span class="source-line-no">048</span><span id="line-48">    public static Provider fromValue(String value) {</span>
+<span class="source-line-no">049</span><span id="line-49">        if (value == null || value.isBlank()) {</span>
+<span class="source-line-no">050</span><span id="line-50">            return null;</span>
+<span class="source-line-no">051</span><span id="line-51">        }</span>
+<span class="source-line-no">052</span><span id="line-52">        return Arrays.stream(values())</span>
+<span class="source-line-no">053</span><span id="line-53">                .filter(provider -&gt; provider.name().equalsIgnoreCase(value))</span>
+<span class="source-line-no">054</span><span id="line-54">                .findFirst()</span>
+<span class="source-line-no">055</span><span id="line-55">                .orElseThrow(() -&gt; new IllegalArgumentException("Unsupported provider: " + value));</span>
+<span class="source-line-no">056</span><span id="line-56">    }</span>
+<span class="source-line-no">057</span><span id="line-57">}</span>
 
 
 

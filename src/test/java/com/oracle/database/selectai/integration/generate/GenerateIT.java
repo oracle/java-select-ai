@@ -55,6 +55,26 @@ class GenerateIT extends GenerateIntegrationFixture {
     }
 
     /**
+     * Emits the SQL generated for an execution-oriented request. The subsequent execution is a
+     * separate provider call, but this records the schema context and generated SQL immediately
+     * beforehand when diagnosing object-list enforcement failures.
+     */
+    private void logExecutionDiagnostic(String operation, String prompt) {
+        try {
+            String generatedSql = profile.generate(prompt, GenerateAction.showsql);
+            System.out.printf(
+                    "JSAI DIAGNOSTIC operation=%s%n  prompt=%s%n  object_list=%s%n"
+                            + "  generated_sql=%s%n",
+                    operation, prompt, profile.getProfileAttributes().getObjectList(), generatedSql);
+        } catch (Exception exception) {
+            System.out.printf(
+                    "JSAI DIAGNOSTIC operation=%s%n  prompt=%s%n"
+                            + "  showsql_diagnostic_error=%s%n",
+                    operation, prompt, exception.getMessage());
+        }
+    }
+
+    /**
      * Test: On the fixture-created profile, whose object list contains the PEOPLE and GYMNAST
      * tables and whose model is set to {@code openai.gpt-5.6-luna}, call {@code showsql} for
      * both prompts: {@code "How many gymnasts in database?"} and
@@ -100,14 +120,15 @@ class GenerateIT extends GenerateIntegrationFixture {
      */
     @Test
     void test16002RunSql() throws Exception {
-        assertThat(profile.runsql(PROMPTS[0]))
-                .isNotBlank()
-                .satisfies(response -> assertThat(response.toLowerCase())
-                        .containsAnyOf("5", "five"));
-        assertThat(profile.runsql(PROMPTS[1]))
-                .isNotBlank()
-                .satisfies(response -> assertThat(response.toLowerCase())
-                        .containsAnyOf("5", "five"));
+        for (String prompt : PROMPTS) {
+            logExecutionDiagnostic("runsql", prompt);
+            String response = profile.runsql(prompt);
+            System.out.printf("JSAI DIAGNOSTIC operation=runsql%n  response=%s%n", response);
+            assertThat(response)
+                    .isNotBlank()
+                    .satisfies(value -> assertThat(value.toLowerCase())
+                            .containsAnyOf("5", "five"));
+        }
     }
 
     /**
@@ -137,10 +158,13 @@ class GenerateIT extends GenerateIntegrationFixture {
      */
     @Test
     void test16004Narrate() throws Exception {
-        for (int i = 0; i < PROMPTS.length; i++) {
-            assertThat(profile.narrate(PROMPTS[i]))
+        for (String prompt : PROMPTS) {
+            logExecutionDiagnostic("narrate", prompt);
+            String response = profile.narrate(prompt);
+            System.out.printf("JSAI DIAGNOSTIC operation=narrate%n  response=%s%n", response);
+            assertThat(response)
                     .isNotBlank()
-                    .satisfies(response -> assertThat(response.toLowerCase())
+                    .satisfies(value -> assertThat(value.toLowerCase())
                             .containsAnyOf("5", "five"));
         }
     }
@@ -170,9 +194,12 @@ class GenerateIT extends GenerateIntegrationFixture {
      */
     @Test
     void test16006GenerateRunSql() throws Exception {
-        assertThat(profile.generate(PROMPTS[0], GenerateAction.runsql))
+        logExecutionDiagnostic("generate(runsql)", PROMPTS[0]);
+        String response = profile.generate(PROMPTS[0], GenerateAction.runsql);
+        System.out.printf("JSAI DIAGNOSTIC operation=generate(runsql)%n  response=%s%n", response);
+        assertThat(response)
                 .isNotBlank()
-                .satisfies(response -> assertThat(response.toLowerCase())
+                .satisfies(value -> assertThat(value.toLowerCase())
                             .containsAnyOf("5", "five"));
     }
 
@@ -214,9 +241,12 @@ class GenerateIT extends GenerateIntegrationFixture {
      */
     @Test
     void test16009GenerateNarrate() throws Exception {
-        assertThat(profile.generate(PROMPTS[0], GenerateAction.narrate))
+        logExecutionDiagnostic("generate(narrate)", PROMPTS[0]);
+        String response = profile.generate(PROMPTS[0], GenerateAction.narrate);
+        System.out.printf("JSAI DIAGNOSTIC operation=generate(narrate)%n  response=%s%n", response);
+        assertThat(response)
                 .isNotBlank()
-                .satisfies(response -> assertThat(response.toLowerCase())
+                .satisfies(value -> assertThat(value.toLowerCase())
                             .containsAnyOf("5", "five"));
     }
 

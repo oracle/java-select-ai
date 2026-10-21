@@ -102,9 +102,14 @@ loadScripts(document, 'script');</script>
 <dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Comparable.html" title="class or interface in java.lang" class="external-link">Comparable</a>&lt;<a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/constant/Constable.html" title="class or interface in java.lang.constant" class="external-link">Constable</a></code></dd>
 </dl>
 <hr>
-<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-17">Provider</a></span>
+<div class="type-signature"><span class="modifiers">public enum </span><span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-22">Provider</a></span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Enum.html" title="class or interface in java.lang" class="external-link">Enum</a>&lt;<a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a>&gt;</span></div>
-<div class="block">Supported Select AI provider identifiers accepted by profile attributes.</div>
+<div class="block">Select AI provider identifiers currently recognized by the SDK.
+ <p>
+ This enum is used for creation and update validation. Existing database
+ profiles may contain provider values introduced by a newer database release;
+ profile metadata hydration preserves those values as strings instead of
+ requiring them to be present in this enum.</div>
 <dl class="notes">
 <dt>See Also:</dt>
 <dd>
@@ -150,20 +155,24 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Cohere provider.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#google" class="member-name-link">google</a></code></div>
+<div class="col-first even-row-color"><code><a href="#database" class="member-name-link">database</a></code></div>
 <div class="col-last even-row-color">
+<div class="block">In-database Select AI provider.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="#google" class="member-name-link">google</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">Google provider.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#huggingface" class="member-name-link">huggingface</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="#huggingface" class="member-name-link">huggingface</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">Hugging Face provider.</div>
 </div>
-<div class="col-first even-row-color"><code><a href="#oci" class="member-name-link">oci</a></code></div>
-<div class="col-last even-row-color">
+<div class="col-first odd-row-color"><code><a href="#oci" class="member-name-link">oci</a></code></div>
+<div class="col-last odd-row-color">
 <div class="block">OCI Generative AI provider.</div>
 </div>
-<div class="col-first odd-row-color"><code><a href="#openai" class="member-name-link">openai</a></code></div>
-<div class="col-last odd-row-color">
+<div class="col-first even-row-color"><code><a href="#openai" class="member-name-link">openai</a></code></div>
+<div class="col-last even-row-color">
 <div class="block">OpenAI provider.</div>
 </div>
 </div>
@@ -219,56 +228,63 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="openai">
 <h3>openai</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-19">openai</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-24">openai</a></span></div>
 <div class="block">OpenAI provider.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="cohere">
 <h3>cohere</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-21">cohere</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-26">cohere</a></span></div>
 <div class="block">Cohere provider.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="azure">
 <h3>azure</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-23">azure</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-28">azure</a></span></div>
 <div class="block">Azure OpenAI provider.</div>
+</section>
+</li>
+<li>
+<section class="detail" id="database">
+<h3>database</h3>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-30">database</a></span></div>
+<div class="block">In-database Select AI provider.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="oci">
 <h3>oci</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-25">oci</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-32">oci</a></span></div>
 <div class="block">OCI Generative AI provider.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="google">
 <h3>google</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-27">google</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-34">google</a></span></div>
 <div class="block">Google provider.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="anthropic">
 <h3>anthropic</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-29">anthropic</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-36">anthropic</a></span></div>
 <div class="block">Anthropic provider.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="huggingface">
 <h3>huggingface</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-31">huggingface</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-38">huggingface</a></span></div>
 <div class="block">Hugging Face provider.</div>
 </section>
 </li>
 <li>
 <section class="detail" id="aws">
 <h3>aws</h3>
-<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-33">aws</a></span></div>
+<div class="member-signature"><span class="modifiers">public static final</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-40">aws</a></span></div>
 <div class="block">AWS Bedrock provider.</div>
 </section>
 </li>
@@ -283,7 +299,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="values()">
 <h3>values</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-17">values</a></span>()</div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a>[]</span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-22">values</a></span>()</div>
 <div class="block">Returns an array containing the constants of this enum class, in
 the order they are declared.</div>
 <dl class="notes">
@@ -295,7 +311,7 @@ the order they are declared.</div>
 <li>
 <section class="detail" id="valueOf(java.lang.String)">
 <h3>valueOf</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-17">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-22">valueOf</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</span></div>
 <div class="block">Returns the enum constant of this class with the specified name.
 The string must match <i>exactly</i> an identifier used to declare an
 enum constant in this class.  (Extraneous whitespace characters are 
@@ -314,11 +330,11 @@ not permitted.)</div>
 <li>
 <section class="detail" id="fromValue(java.lang.String)">
 <h3>fromValue</h3>
-<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-41">fromValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
+<div class="member-signature"><span class="modifiers">public static</span>&nbsp;<span class="return-type"><a href="Provider.html" title="enum class in com.oracle.database.selectai.model">Provider</a></span>&nbsp;<span class="element-name"><a href="../../../../../src-html/com/oracle/database/selectai/model/Provider.html#line-48">fromValue</a></span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</span></div>
 <div class="block">Parses a provider name using case-insensitive matching.</div>
 <dl class="notes">
 <dt>Parameters:</dt>
-<dd><code>value</code> - provider name from user input or database attributes</dd>
+<dd><code>value</code> - provider name supplied to a creation or update builder</dd>
 <dt>Returns:</dt>
 <dd>matching provider enum constant, or <code>null</code> when input is null/blank</dd>
 </dl>

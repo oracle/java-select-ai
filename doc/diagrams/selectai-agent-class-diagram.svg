@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2500" role="img" aria-labelledby="title desc" height="1757" viewBox="0 0 2500 1757">
+  <title id="title">SelectAIAgent Class Diagram</title>
+  <desc id="desc">com.oracle.database.selectai.agent.SelectAIAgent | complete public methods, grouped within one interface</desc>
+  <defs>
+    <style>
+            .title {font:700 32px Arial,sans-serif;fill:#17212b}
+            .subtitle {font:18px Arial,sans-serif;fill:#475569}
+            .box {fill:#fafbfc;stroke:#475569;stroke-width:2}
+            .header {fill:#e6edf3}
+            .name {font:700 23px Arial,sans-serif;fill:#17212b}
+            .stereo,.note,.label {font:18px Arial,sans-serif;fill:#374151}
+            .member {font:18px Menlo,Consolas,monospace;fill:#17212b;white-space:pre}
+            .section {font:700 18px Arial,sans-serif;fill:#18665c}
+            .dependency {fill:none;stroke:#475569;stroke-width:2;stroke-dasharray:8 5;marker-end:url(#arrow)}
+            .realization {fill:none;stroke:#475569;stroke-width:2;stroke-dasharray:8 5;marker-end:url(#triangle)}
+            .inheritance {fill:none;stroke:#475569;stroke-width:2;marker-end:url(#triangle)}
+            .association {fill:none;stroke:#475569;stroke-width:2;marker-end:url(#arrow)}
+        </style>
+    <marker id="arrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M1,1 L10,5 L1,9" fill="none" stroke="#475569" stroke-width="2" />
+    </marker>
+    <marker id="triangle" markerWidth="18" markerHeight="18" refX="17" refY="9" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M17,9 L1,1 L1,17 Z" fill="#fff" stroke="#475569" stroke-width="2" />
+    </marker>
+  </defs>
+  <rect width="2500" fill="#fff" height="1757" />
+  <text x="1250.0" y="50" class="title" text-anchor="middle">SelectAIAgent Class Diagram</text>
+  <text x="1250.0" y="82" class="subtitle" text-anchor="middle">com.oracle.database.selectai.agent.SelectAIAgent | complete public methods, grouped within one interface</text>
+  <g class="node" data-name="SelectAIAgent: factories and collections">
+    <rect x="60" y="260" width="1120" height="856" rx="6" class="box" />
+    <rect x="61" y="261" width="1118" height="82" rx="5" class="header" />
+    <line x1="60" y1="343" x2="1180" y2="343" stroke="#475569" stroke-width="2" />
+    <text x="620.0" y="294" class="name" text-anchor="middle">SelectAIAgent: factories and collections</text>
+    <text x="620.0" y="323" class="stereo" text-anchor="middle">&lt;&lt;interface; left half of the same contract&gt;&gt;</text>
+    <text x="86" y="376" class="section" text-anchor="start">CLIENT FACTORIES</text>
+    <text x="86" y="407" class="member" text-anchor="start">+ {static} create(DbConnectionConfig) : SelectAIAgent</text>
+    <text x="86" y="438" class="member" text-anchor="start">+ {static} create(DbConnectionConfig, SelectAIOptions) : SelectAIAgent</text>
+    <text x="86" y="469" class="member" text-anchor="start">+ {static} create(DataSource) : SelectAIAgent</text>
+    <text x="86" y="500" class="member" text-anchor="start">+ {static} create(DataSource, SelectAIOptions) : SelectAIAgent</text>
+    <text x="86" y="531" class="section" text-anchor="start">LOAD OWNED RESOURCES</text>
+    <text x="86" y="562" class="member" text-anchor="start">+ agent(String) : Agent</text>
+    <text x="86" y="593" class="member" text-anchor="start">+ task(String) : Task</text>
+    <text x="86" y="624" class="member" text-anchor="start">+ tool(String) : Tool</text>
+    <text x="86" y="655" class="member" text-anchor="start">+ team(String) : Team</text>
+    <text x="86" y="686" class="section" text-anchor="start">CONFIGURE NEW RESOURCES; THEN CALL create()</text>
+    <text x="86" y="717" class="member" text-anchor="start">+ agent(String, AgentAttributes, String, AgentStatus) : Agent</text>
+    <text x="86" y="748" class="member" text-anchor="start">+ task(String, TaskAttributes, String, TaskStatus) : Task</text>
+    <text x="86" y="779" class="member" text-anchor="start">+ tool(String, ToolAttributes, String, ToolStatus) : Tool</text>
+    <text x="86" y="810" class="member" text-anchor="start">+ team(String, TeamAttributes, String, TeamStatus) : Team</text>
+    <text x="86" y="841" class="section" text-anchor="start">OWNED-RESOURCE COLLECTIONS; OPTIONAL NAME PATTERN</text>
+    <text x="86" y="872" class="member" text-anchor="start">+ listAgents() : List&lt;Agent&gt;</text>
+    <text x="86" y="903" class="member" text-anchor="start">+ listAgents(String) : List&lt;Agent&gt;</text>
+    <text x="86" y="934" class="member" text-anchor="start">+ listTasks() : List&lt;Task&gt;</text>
+    <text x="86" y="965" class="member" text-anchor="start">+ listTasks(String) : List&lt;Task&gt;</text>
+    <text x="86" y="996" class="member" text-anchor="start">+ listTools() : List&lt;Tool&gt;</text>
+    <text x="86" y="1027" class="member" text-anchor="start">+ listTools(String) : List&lt;Tool&gt;</text>
+    <text x="86" y="1058" class="member" text-anchor="start">+ listTeams() : List&lt;Team&gt;</text>
+    <text x="86" y="1089" class="member" text-anchor="start">+ listTeams(String) : List&lt;Team&gt;</text>
+  </g>
+  <g class="node" data-name="SelectAIAgent: execution and sharing">
+    <rect x="1320" y="260" width="1120" height="732" rx="6" class="box" />
+    <rect x="1321" y="261" width="1118" height="82" rx="5" class="header" />
+    <line x1="1320" y1="343" x2="2440" y2="343" stroke="#475569" stroke-width="2" />
+    <text x="1880.0" y="294" class="name" text-anchor="middle">SelectAIAgent: execution and sharing</text>
+    <text x="1880.0" y="323" class="stereo" text-anchor="middle">&lt;&lt;interface; right half of the same contract&gt;&gt;</text>
+    <text x="1346" y="376" class="section" text-anchor="start">AVAILABLE-TEAM DISCOVERY</text>
+    <text x="1346" y="407" class="member" text-anchor="start">+ listAvailableTeams() : List&lt;AvailableTeam&gt;</text>
+    <text x="1346" y="438" class="section" text-anchor="start">RUN AND STATE; OWNER-QUALIFIED TEAM NAMES SUPPORTED</text>
+    <text x="1346" y="469" class="member" text-anchor="start">+ runTeam(String, RunTeamRequest) : TeamRunResult</text>
+    <text x="1346" y="500" class="member" text-anchor="start">+ getTeamStateByConversationId(String, String)</text>
+    <text x="1346" y="531" class="member" text-anchor="start">    : TeamExecutionState</text>
+    <text x="1346" y="562" class="member" text-anchor="start">+ setTeamExecutionState(String, ExecutionStateRequest) : boolean</text>
+    <text x="1346" y="593" class="section" text-anchor="start">TEAM-OWNER ACCESS MANAGEMENT</text>
+    <text x="1346" y="624" class="member" text-anchor="start">+ grantTeamAccess(String, String) : boolean</text>
+    <text x="1346" y="655" class="member" text-anchor="start">+ revokeTeamAccess(String, String) : boolean</text>
+    <text x="1346" y="686" class="section" text-anchor="start">SESSION-SCOPED RUNTIME VARIABLES</text>
+    <text x="1346" y="717" class="member" text-anchor="start">+ getVariable(String, String) : String</text>
+    <text x="1346" y="748" class="member" text-anchor="start">+ getVariable(String, String, String) : String</text>
+    <text x="1346" y="779" class="member" text-anchor="start">+ setVariable(String, String, String) : boolean</text>
+    <text x="1346" y="810" class="member" text-anchor="start">+ setVariable(String, String, String, String) : boolean</text>
+    <text x="1346" y="841" class="section" text-anchor="start">DEFINITIONS AND IMPORT</text>
+    <text x="1346" y="872" class="member" text-anchor="start">+ getDefinition(AgentObjectType, String, boolean) : String</text>
+    <text x="1346" y="903" class="member" text-anchor="start">+ importTeam(ImportTeamRequest) : boolean</text>
+    <text x="1346" y="934" class="section" text-anchor="start">CLIENT LIFECYCLE</text>
+    <text x="1346" y="965" class="member" text-anchor="start">+ close() : void</text>
+  </g>
+  <g class="node" data-name="AutoCloseable">
+    <rect x="1740" y="112" width="700" height="112" rx="6" class="box" />
+    <rect x="1741" y="113" width="698" height="82" rx="5" class="header" />
+    <line x1="1740" y1="195" x2="2440" y2="195" stroke="#475569" stroke-width="2" />
+    <text x="2090.0" y="146" class="name" text-anchor="middle">AutoCloseable</text>
+    <text x="2090.0" y="175" class="stereo" text-anchor="middle">&lt;&lt;superinterface&gt;&gt;</text>
+  </g>
+  <path d="M2090 260 V224" class="inheritance" />
+  <text x="2180" y="247" class="label" text-anchor="middle">extends</text>
+  <g class="node" data-name="DefaultSelectAIAgent">
+    <rect x="60" y="1216" width="1120" height="270" rx="6" class="box" />
+    <rect x="61" y="1217" width="1118" height="82" rx="5" class="header" />
+    <line x1="60" y1="1299" x2="1180" y2="1299" stroke="#475569" stroke-width="2" />
+    <text x="620.0" y="1250" class="name" text-anchor="middle">DefaultSelectAIAgent</text>
+    <text x="620.0" y="1279" class="stereo" text-anchor="middle">&lt;&lt;package-private, final implementation&gt;&gt;</text>
+    <text x="86" y="1332" class="member" text-anchor="start">ConnectionProvider / AgentJdbc / AgentSql</text>
+    <text x="86" y="1363" class="member" text-anchor="start">DbConnectionConfig / DataSource / SelectAIOptions</text>
+    <text x="86" y="1410" class="note" text-anchor="start">DbConnectionConfig: one SDK-owned connection; close() releases it.</text>
+    <text x="86" y="1436" class="note" text-anchor="start">DataSource: borrow/close per operation; the application owns the source.</text>
+    <text x="86" y="1462" class="note" text-anchor="start">One operation may use a different pooled session from the next.</text>
+  </g>
+  <path d="M620 1216 V1116" class="realization" />
+  <text x="715" y="1168" class="label" text-anchor="middle">implements</text>
+  <g class="node" data-name="Discovery and workflow contracts">
+    <rect x="1320" y="1216" width="1120" height="358" rx="6" class="box" />
+    <rect x="1321" y="1217" width="1118" height="82" rx="5" class="header" />
+    <line x1="1320" y1="1299" x2="2440" y2="1299" stroke="#475569" stroke-width="2" />
+    <text x="1880.0" y="1250" class="name" text-anchor="middle">Discovery and workflow contracts</text>
+    <text x="1880.0" y="1279" class="stereo" text-anchor="middle">&lt;&lt;public model dependencies&gt;&gt;</text>
+    <text x="1346" y="1332" class="member" text-anchor="start">AvailableTeam : teamName / description / rawJson</text>
+    <text x="1346" y="1363" class="member" text-anchor="start">RunTeamRequest / RunTeamParams -&gt; TeamRunResult</text>
+    <text x="1346" y="1394" class="member" text-anchor="start">ExecutionStateRequest / ExecutionStateParams</text>
+    <text x="1346" y="1425" class="member" text-anchor="start">TeamExecutionState / ImportTeamRequest / AgentObjectType</text>
+    <text x="1346" y="1472" class="note" text-anchor="start">listTeams(): owned, mutable Team handles; listAvailableTeams(): read-only discovery.</text>
+    <text x="1346" y="1498" class="note" text-anchor="start">Available teams include granted shared teams; discovery does not confer ownership.</text>
+    <text x="1346" y="1524" class="note" text-anchor="start">State read/update operations require the explicit workflow conversation ID.</text>
+    <text x="1346" y="1550" class="note" text-anchor="start">Runtime get/setVariable calls use session state, not durable cross-session storage.</text>
+  </g>
+  <path d="M1880 992 V1216" class="dependency" />
+  <text x="1945" y="1192" class="label" text-anchor="middle">uses</text>
+  <line x1="60" x2="2440" y1="1619" y2="1619" stroke="#cbd5e1" />
+  <text x="60" y="1653" class="note" text-anchor="start">The two top method compartments represent one interface, not two types. String factory arguments are name and description.</text>
+  <text x="60" y="1680" class="note" text-anchor="start">Use SelectAIAgent or Team for team-owner grants; DatabaseAdmin does not expose team-sharing methods.</text>
+  <text x="60" y="1707" class="note" text-anchor="start">Database/JDBC failures: SelectAIException. Invalid input/state: unchecked exceptions. Exception clauses omitted.</text>
+</svg>

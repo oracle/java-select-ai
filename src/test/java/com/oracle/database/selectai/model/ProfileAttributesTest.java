@@ -134,6 +134,45 @@ class ProfileAttributesTest {
     }
 
     /**
+     * Test: Accept the documented in-database Select AI provider.
+     * Expected: The generic profile builder accepts and serializes database.
+     */
+    @Test
+    void builderAcceptsDatabaseProvider() throws Exception {
+        ProfileAttributes attributes = ProfileAttributes.builder()
+                .provider("database")
+                .build();
+
+        assertThat(attributes.getProvider()).isEqualTo("database");
+        assertThat(MAPPER.readTree(attributes.toJson()).get("provider").asText())
+                .isEqualTo("database");
+    }
+
+    /**
+     * Test: Hydrate values introduced by a newer database release.
+     * Expected: Database hydration preserves unsupported values while the
+     * public builder remains strict for creation and update payloads.
+     */
+    @Test
+    void databaseHydrationPreservesUnsupportedProfileValues() {
+        ProfileAttributes attributes = ProfileAttributes.fromDatabaseAttributeMap(Map.of(
+                "provider", "vertexai",
+                "oci_apiformat", "FUTURE_FORMAT",
+                "object_list_mode", "future_mode"));
+
+        assertThat(attributes.getProvider()).isEqualTo("vertexai");
+        assertThat(attributes.getOciApiformat()).isEqualTo("FUTURE_FORMAT");
+        assertThat(attributes.getObjectListMode()).isEqualTo("future_mode");
+
+        assertThatThrownBy(() -> ProfileAttributes.builder().provider("vertexai"))
+                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> ProfileAttributes.builder().ociApiformat("FUTURE_FORMAT"))
+                .isInstanceOf(IllegalArgumentException.class);
+        assertThatThrownBy(() -> ProfileAttributes.builder().objectListMode("future_mode"))
+                .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    /**
      * Test: Reloads database attributes without adding SDK defaults.
      * Expected: Only attributes supplied by the database are represented.
      */

@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2200" role="img" aria-labelledby="title desc" height="1561" viewBox="0 0 2200 1561">
+  <title id="title">Tool Class Diagram</title>
+  <desc id="desc">com.oracle.database.selectai.agent.Tool | complete public method signatures</desc>
+  <defs>
+    <style>
+            .title {font:700 32px Arial,sans-serif;fill:#17212b}
+            .subtitle {font:18px Arial,sans-serif;fill:#475569}
+            .box {fill:#fafbfc;stroke:#475569;stroke-width:2}
+            .header {fill:#e6edf3}
+            .name {font:700 23px Arial,sans-serif;fill:#17212b}
+            .stereo,.note,.label {font:18px Arial,sans-serif;fill:#374151}
+            .member {font:18px Menlo,Consolas,monospace;fill:#17212b;white-space:pre}
+            .section {font:700 18px Arial,sans-serif;fill:#18665c}
+            .dependency {fill:none;stroke:#475569;stroke-width:2;stroke-dasharray:8 5;marker-end:url(#arrow)}
+            .realization {fill:none;stroke:#475569;stroke-width:2;stroke-dasharray:8 5;marker-end:url(#triangle)}
+            .inheritance {fill:none;stroke:#475569;stroke-width:2;marker-end:url(#triangle)}
+            .association {fill:none;stroke:#475569;stroke-width:2;marker-end:url(#arrow)}
+        </style>
+    <marker id="arrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M1,1 L10,5 L1,9" fill="none" stroke="#475569" stroke-width="2" />
+    </marker>
+    <marker id="triangle" markerWidth="18" markerHeight="18" refX="17" refY="9" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M17,9 L1,1 L1,17 Z" fill="#fff" stroke="#475569" stroke-width="2" />
+    </marker>
+  </defs>
+  <rect width="2200" fill="#fff" height="1561" />
+  <text x="1100.0" y="50" class="title" text-anchor="middle">Tool Class Diagram</text>
+  <text x="1100.0" y="82" class="subtitle" text-anchor="middle">com.oracle.database.selectai.agent.Tool | complete public method signatures</text>
+  <g class="node" data-name="Tool">
+    <rect x="60" y="140" width="1040" height="647" rx="6" class="box" />
+    <rect x="61" y="141" width="1038" height="82" rx="5" class="header" />
+    <line x1="60" y1="223" x2="1100" y2="223" stroke="#475569" stroke-width="2" />
+    <text x="580.0" y="174" class="name" text-anchor="middle">Tool</text>
+    <text x="580.0" y="203" class="stereo" text-anchor="middle">&lt;&lt;interface&gt;&gt;</text>
+    <text x="86" y="256" class="member" text-anchor="start">+ create() : boolean</text>
+    <text x="86" y="287" class="member" text-anchor="start">+ enable() : boolean</text>
+    <text x="86" y="318" class="member" text-anchor="start">+ disable() : boolean</text>
+    <text x="86" y="349" class="member" text-anchor="start">+ drop(boolean) : boolean</text>
+    <text x="86" y="380" class="member" text-anchor="start">+ setAttribute(String, String) : boolean</text>
+    <text x="86" y="411" class="member" text-anchor="start">+ setAttribute(String, boolean) : boolean</text>
+    <text x="86" y="442" class="member" text-anchor="start">+ setAttribute(String, Integer) : boolean</text>
+    <text x="86" y="473" class="member" text-anchor="start">+ setAttribute(String, Float) : boolean</text>
+    <text x="86" y="504" class="member" text-anchor="start">+ setAttributes(ToolAttributes) : boolean</text>
+    <text x="86" y="535" class="member" text-anchor="start">+ describe() : String</text>
+    <text x="86" y="566" class="member" text-anchor="start">+ run(String) : ToolRunResult</text>
+    <text x="86" y="597" class="member" text-anchor="start">+ getToolName() : String</text>
+    <text x="86" y="628" class="member" text-anchor="start">+ getDescription() : String</text>
+    <text x="86" y="659" class="member" text-anchor="start">+ getStatus() : ToolStatus</text>
+    <text x="86" y="690" class="member" text-anchor="start">+ getToolAttributes() : ToolAttributes</text>
+    <text x="86" y="737" class="note" text-anchor="start">describe() returns the database JSON object as text.</text>
+    <text x="86" y="763" class="note" text-anchor="start">run(inputJson) accepts the tool-defined JSON input payload.</text>
+  </g>
+  <g class="node" data-name="DefaultTool">
+    <rect x="1240" y="140" width="900" height="205" rx="6" class="box" />
+    <rect x="1241" y="141" width="898" height="82" rx="5" class="header" />
+    <line x1="1240" y1="223" x2="2140" y2="223" stroke="#475569" stroke-width="2" />
+    <text x="1690.0" y="174" class="name" text-anchor="middle">DefaultTool</text>
+    <text x="1690.0" y="203" class="stereo" text-anchor="middle">&lt;&lt;package-private, final implementation&gt;&gt;</text>
+    <text x="1266" y="256" class="note" text-anchor="start">Implements Tool; constructors are package-private.</text>
+    <text x="1266" y="287" class="note" text-anchor="start">Created through SelectAIAgent resource factories.</text>
+    <text x="1266" y="318" class="note" text-anchor="start">Uses ConnectionProvider, AgentJdbc, and AgentSql.</text>
+  </g>
+  <path d="M1240 235 H1100" class="realization" />
+  <text x="1170" y="218" class="label" text-anchor="middle">implements</text>
+  <g class="node" data-name="ToolAttributes">
+    <rect x="1240" y="425" width="900" height="311" rx="6" class="box" />
+    <rect x="1241" y="426" width="898" height="82" rx="5" class="header" />
+    <line x1="1240" y1="508" x2="2140" y2="508" stroke="#475569" stroke-width="2" />
+    <text x="1690.0" y="459" class="name" text-anchor="middle">ToolAttributes</text>
+    <text x="1690.0" y="488" class="stereo" text-anchor="middle">&lt;&lt;immutable configuration; builder&gt;&gt;</text>
+    <text x="1266" y="541" class="member" text-anchor="start">instruction : String</text>
+    <text x="1266" y="572" class="member" text-anchor="start">function : String</text>
+    <text x="1266" y="603" class="member" text-anchor="start">toolType : ToolType</text>
+    <text x="1266" y="634" class="member" text-anchor="start">toolParams : ToolParams</text>
+    <text x="1266" y="665" class="member" text-anchor="start">toolInputs : List&lt;ToolInput&gt;</text>
+    <text x="1266" y="712" class="note" text-anchor="start">ToolInput contains name and description.</text>
+  </g>
+  <path d="M1100 575 H1240" class="dependency" />
+  <text x="1170" y="558" class="label" text-anchor="middle">uses</text>
+  <g class="node" data-name="ToolParams">
+    <rect x="1240" y="806" width="900" height="337" rx="6" class="box" />
+    <rect x="1241" y="807" width="898" height="82" rx="5" class="header" />
+    <line x1="1240" y1="889" x2="2140" y2="889" stroke="#475569" stroke-width="2" />
+    <text x="1690.0" y="840" class="name" text-anchor="middle">ToolParams</text>
+    <text x="1690.0" y="869" class="stereo" text-anchor="middle">&lt;&lt;interface; immutable SDK implementations&gt;&gt;</text>
+    <text x="1266" y="922" class="member" text-anchor="start">SqlToolParams / RagToolParams</text>
+    <text x="1266" y="953" class="member" text-anchor="start">WebSearchToolParams</text>
+    <text x="1266" y="984" class="member" text-anchor="start">SlackNotificationToolParams</text>
+    <text x="1266" y="1015" class="member" text-anchor="start">EmailNotificationToolParams</text>
+    <text x="1266" y="1046" class="member" text-anchor="start">GenericToolParams</text>
+    <text x="1266" y="1093" class="note" text-anchor="start">Known models retain additional database parameter fields.</text>
+    <text x="1266" y="1119" class="note" text-anchor="start">Unknown types or field shapes use GenericToolParams.</text>
+  </g>
+  <g class="node" data-name="ToolType">
+    <rect x="60" y="847" width="1040" height="280" rx="6" class="box" />
+    <rect x="61" y="848" width="1038" height="82" rx="5" class="header" />
+    <line x1="60" y1="930" x2="1100" y2="930" stroke="#475569" stroke-width="2" />
+    <text x="580.0" y="881" class="name" text-anchor="middle">ToolType</text>
+    <text x="580.0" y="910" class="stereo" text-anchor="middle">&lt;&lt;extensible value object; not an enum&gt;&gt;</text>
+    <text x="86" y="963" class="member" text-anchor="start">SQL / RAG / WEBSEARCH / NOTIFICATION / HUMAN</text>
+    <text x="86" y="994" class="member" text-anchor="start">+ of(String) : ToolType</text>
+    <text x="86" y="1025" class="member" text-anchor="start">+ getValue() : String</text>
+    <text x="86" y="1056" class="member" text-anchor="start">+ isKnown() : boolean</text>
+    <text x="86" y="1103" class="note" text-anchor="start">Unknown database values are preserved without a new SDK release.</text>
+  </g>
+  <g class="node" data-name="ToolRunResult / ToolStatus">
+    <rect x="60" y="1187" width="1040" height="218" rx="6" class="box" />
+    <rect x="61" y="1188" width="1038" height="82" rx="5" class="header" />
+    <line x1="60" y1="1270" x2="1100" y2="1270" stroke="#475569" stroke-width="2" />
+    <text x="580.0" y="1221" class="name" text-anchor="middle">ToolRunResult / ToolStatus</text>
+    <text x="580.0" y="1250" class="stereo" text-anchor="middle">&lt;&lt;result model / resource-status enum&gt;&gt;</text>
+    <text x="86" y="1303" class="member" text-anchor="start">ToolRunResult.getRawValue() : String</text>
+    <text x="86" y="1334" class="member" text-anchor="start">ToolStatus : ENABLED / DISABLED</text>
+    <text x="86" y="1381" class="note" text-anchor="start">Tool output can be text or JSON; the original value is retained.</text>
+  </g>
+  <line x1="60" x2="2140" y1="1450" y2="1450" stroke="#cbd5e1" />
+  <text x="60" y="1484" class="note" text-anchor="start">Creation-configured handles persist only when create() is called. Loaded handles represent owned tools.</text>
+  <text x="60" y="1511" class="note" text-anchor="start">JDBC/database failures: SelectAIException. Validation/state failures: unchecked exceptions. Exception clauses omitted.</text>
+</svg>

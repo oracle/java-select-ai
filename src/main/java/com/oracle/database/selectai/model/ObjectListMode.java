@@ -9,7 +9,11 @@ package com.oracle.database.selectai.model;
 import java.util.Locale;
 
 /**
- * Controls how Select AI chooses database objects for prompt metadata.
+ * Object-list modes currently recognized by the SDK.
+ * <p>
+ * This enum is used for creation and update validation. Existing database
+ * profile metadata may contain a newer mode and is preserved as a string
+ * during hydration.
  *
  * @see <a href="https://docs.oracle.com/en/cloud/paas/autonomous-database/serverless/adbsb/select-ai-manage-profiles.html">
  *      Select AI profile object-list configuration</a>
@@ -39,7 +43,7 @@ public enum ObjectListMode {
     /**
      * Parses an object-list mode using case-insensitive matching.
      *
-     * @param value attribute value to parse
+     * @param value object-list mode supplied to a creation or update builder
      * @return matching enum constant for input value, or {@code null} when input is null/blank
      */
     public static ObjectListMode fromValue(String value) {

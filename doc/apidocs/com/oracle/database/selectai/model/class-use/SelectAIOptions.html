@@ -59,8 +59,13 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Public API for using Oracle Select AI from Java applications.</div>
 </div>
-<div class="col-first odd-row-color"><a href="#com.oracle.database.selectai.model">com.oracle.database.selectai.model</a></div>
+<div class="col-first odd-row-color"><a href="#com.oracle.database.selectai.agent">com.oracle.database.selectai.agent</a></div>
 <div class="col-last odd-row-color">
+<div class="block">Public synchronous interfaces for Oracle Select AI Agent resource management
+ and workflow execution.</div>
+</div>
+<div class="col-first even-row-color"><a href="#com.oracle.database.selectai.model">com.oracle.database.selectai.model</a></div>
+<div class="col-last even-row-color">
 <div class="block">Typed configuration, request, and value models used by the Select AI Java
  API.</div>
 </div>
@@ -101,6 +106,30 @@ loadScripts(document, 'script');</script>
 <div class="col-last odd-row-color">
 <div class="block">Creates a SelectAI client backed by a <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.sql/javax/sql/DataSource.html" title="class or interface in javax.sql" class="external-link"><code>DataSource</code></a> and SDK execution
  options.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="com.oracle.database.selectai.agent">
+<h2>Uses of <a href="../SelectAIOptions.html" title="class in com.oracle.database.selectai.model">SelectAIOptions</a> in <a href="../../agent/package-summary.html">com.oracle.database.selectai.agent</a></h2>
+<div class="caption"><span>Methods in <a href="../../agent/package-summary.html">com.oracle.database.selectai.agent</a> with parameters of type <a href="../SelectAIOptions.html" title="class in com.oracle.database.selectai.model">SelectAIOptions</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code>static <a href="../../agent/SelectAIAgent.html" title="interface in com.oracle.database.selectai.agent">SelectAIAgent</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#create(com.oracle.database.selectai.model.DbConnectionConfig,com.oracle.database.selectai.model.SelectAIOptions)" class="member-name-link">create</a><wbr>(<a href="../DbConnectionConfig.html" title="class in com.oracle.database.selectai.model">DbConnectionConfig</a>&nbsp;dbConnectionConfig,
+ <a href="../SelectAIOptions.html" title="class in com.oracle.database.selectai.model">SelectAIOptions</a>&nbsp;options)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates a SelectAIAgent client from database connection configuration and
+ SDK execution options.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../../agent/SelectAIAgent.html" title="interface in com.oracle.database.selectai.agent">SelectAIAgent</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#create(javax.sql.DataSource,com.oracle.database.selectai.model.SelectAIOptions)" class="member-name-link">create</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.sql/javax/sql/DataSource.html" title="class or interface in javax.sql" class="external-link">DataSource</a>&nbsp;dataSource,
+ <a href="../SelectAIOptions.html" title="class in com.oracle.database.selectai.model">SelectAIOptions</a>&nbsp;options)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Creates a DataSource-backed SelectAIAgent client with SDK execution options.</div>
 </div>
 </div>
 </section>

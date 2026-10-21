@@ -82,8 +82,8 @@ class ConversationAttributesIT extends ConversationIntegrationFixture {
 
     /**
      * Test: Attempts create() with a 255-character title and a 1000-character description.
-     * Expected: The database rejects the request through SelectAIException; the cause contains
-     * "ORA-20050: title value length (255) exceeds the maximum length (128)".
+     * Expected: The database rejects the request through {@code SelectAIException}.
+     * Oracle error codes can vary by environment, so the test accepts the applicable expected code.
      */
     @Test
     void test14103CreateWithLongValues() throws Exception {
@@ -94,9 +94,10 @@ class ConversationAttributesIT extends ConversationIntegrationFixture {
 
         assertThatThrownBy(conversation::create)
                 .isInstanceOf(SelectAIException.class)
-                .satisfies(exception -> assertThat(exception.getCause())
-                        .hasMessageContaining(
-                                "ORA-20050: title value length (255) exceeds the maximum length (128)"));
+                .satisfies(exception -> assertThat(exception.getCause().getMessage())
+                        .containsAnyOf(
+                                "ORA-20050: title value length (255) exceeds the maximum length (128)",
+                                "ORA-20050: Value is too long for conversation attribute - title"));
     }
 
     /**

@@ -18,9 +18,17 @@ import org.junit.jupiter.api.TestInfo;
  */
 abstract class SyntheticDataIntegrationFixture extends IntegrationTestFixture {
 
+    private static final String SYNTHETIC_DATA_MODEL = "xai.grok-4.6";
+
     @BeforeAll
     static void createSyntheticDataSchema(TestInfo testInfo) throws Exception {
         createFreshIntegrationSchema(testClassName(testInfo));
+    }
+
+    @Override
+    protected void createIsolatedProfile() throws Exception {
+        super.createIsolatedProfile();
+        profile.setAttribute("model", SYNTHETIC_DATA_MODEL);
     }
 
     @BeforeEach
@@ -33,7 +41,7 @@ abstract class SyntheticDataIntegrationFixture extends IntegrationTestFixture {
         closeIsolatedConnection();
     }
 
-    protected static final String SINGLE_OBJECT_NAME = "people";
+    protected static final String SINGLE_OBJECT_NAME = "director";
     protected static final String BATCH_OBJECT_OWNER = "ADMIN";
-    protected static final String[] BATCH_OBJECT_NAMES = {"people", "gymnast"};
+    protected static final String[] BATCH_OBJECT_NAMES = {"director", "actor"};
 }

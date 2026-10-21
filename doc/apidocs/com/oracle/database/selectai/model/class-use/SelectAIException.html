@@ -59,6 +59,11 @@ loadScripts(document, 'script');</script>
 <div class="col-last even-row-color">
 <div class="block">Public API for using Oracle Select AI from Java applications.</div>
 </div>
+<div class="col-first odd-row-color"><a href="#com.oracle.database.selectai.agent">com.oracle.database.selectai.agent</a></div>
+<div class="col-last odd-row-color">
+<div class="block">Public synchronous interfaces for Oracle Select AI Agent resource management
+ and workflow execution.</div>
+</div>
 </div>
 <section class="class-uses">
 <ul class="block-list">
@@ -603,6 +608,468 @@ loadScripts(document, 'script');</script>
 <div class="col-second odd-row-color"><span class="type-name-label">ConnectionProvider.</span><code><a href="../../ConnectionProvider.html#withConnection(com.oracle.database.selectai.ConnectionCallback)" class="member-name-link">withConnection</a><wbr>(<a href="../../ConnectionCallback.html" title="interface in com.oracle.database.selectai">ConnectionCallback</a>&lt;T&gt;&nbsp;callback)</code></div>
 <div class="col-last odd-row-color">
 <div class="block">Executes one SDK operation with a connection supplied by this provider.</div>
+</div>
+</div>
+</section>
+</li>
+<li>
+<section class="detail" id="com.oracle.database.selectai.agent">
+<h2>Uses of <a href="../SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a> in <a href="../../agent/package-summary.html">com.oracle.database.selectai.agent</a></h2>
+<div class="caption"><span>Methods in <a href="../../agent/package-summary.html">com.oracle.database.selectai.agent</a> that throw <a href="../SelectAIException.html" title="class in com.oracle.database.selectai.model">SelectAIException</a></span></div>
+<div class="summary-table three-column-summary">
+<div class="table-header col-first">Modifier and Type</div>
+<div class="table-header col-second">Method</div>
+<div class="table-header col-last">Description</div>
+<div class="col-first even-row-color"><code><a href="../../agent/Agent.html" title="interface in com.oracle.database.selectai.agent">Agent</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#agent(java.lang.String)" class="member-name-link">agent</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;agentName)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Loads an existing agent, including its metadata and attributes.</div>
+</div>
+<div class="col-first odd-row-color"><code>void</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#close()" class="member-name-link">close</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Releases resources owned by this client.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Agent.</span><code><a href="../../agent/Agent.html#create()" class="member-name-link">create</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates this creation-configured agent in the database.</div>
+</div>
+<div class="col-first odd-row-color"><code>static <a href="../../agent/SelectAIAgent.html" title="interface in com.oracle.database.selectai.agent">SelectAIAgent</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#create(com.oracle.database.selectai.model.DbConnectionConfig)" class="member-name-link">create</a><wbr>(<a href="../DbConnectionConfig.html" title="class in com.oracle.database.selectai.model">DbConnectionConfig</a>&nbsp;dbConnectionConfig)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Creates a SelectAIAgent client from database connection configuration.</div>
+</div>
+<div class="col-first even-row-color"><code>static <a href="../../agent/SelectAIAgent.html" title="interface in com.oracle.database.selectai.agent">SelectAIAgent</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#create(com.oracle.database.selectai.model.DbConnectionConfig,com.oracle.database.selectai.model.SelectAIOptions)" class="member-name-link">create</a><wbr>(<a href="../DbConnectionConfig.html" title="class in com.oracle.database.selectai.model">DbConnectionConfig</a>&nbsp;dbConnectionConfig,
+ <a href="../SelectAIOptions.html" title="class in com.oracle.database.selectai.model">SelectAIOptions</a>&nbsp;options)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates a SelectAIAgent client from database connection configuration and
+ SDK execution options.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Task.</span><code><a href="../../agent/Task.html#create()" class="member-name-link">create</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Creates this creation-configured task in the database.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#create()" class="member-name-link">create</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Creates this creation-configured team in the database.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Tool.</span><code><a href="../../agent/Tool.html#create()" class="member-name-link">create</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Creates this creation-configured tool in the database.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../agent/TeamDescription.html" title="class in com.oracle.database.selectai.model.agent">TeamDescription</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#describe()" class="member-name-link">describe</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the database-generated team definition and aggregated capabilities.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Tool.</span><code><a href="../../agent/Tool.html#describe()" class="member-name-link">describe</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the database-generated tool definition and input metadata as raw JSON.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Agent.</span><code><a href="../../agent/Agent.html#disable()" class="member-name-link">disable</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Disables this database-backed agent.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Task.</span><code><a href="../../agent/Task.html#disable()" class="member-name-link">disable</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Disables this database-backed task.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#disable()" class="member-name-link">disable</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Disables this database-backed team.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Tool.</span><code><a href="../../agent/Tool.html#disable()" class="member-name-link">disable</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Disables this database-backed tool.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Agent.</span><code><a href="../../agent/Agent.html#drop(boolean)" class="member-name-link">drop</a><wbr>(boolean&nbsp;force)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Drops this database-backed agent.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Task.</span><code><a href="../../agent/Task.html#drop(boolean)" class="member-name-link">drop</a><wbr>(boolean&nbsp;force)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Drops this database-backed task.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#drop(boolean)" class="member-name-link">drop</a><wbr>(boolean&nbsp;force)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Drops this database-backed team owned by the connected user.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Tool.</span><code><a href="../../agent/Tool.html#drop(boolean)" class="member-name-link">drop</a><wbr>(boolean&nbsp;force)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Drops this database-backed tool.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Agent.</span><code><a href="../../agent/Agent.html#enable()" class="member-name-link">enable</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Enables this database-backed agent.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Task.</span><code><a href="../../agent/Task.html#enable()" class="member-name-link">enable</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Enables this database-backed task.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#enable()" class="member-name-link">enable</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Enables this database-backed team.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Tool.</span><code><a href="../../agent/Tool.html#enable()" class="member-name-link">enable</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Enables this database-backed tool.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#exportDefinition()" class="member-name-link">exportDefinition</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the team definition as JSON using the database defaults.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#exportDefinition(com.oracle.database.selectai.model.agent.ExportTeamParams)" class="member-name-link">exportDefinition</a><wbr>(<a href="../agent/ExportTeamParams.html" title="class in com.oracle.database.selectai.model.agent">ExportTeamParams</a>&nbsp;params)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the team definition as JSON using typed export parameters.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#exportDefinition(com.oracle.database.selectai.model.agent.ExportTeamRequest)" class="member-name-link">exportDefinition</a><wbr>(<a href="../agent/ExportTeamRequest.html" title="class in com.oracle.database.selectai.model.agent">ExportTeamRequest</a>&nbsp;request)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Exports this team definition to object storage or a database directory file.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../agent/AgentAttributes.html" title="class in com.oracle.database.selectai.model.agent">AgentAttributes</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Agent.</span><code><a href="../../agent/Agent.html#getAgentAttributes()" class="member-name-link">getAgentAttributes</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns agent attributes for this handle.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#getDefinition(com.oracle.database.selectai.model.agent.AgentObjectType,java.lang.String,boolean)" class="member-name-link">getDefinition</a><wbr>(<a href="../agent/AgentObjectType.html" title="enum class in com.oracle.database.selectai.model.agent">AgentObjectType</a>&nbsp;objectType,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;objectName,
+ boolean&nbsp;includeDependentObjects)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the definition produced by
+ <code>DBMS_CLOUD_AI_AGENT.GET_DEFINITION</code> for an agent framework object.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../agent/TeamExecutionState.html" title="enum class in com.oracle.database.selectai.model.agent">TeamExecutionState</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#getStateByConversationId(java.lang.String)" class="member-name-link">getStateByConversationId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;conversationId)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the latest run state for a conversation associated with this team.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../agent/AgentStatus.html" title="enum class in com.oracle.database.selectai.model.agent">AgentStatus</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Agent.</span><code><a href="../../agent/Agent.html#getStatus()" class="member-name-link">getStatus</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the configured status before creation or the current database
+ status for an existing agent.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../agent/TaskStatus.html" title="enum class in com.oracle.database.selectai.model.agent">TaskStatus</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Task.</span><code><a href="../../agent/Task.html#getStatus()" class="member-name-link">getStatus</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the configured status before creation or the current database
+ status for an existing task.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../agent/TeamStatus.html" title="enum class in com.oracle.database.selectai.model.agent">TeamStatus</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#getStatus()" class="member-name-link">getStatus</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the configured status before creation or the current database
+ status for an existing team.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../agent/ToolStatus.html" title="enum class in com.oracle.database.selectai.model.agent">ToolStatus</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Tool.</span><code><a href="../../agent/Tool.html#getStatus()" class="member-name-link">getStatus</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns the configured status before creation or the current database
+ status for an existing tool.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../agent/TaskAttributes.html" title="class in com.oracle.database.selectai.model.agent">TaskAttributes</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Task.</span><code><a href="../../agent/Task.html#getTaskAttributes()" class="member-name-link">getTaskAttributes</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns task attributes for this handle.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../agent/TeamAttributes.html" title="class in com.oracle.database.selectai.model.agent">TeamAttributes</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#getTeamAttributes()" class="member-name-link">getTeamAttributes</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns team attributes for this handle.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../agent/TeamExecutionState.html" title="enum class in com.oracle.database.selectai.model.agent">TeamExecutionState</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#getTeamStateByConversationId(java.lang.String,java.lang.String)" class="member-name-link">getTeamStateByConversationId</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;teamName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;conversationId)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Returns the latest state for a team run identified by a database
+ conversation identifier.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../agent/ToolAttributes.html" title="class in com.oracle.database.selectai.model.agent">ToolAttributes</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Tool.</span><code><a href="../../agent/Tool.html#getToolAttributes()" class="member-name-link">getToolAttributes</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Returns tool attributes for this handle.</div>
+</div>
+<div class="col-first even-row-color"><code>default <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#getVariable(java.lang.String,java.lang.String)" class="member-name-link">getVariable</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Reads an ephemeral runtime variable from the current database session.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#getVariable(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">getVariable</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scope)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Reads a runtime variable from the current database session and scope.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#grantAccess(java.lang.String)" class="member-name-link">grantAccess</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;userOrRoleName)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Grants a database user or role permission to run this owner-managed team.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#grantTeamAccess(java.lang.String,java.lang.String)" class="member-name-link">grantTeamAccess</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;teamName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;userOrRoleName)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Grants a database user or role permission to run an owner-managed team.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#importTeam(com.oracle.database.selectai.model.agent.ImportTeamRequest)" class="member-name-link">importTeam</a><wbr>(<a href="../agent/ImportTeamRequest.html" title="class in com.oracle.database.selectai.model.agent">ImportTeamRequest</a>&nbsp;request)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Imports an agent team definition into the database.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../agent/Agent.html" title="interface in com.oracle.database.selectai.agent">Agent</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#listAgents()" class="member-name-link">listAgents</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Lists agents owned by the current database user.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../agent/Agent.html" title="interface in com.oracle.database.selectai.agent">Agent</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#listAgents(java.lang.String)" class="member-name-link">listAgents</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;agentNamePattern)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Lists owned agents whose names match a database regular-expression pattern.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../agent/AvailableTeam.html" title="class in com.oracle.database.selectai.model.agent">AvailableTeam</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#listAvailableTeams()" class="member-name-link">listAvailableTeams</a>()</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Lists teams available to the calling database user for discovery.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../agent/Task.html" title="interface in com.oracle.database.selectai.agent">Task</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#listTasks()" class="member-name-link">listTasks</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Lists tasks owned by the current database user.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../agent/Task.html" title="interface in com.oracle.database.selectai.agent">Task</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#listTasks(java.lang.String)" class="member-name-link">listTasks</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;taskNamePattern)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Lists owned tasks whose names match a database regular-expression pattern.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../agent/Team.html" title="interface in com.oracle.database.selectai.agent">Team</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#listTeams()" class="member-name-link">listTeams</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Lists agent teams owned by the current database user.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../agent/Team.html" title="interface in com.oracle.database.selectai.agent">Team</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#listTeams(java.lang.String)" class="member-name-link">listTeams</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;teamNamePattern)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Lists owned teams whose names match a database regular-expression pattern.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../agent/Tool.html" title="interface in com.oracle.database.selectai.agent">Tool</a>&gt;</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#listTools()" class="member-name-link">listTools</a>()</code></div>
+<div class="col-last even-row-color">
+<div class="block">Lists tools owned by the current database user.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../../agent/Tool.html" title="interface in com.oracle.database.selectai.agent">Tool</a>&gt;</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#listTools(java.lang.String)" class="member-name-link">listTools</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;toolNamePattern)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Lists owned tools whose names match a database regular-expression pattern.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#revokeAccess(java.lang.String)" class="member-name-link">revokeAccess</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;userOrRoleName)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Revokes a database user or role permission to run this owner-managed team.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#revokeTeamAccess(java.lang.String,java.lang.String)" class="member-name-link">revokeTeamAccess</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;teamName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;userOrRoleName)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Revokes a database user or role permission to run an owner-managed team.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../agent/TeamRunResult.html" title="class in com.oracle.database.selectai.model.agent">TeamRunResult</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#run(com.oracle.database.selectai.model.agent.RunTeamRequest)" class="member-name-link">run</a><wbr>(<a href="../agent/RunTeamRequest.html" title="class in com.oracle.database.selectai.model.agent">RunTeamRequest</a>&nbsp;request)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Starts or resumes a synchronous team run using the supplied prompt and
+ runtime parameters.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../agent/ToolRunResult.html" title="class in com.oracle.database.selectai.model.agent">ToolRunResult</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Tool.</span><code><a href="../../agent/Tool.html#run(java.lang.String)" class="member-name-link">run</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;inputJson)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Runs this tool with a JSON input payload.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../agent/TeamRunResult.html" title="class in com.oracle.database.selectai.model.agent">TeamRunResult</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#runTeam(java.lang.String,com.oracle.database.selectai.model.agent.RunTeamRequest)" class="member-name-link">runTeam</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;teamName,
+ <a href="../agent/RunTeamRequest.html" title="class in com.oracle.database.selectai.model.agent">RunTeamRequest</a>&nbsp;request)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Runs an existing team by name without loading owner-only team metadata.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Agent.</span><code><a href="../../agent/Agent.html#setAttribute(java.lang.String,boolean)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ boolean&nbsp;attributeValue)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Updates one boolean agent attribute in the database.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Agent.</span><code><a href="../../agent/Agent.html#setAttribute(java.lang.String,java.lang.Float)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&nbsp;attributeValue)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Updates one floating-point agent attribute in the database.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Agent.</span><code><a href="../../agent/Agent.html#setAttribute(java.lang.String,java.lang.Integer)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;attributeValue)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Updates one integer agent attribute in the database.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Agent.</span><code><a href="../../agent/Agent.html#setAttribute(java.lang.String,java.lang.String)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeValue)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Updates one agent attribute in the database.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Task.</span><code><a href="../../agent/Task.html#setAttribute(java.lang.String,boolean)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ boolean&nbsp;attributeValue)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Updates one boolean task attribute in the database.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Task.</span><code><a href="../../agent/Task.html#setAttribute(java.lang.String,java.lang.Float)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&nbsp;attributeValue)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Updates one floating-point task attribute in the database.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Task.</span><code><a href="../../agent/Task.html#setAttribute(java.lang.String,java.lang.Integer)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;attributeValue)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Updates one integer task attribute in the database.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Task.</span><code><a href="../../agent/Task.html#setAttribute(java.lang.String,java.lang.String)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeValue)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Updates one task attribute in the database.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#setAttribute(java.lang.String,boolean)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ boolean&nbsp;attributeValue)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Updates one boolean team attribute in the database.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#setAttribute(java.lang.String,java.lang.Float)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&nbsp;attributeValue)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Updates one floating-point team attribute in the database.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#setAttribute(java.lang.String,java.lang.Integer)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;attributeValue)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Updates one integer team attribute in the database.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#setAttribute(java.lang.String,java.lang.String)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeValue)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Updates one team attribute in the database.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Tool.</span><code><a href="../../agent/Tool.html#setAttribute(java.lang.String,boolean)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ boolean&nbsp;attributeValue)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Updates one boolean tool attribute in the database.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Tool.</span><code><a href="../../agent/Tool.html#setAttribute(java.lang.String,java.lang.Float)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Float.html" title="class or interface in java.lang" class="external-link">Float</a>&nbsp;attributeValue)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Updates one floating-point tool attribute in the database.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Tool.</span><code><a href="../../agent/Tool.html#setAttribute(java.lang.String,java.lang.Integer)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Integer.html" title="class or interface in java.lang" class="external-link">Integer</a>&nbsp;attributeValue)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Updates one integer tool attribute in the database.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Tool.</span><code><a href="../../agent/Tool.html#setAttribute(java.lang.String,java.lang.String)" class="member-name-link">setAttribute</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeName,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;attributeValue)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Updates one tool attribute in the database.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Agent.</span><code><a href="../../agent/Agent.html#setAttributes(com.oracle.database.selectai.model.agent.AgentAttributes)" class="member-name-link">setAttributes</a><wbr>(<a href="../agent/AgentAttributes.html" title="class in com.oracle.database.selectai.model.agent">AgentAttributes</a>&nbsp;agentAttributes)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Updates multiple agent attributes in one database operation.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Task.</span><code><a href="../../agent/Task.html#setAttributes(com.oracle.database.selectai.model.agent.TaskAttributes)" class="member-name-link">setAttributes</a><wbr>(<a href="../agent/TaskAttributes.html" title="class in com.oracle.database.selectai.model.agent">TaskAttributes</a>&nbsp;taskAttributes)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Updates multiple task attributes in one database operation.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#setAttributes(com.oracle.database.selectai.model.agent.TeamAttributes)" class="member-name-link">setAttributes</a><wbr>(<a href="../agent/TeamAttributes.html" title="class in com.oracle.database.selectai.model.agent">TeamAttributes</a>&nbsp;teamAttributes)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Updates multiple team attributes in one database operation.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">Tool.</span><code><a href="../../agent/Tool.html#setAttributes(com.oracle.database.selectai.model.agent.ToolAttributes)" class="member-name-link">setAttributes</a><wbr>(<a href="../agent/ToolAttributes.html" title="class in com.oracle.database.selectai.model.agent">ToolAttributes</a>&nbsp;toolAttributes)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Updates multiple tool attributes in one database operation.</div>
+</div>
+<div class="col-first odd-row-color"><code>boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">Team.</span><code><a href="../../agent/Team.html#setExecutionState(com.oracle.database.selectai.model.agent.ExecutionStateRequest)" class="member-name-link">setExecutionState</a><wbr>(<a href="../agent/ExecutionStateRequest.html" title="class in com.oracle.database.selectai.model.agent">ExecutionStateRequest</a>&nbsp;request)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Updates the state of a waiting team execution.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#setTeamExecutionState(java.lang.String,com.oracle.database.selectai.model.agent.ExecutionStateRequest)" class="member-name-link">setTeamExecutionState</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;teamName,
+ <a href="../agent/ExecutionStateRequest.html" title="class in com.oracle.database.selectai.model.agent">ExecutionStateRequest</a>&nbsp;request)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Updates the execution state of a team run.</div>
+</div>
+<div class="col-first odd-row-color"><code>default boolean</code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#setVariable(java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">setVariable</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Sets or clears an ephemeral runtime variable in the current database session.</div>
+</div>
+<div class="col-first even-row-color"><code>boolean</code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#setVariable(java.lang.String,java.lang.String,java.lang.String,java.lang.String)" class="member-name-link">setVariable</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;namespace,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;name,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;value,
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;scope)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Sets or clears a runtime variable in the current database session and scope.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../agent/Task.html" title="interface in com.oracle.database.selectai.agent">Task</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#task(java.lang.String)" class="member-name-link">task</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;taskName)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Loads an existing task, including its metadata and attributes.</div>
+</div>
+<div class="col-first even-row-color"><code><a href="../../agent/Team.html" title="interface in com.oracle.database.selectai.agent">Team</a></code></div>
+<div class="col-second even-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#team(java.lang.String)" class="member-name-link">team</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;teamName)</code></div>
+<div class="col-last even-row-color">
+<div class="block">Loads a team owned by the current database user, including its metadata
+ and attributes.</div>
+</div>
+<div class="col-first odd-row-color"><code><a href="../../agent/Tool.html" title="interface in com.oracle.database.selectai.agent">Tool</a></code></div>
+<div class="col-second odd-row-color"><span class="type-name-label">SelectAIAgent.</span><code><a href="../../agent/SelectAIAgent.html#tool(java.lang.String)" class="member-name-link">tool</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/String.html" title="class or interface in java.lang" class="external-link">String</a>&nbsp;toolName)</code></div>
+<div class="col-last odd-row-color">
+<div class="block">Loads an existing tool, including its metadata and attributes.</div>
 </div>
 </div>
 </section>

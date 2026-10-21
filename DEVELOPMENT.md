@@ -12,6 +12,7 @@ documented in [`README.md`](README.md).
 - [Unit tests](#unit-tests)
 - [Integration tests](#integration-tests)
 - [Javadoc](#javadoc)
+- [README HTML](#readme-html)
 - [Samples](#samples)
 - [Java code guidelines](#java-code-guidelines)
 - [Generated diagrams](#generated-diagrams)
@@ -23,7 +24,10 @@ documented in [`README.md`](README.md).
 | --- | --- |
 | `src/main/java/com/oracle/database/selectai` | Public SDK interfaces and entry points. |
 | `src/main/java/com/oracle/database/selectai/model` | Public request, configuration, attribute, enum, and exception models. |
-| `src/main/java/com/oracle/database/selectai/impl` | Internal implementations, JDBC execution helpers, connection providers, and SQL/PLSQL constants. |
+| `src/main/java/com/oracle/database/selectai/agent` | Public agent, task, tool, and team interfaces and the `SelectAIAgent` entry point. |
+| `src/main/java/com/oracle/database/selectai/model/agent` | Public agent resource models and enums. |
+| `src/main/java/com/oracle/database/selectai/impl` | Internal DBMS_CLOUD_AI implementations, JDBC execution helpers, connection providers, and SQL/PLSQL constants. |
+| `src/main/java/com/oracle/database/selectai/impl/agent` | Internal DBMS_CLOUD_AI_AGENT implementations and agent-specific SQL/JDBC helpers. |
 | `src/main/java/com/oracle/database/selectai/util` | Internal SDK utility helpers. |
 | `src/test/java/com/oracle/database/selectai` | Unit tests and database integration tests. |
 | `samples/src/main/java/com/oracle/database/selectai/samples` | Standalone usage samples organized by feature. |
@@ -31,12 +35,14 @@ documented in [`README.md`](README.md).
 | `doc/diagrams` | Source diagrams and rendered PNG diagrams. |
 | `doc/apidocs` | Checked-in generated Javadoc, including sample source pages. |
 
-Public customer-facing contracts belong in `com.oracle.database.selectai` and
-`com.oracle.database.selectai.model`. Classes under `com.oracle.database.selectai.impl` are
+Public customer-facing contracts belong in `com.oracle.database.selectai`,
+`com.oracle.database.selectai.model`, `com.oracle.database.selectai.agent`, and
+`com.oracle.database.selectai.model.agent`. Classes under
+`com.oracle.database.selectai.impl` and `com.oracle.database.selectai.impl.agent` are
 internal implementation details and are not supported customer-facing APIs.
 Use public interfaces and factory methods such as `SelectAI.create(...)`,
-`DatabaseAdmin.create(...)`, and `DbConnection.create(...)` in samples and
-documentation.
+`SelectAIAgent.create(...)`, `DatabaseAdmin.create(...)`, and
+`DbConnection.create(...)` in samples and documentation.
 
 ## Connection provider internals
 
@@ -70,8 +76,8 @@ mvn clean install
 
 This compiles the SDK, runs unit tests, packages the JAR, and installs it in the
 local Maven repository. The package also attaches
-`target/select-ai-1.0.0-sources.jar` and
-`target/select-ai-1.0.0-javadoc.jar`.
+`target/select-ai-1.1.0-sources.jar` and
+`target/select-ai-1.1.0-javadoc.jar`.
 
 Applications using the published release do not need to build or install the
 SDK locally. This workflow is for SDK development, testing, Javadoc generation,
@@ -121,6 +127,21 @@ shell that expands `*`:
 mvn -Dtest='DefaultProfileTest' test
 mvn -Dtest='DefaultProfileTest#testName' test
 ```
+
+`AgentSamplesTest` compiles agent sample sources into a temporary directory,
+checks workflow cleanup with mocked SDK clients, and checks process exit
+statuses with a failing JDBC driver. It requires a JDK but does not connect
+to a database or use application credentials. It does not write to
+`samples/out` or the sample integration runner's output directories.
+
+`AgentLoggingTest` runs isolated JVMs with agent logging explicitly enabled at
+`DEBUG`, captures real SLF4J output, and verifies that the captures contain
+operation logs. It uses synthetic markers and mocked JDBC connections. The
+checks distinguish payload arguments (which should not be logged) from
+exception content. The exception-content scenario characterizes the current
+policy: logging the original exception exposes its message, causes, and
+suppressed exceptions. Its passing result is not a redaction guarantee; update
+that expectation if the error-logging policy changes.
 
 Unit tests should cover validation, model serialization, JDBC binding behavior,
 exception wrapping, connection ownership, logging-sensitive behavior, and
@@ -207,6 +228,19 @@ Generated Javadoc is checked into the repository. Do not edit generated HTML
 manually; update the source comments or generator configuration and regenerate
 the output. Review generated changes before submitting a pull request.
 
+## README HTML
+
+Regenerate `README.html` from the repository root using Pandoc:
+
+```bash
+pandoc --from=markdown+gfm_auto_identifiers --to=html5 --standalone \
+    --metadata pagetitle=README --output=README.html README.md
+```
+
+Use `gfm_auto_identifiers` so generated heading IDs match the GitHub Markdown
+table-of-contents links. Set `pagetitle`, not `title`, to avoid adding a second
+visible title above the README's existing heading.
+
 ## Samples
 
 Samples are standalone Java sources and are not part of the Maven main source
@@ -215,21 +249,26 @@ set. Build the SDK, copy the sample runtime dependencies, and compile samples:
 ```bash
 mvn clean install
 mvn -Psamples -DincludeScope=runtime -DoutputDirectory=target/dependency dependency:copy-dependencies
-javac --release 17 -cp "target/select-ai-1.0.0.jar:target/dependency/*" \
+javac --release 17 -cp "target/select-ai-1.1.0.jar:target/dependency/*" \
   -d samples/out $(find samples/src/main/java -name "*.java")
 ```
 
 The `samples` Maven profile adds `slf4j-simple` only for standalone sample
 execution. The SDK itself depends on `slf4j-api`; SDK consumers must select and
 configure their own SLF4J logging provider.
+The profile also supplies Oracle UCP for `PooledTeamResumeSample`; UCP is a
+test dependency for offline sample compilation, not an SDK runtime dependency.
 
 Review [`samples/README.md`](samples/README.md) for sample prerequisites,
 environment variables, external resources, and state-changing operations.
 
 ## Java code guidelines
 
-- Keep public APIs in `com.oracle.database.selectai` and `com.oracle.database.selectai.model`.
-- Keep implementation classes under `com.oracle.database.selectai.impl` internal.
+- Keep public APIs in `com.oracle.database.selectai`,
+  `com.oracle.database.selectai.model`, `com.oracle.database.selectai.agent`,
+  and `com.oracle.database.selectai.model.agent`.
+- Keep implementation classes under `com.oracle.database.selectai.impl` and
+  `com.oracle.database.selectai.impl.agent` internal.
 - Prefer public factory methods over direct implementation construction.
 - Preserve source and binary compatibility for released public APIs.
 - Use typed request and configuration models when options are expected to grow.
@@ -246,6 +285,14 @@ environment variables, external resources, and state-changing operations.
   configurations, prompts, generated responses, SQL text, or customer content.
 - Use `DEBUG` for operation details, `INFO` for high-value successful state
   changes, and `ERROR` for failures.
+- Log a successful state change only after the connection-provider operation
+  returns. Do not log expected argument or object-state validation failures at
+  `ERROR`; let the caller decide how to report them.
+- Preserve contextual `SelectAIException` messages for missing resources and
+  metadata-mapping failures without logging them again in helper layers. Log
+  unexpected JDBC failures at an operation boundary when appropriate; helpers
+  may wrap and propagate them without logging. Avoid duplicate stack traces
+  for the same failure, and leave application-level reporting to the caller.
 - Keep samples runnable without source edits by using documented environment
   variables.
 - Update relevant unit tests, integration tests, samples, documentation,

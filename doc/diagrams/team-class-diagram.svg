@@ -1,0 +1,135 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2360" role="img" aria-labelledby="title desc" height="1748" viewBox="0 0 2360 1748">
+  <title id="title">Team Class Diagram</title>
+  <desc id="desc">com.oracle.database.selectai.agent.Team | complete public method signatures</desc>
+  <defs>
+    <style>
+            .title {font:700 32px Arial,sans-serif;fill:#17212b}
+            .subtitle {font:18px Arial,sans-serif;fill:#475569}
+            .box {fill:#fafbfc;stroke:#475569;stroke-width:2}
+            .header {fill:#e6edf3}
+            .name {font:700 23px Arial,sans-serif;fill:#17212b}
+            .stereo,.note,.label {font:18px Arial,sans-serif;fill:#374151}
+            .member {font:18px Menlo,Consolas,monospace;fill:#17212b;white-space:pre}
+            .section {font:700 18px Arial,sans-serif;fill:#18665c}
+            .dependency {fill:none;stroke:#475569;stroke-width:2;stroke-dasharray:8 5;marker-end:url(#arrow)}
+            .realization {fill:none;stroke:#475569;stroke-width:2;stroke-dasharray:8 5;marker-end:url(#triangle)}
+            .inheritance {fill:none;stroke:#475569;stroke-width:2;marker-end:url(#triangle)}
+            .association {fill:none;stroke:#475569;stroke-width:2;marker-end:url(#arrow)}
+        </style>
+    <marker id="arrow" markerWidth="12" markerHeight="10" refX="10" refY="5" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M1,1 L10,5 L1,9" fill="none" stroke="#475569" stroke-width="2" />
+    </marker>
+    <marker id="triangle" markerWidth="18" markerHeight="18" refX="17" refY="9" orient="auto" markerUnits="userSpaceOnUse">
+      <path d="M17,9 L1,1 L1,17 Z" fill="#fff" stroke="#475569" stroke-width="2" />
+    </marker>
+  </defs>
+  <rect width="2360" fill="#fff" height="1748" />
+  <text x="1180.0" y="50" class="title" text-anchor="middle">Team Class Diagram</text>
+  <text x="1180.0" y="82" class="subtitle" text-anchor="middle">com.oracle.database.selectai.agent.Team | complete public method signatures</text>
+  <g class="node" data-name="Team">
+    <rect x="60" y="140" width="1160" height="864" rx="6" class="box" />
+    <rect x="61" y="141" width="1158" height="82" rx="5" class="header" />
+    <line x1="60" y1="223" x2="1220" y2="223" stroke="#475569" stroke-width="2" />
+    <text x="640.0" y="174" class="name" text-anchor="middle">Team</text>
+    <text x="640.0" y="203" class="stereo" text-anchor="middle">&lt;&lt;owner-scoped resource interface&gt;&gt;</text>
+    <text x="86" y="256" class="member" text-anchor="start">+ create() : boolean</text>
+    <text x="86" y="287" class="member" text-anchor="start">+ enable() : boolean</text>
+    <text x="86" y="318" class="member" text-anchor="start">+ disable() : boolean</text>
+    <text x="86" y="349" class="member" text-anchor="start">+ drop(boolean) : boolean</text>
+    <text x="86" y="380" class="member" text-anchor="start">+ setAttribute(String, String) : boolean</text>
+    <text x="86" y="411" class="member" text-anchor="start">+ setAttribute(String, boolean) : boolean</text>
+    <text x="86" y="442" class="member" text-anchor="start">+ setAttribute(String, Integer) : boolean</text>
+    <text x="86" y="473" class="member" text-anchor="start">+ setAttribute(String, Float) : boolean</text>
+    <text x="86" y="504" class="member" text-anchor="start">+ setAttributes(TeamAttributes) : boolean</text>
+    <text x="86" y="535" class="member" text-anchor="start">+ grantAccess(String) : boolean</text>
+    <text x="86" y="566" class="member" text-anchor="start">+ revokeAccess(String) : boolean</text>
+    <text x="86" y="597" class="member" text-anchor="start">+ run(RunTeamRequest) : TeamRunResult</text>
+    <text x="86" y="628" class="member" text-anchor="start">+ describe() : TeamDescription</text>
+    <text x="86" y="659" class="member" text-anchor="start">+ getStateByConversationId(String) : TeamExecutionState</text>
+    <text x="86" y="690" class="member" text-anchor="start">+ setExecutionState(ExecutionStateRequest) : boolean</text>
+    <text x="86" y="721" class="member" text-anchor="start">+ exportDefinition() : String</text>
+    <text x="86" y="752" class="member" text-anchor="start">+ exportDefinition(ExportTeamParams) : String</text>
+    <text x="86" y="783" class="member" text-anchor="start">+ exportDefinition(ExportTeamRequest) : boolean</text>
+    <text x="86" y="814" class="member" text-anchor="start">+ getTeamName() : String</text>
+    <text x="86" y="845" class="member" text-anchor="start">+ getDescription() : String</text>
+    <text x="86" y="876" class="member" text-anchor="start">+ getStatus() : TeamStatus</text>
+    <text x="86" y="907" class="member" text-anchor="start">+ getTeamAttributes() : TeamAttributes</text>
+    <text x="86" y="954" class="note" text-anchor="start">grantAccess/revokeAccess are team-owner operations, not DBA-only.</text>
+    <text x="86" y="980" class="note" text-anchor="start">Export function results are JSON text with an object or array root.</text>
+  </g>
+  <g class="node" data-name="DefaultTeam">
+    <rect x="1360" y="140" width="940" height="205" rx="6" class="box" />
+    <rect x="1361" y="141" width="938" height="82" rx="5" class="header" />
+    <line x1="1360" y1="223" x2="2300" y2="223" stroke="#475569" stroke-width="2" />
+    <text x="1830.0" y="174" class="name" text-anchor="middle">DefaultTeam</text>
+    <text x="1830.0" y="203" class="stereo" text-anchor="middle">&lt;&lt;package-private, final implementation&gt;&gt;</text>
+    <text x="1386" y="256" class="note" text-anchor="start">Implements Team; constructors are package-private.</text>
+    <text x="1386" y="287" class="note" text-anchor="start">Created through SelectAIAgent resource factories.</text>
+    <text x="1386" y="318" class="note" text-anchor="start">Uses ConnectionProvider, AgentJdbc, and AgentSql.</text>
+  </g>
+  <path d="M1360 235 H1220" class="realization" />
+  <text x="1290" y="218" class="label" text-anchor="middle">implements</text>
+  <g class="node" data-name="Run and state requests">
+    <rect x="1360" y="425" width="940" height="456" rx="6" class="box" />
+    <rect x="1361" y="426" width="938" height="82" rx="5" class="header" />
+    <line x1="1360" y1="508" x2="2300" y2="508" stroke="#475569" stroke-width="2" />
+    <text x="1830.0" y="459" class="name" text-anchor="middle">Run and state requests</text>
+    <text x="1830.0" y="488" class="stereo" text-anchor="middle">&lt;&lt;immutable models; builders&gt;&gt;</text>
+    <text x="1386" y="541" class="member" text-anchor="start">RunTeamRequest : userPrompt : String</text>
+    <text x="1386" y="572" class="member" text-anchor="start">                 params : RunTeamParams</text>
+    <text x="1386" y="603" class="member" text-anchor="start">RunTeamParams : conversationId : String</text>
+    <text x="1386" y="634" class="member" text-anchor="start">  instructionVariables / attributeVariables / stateVariables</text>
+    <text x="1386" y="665" class="member" text-anchor="start">  (each variable collection is a Map&lt;String, Object&gt;)</text>
+    <text x="1386" y="696" class="member" text-anchor="start">ExecutionStateRequest : state : TeamExecutionState</text>
+    <text x="1386" y="727" class="member" text-anchor="start">                        params : ExecutionStateParams</text>
+    <text x="1386" y="758" class="member" text-anchor="start">ExecutionStateParams : conversationId : String</text>
+    <text x="1386" y="805" class="note" text-anchor="start">State read/update operations require a non-blank conversation ID.</text>
+    <text x="1386" y="831" class="note" text-anchor="start">Reuse the same conversation ID for run, state, and resume.</text>
+    <text x="1386" y="857" class="note" text-anchor="start">UNKNOWN is a read fallback, not a state-update input.</text>
+  </g>
+  <path d="M1220 565 H1360" class="dependency" />
+  <text x="1290" y="547" class="label" text-anchor="middle">uses</text>
+  <g class="node" data-name="Run, description, and state results">
+    <rect x="1360" y="941" width="940" height="311" rx="6" class="box" />
+    <rect x="1361" y="942" width="938" height="82" rx="5" class="header" />
+    <line x1="1360" y1="1024" x2="2300" y2="1024" stroke="#475569" stroke-width="2" />
+    <text x="1830.0" y="975" class="name" text-anchor="middle">Run, description, and state results</text>
+    <text x="1830.0" y="1004" class="stereo" text-anchor="middle">&lt;&lt;immutable result models / enum&gt;&gt;</text>
+    <text x="1386" y="1057" class="member" text-anchor="start">TeamRunResult.getRawValue() : String</text>
+    <text x="1386" y="1088" class="member" text-anchor="start">TeamDescription : teamName / description / version</text>
+    <text x="1386" y="1119" class="member" text-anchor="start">                  skills : String (JSON text)</text>
+    <text x="1386" y="1150" class="member" text-anchor="start">TeamExecutionState : RUNNING / WAITING_FOR_HUMAN</text>
+    <text x="1386" y="1181" class="member" text-anchor="start">                     SUCCEEDED / FAILED / UNKNOWN</text>
+    <text x="1386" y="1228" class="note" text-anchor="start">TeamExecutionState is the state enum, not a response wrapper.</text>
+  </g>
+  <g class="node" data-name="Export configuration">
+    <rect x="1360" y="1312" width="940" height="280" rx="6" class="box" />
+    <rect x="1361" y="1313" width="938" height="82" rx="5" class="header" />
+    <line x1="1360" y1="1395" x2="2300" y2="1395" stroke="#475569" stroke-width="2" />
+    <text x="1830.0" y="1346" class="name" text-anchor="middle">Export configuration</text>
+    <text x="1830.0" y="1375" class="stereo" text-anchor="middle">&lt;&lt;immutable models; builders&gt;&gt;</text>
+    <text x="1386" y="1428" class="member" text-anchor="start">ExportTeamParams : overwrite : Boolean</text>
+    <text x="1386" y="1459" class="member" text-anchor="start">ExportTeamRequest : location : String</text>
+    <text x="1386" y="1490" class="member" text-anchor="start">                    objectStorageCredentialName : String</text>
+    <text x="1386" y="1521" class="member" text-anchor="start">                    params : ExportTeamParams</text>
+    <text x="1386" y="1568" class="note" text-anchor="start">ExportTeamRequest selects the storage destination.</text>
+  </g>
+  <g class="node" data-name="TeamAttributes / TeamStatus">
+    <rect x="60" y="1064" width="1160" height="368" rx="6" class="box" />
+    <rect x="61" y="1065" width="1158" height="82" rx="5" class="header" />
+    <line x1="60" y1="1147" x2="1220" y2="1147" stroke="#475569" stroke-width="2" />
+    <text x="640.0" y="1098" class="name" text-anchor="middle">TeamAttributes / TeamStatus</text>
+    <text x="640.0" y="1127" class="stereo" text-anchor="middle">&lt;&lt;configuration / resource-status enum&gt;&gt;</text>
+    <text x="86" y="1180" class="member" text-anchor="start">agents : List&lt;TeamAttributes.TeamMember&gt;</text>
+    <text x="86" y="1211" class="member" text-anchor="start">process : String</text>
+    <text x="86" y="1242" class="member" text-anchor="start">longTermMemoryLength : Integer</text>
+    <text x="86" y="1273" class="member" text-anchor="start">supervisorAgent : String</text>
+    <text x="86" y="1304" class="member" text-anchor="start">TeamMember : name : String / task : String</text>
+    <text x="86" y="1335" class="member" text-anchor="start">TeamStatus : ENABLED / DISABLED</text>
+    <text x="86" y="1382" class="note" text-anchor="start">Supervisor agent is selected separately from worker/task mappings.</text>
+    <text x="86" y="1408" class="note" text-anchor="start">ImportTeamRequest belongs to SelectAIAgent.importTeam(), not Team.</text>
+  </g>
+  <line x1="60" x2="2300" y1="1637" y2="1637" stroke="#cbd5e1" />
+  <text x="60" y="1671" class="note" text-anchor="start">For a granted cross-schema team, use SelectAIAgent.runTeam(), getTeamStateByConversationId(), and setTeamExecutionState().</text>
+  <text x="60" y="1698" class="note" text-anchor="start">Database/JDBC failures: SelectAIException. Invalid input/state: unchecked exceptions. Exception clauses omitted.</text>
+</svg>

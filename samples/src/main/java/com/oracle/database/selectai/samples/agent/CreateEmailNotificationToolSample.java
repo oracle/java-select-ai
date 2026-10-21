@@ -1,0 +1,92 @@
+/*
+ * Copyright (c) 2026, Oracle and/or its affiliates.
+ *
+ * Licensed under the Universal Permissive License Version 1.0 as shown at
+ * https://oss.oracle.com/licenses/upl/
+ */
+package com.oracle.database.selectai.samples.agent;
+
+import com.oracle.database.selectai.agent.SelectAIAgent;
+import com.oracle.database.selectai.agent.Tool;
+import com.oracle.database.selectai.model.DbConnectionConfig;
+import com.oracle.database.selectai.model.SelectAIException;
+import com.oracle.database.selectai.model.agent.EmailNotificationToolParams;
+import com.oracle.database.selectai.model.agent.ToolAttributes;
+import com.oracle.database.selectai.model.agent.ToolStatus;
+import com.oracle.database.selectai.model.agent.ToolType;
+
+/**
+ * Creates a persistent email notification tool using typed {@link EmailNotificationToolParams}.
+ *
+ * <p>Set {@code SELECTAI_DB_USER}, {@code SELECTAI_DB_PASSWORD},
+ * {@code SELECTAI_JDBC_URL}, {@code SELECTAI_AGENT_TOOL_NAME}, and
+ * {@code SELECTAI_AGENT_TOOL_CREDENTIAL_NAME},
+ * {@code SELECTAI_AGENT_TOOL_RECIPIENT},
+ * {@code SELECTAI_AGENT_TOOL_SENDER},
+ * {@code SELECTAI_AGENT_TOOL_SMTP_HOST}.
+ * The named database credential and SMTP configuration must already be usable by the connected database user.</p>
+ *
+ * <p>Optionally set {@code SELECTAI_AGENT_TOOL_SUBJECT}.</p>
+ * <p>Optionally set {@code SELECTAI_AGENT_TOOL_INSTRUCTION} and
+ * {@code SELECTAI_AGENT_TOOL_DESCRIPTION}. This sample creates a tool but
+ * does not run it or invoke its external service. Closing the client does not
+ * drop the tool. Run {@link DropToolSample} with the same tool name and database
+ * connection settings to remove it. Use a new tool name to avoid replacing
+ * an existing resource.</p>
+ *
+ * @see ToolParamsSample
+ */
+public final class CreateEmailNotificationToolSample {
+
+    private CreateEmailNotificationToolSample() {
+    }
+
+    /**
+     * Creates the configured tool without executing it.
+     *
+     * @param args unused command-line arguments
+     * @throws SelectAIException when an SDK operation fails; the process exits unsuccessfully
+     */
+    public static void main(String[] args) throws SelectAIException {
+        String toolName = requiredEnv("SELECTAI_AGENT_TOOL_NAME");
+        EmailNotificationToolParams params = EmailNotificationToolParams.builder()
+                .credentialName(requiredEnv("SELECTAI_AGENT_TOOL_CREDENTIAL_NAME"))
+                .recipient(requiredEnv("SELECTAI_AGENT_TOOL_RECIPIENT"))
+                .sender(requiredEnv("SELECTAI_AGENT_TOOL_SENDER"))
+                .smtpHost(requiredEnv("SELECTAI_AGENT_TOOL_SMTP_HOST"))
+                .subject(env("SELECTAI_AGENT_TOOL_SUBJECT"))
+                .build();
+        ToolAttributes attributes = ToolAttributes.builder()
+                .toolType(ToolType.NOTIFICATION)
+                .toolParams(params)
+                .instruction(env("SELECTAI_AGENT_TOOL_INSTRUCTION"))
+                .build();
+
+        try (SelectAIAgent client = createClient()) {
+            Tool tool = client.tool(toolName, attributes,
+                    env("SELECTAI_AGENT_TOOL_DESCRIPTION"), ToolStatus.ENABLED);
+            System.out.printf("Create tool '%s' completed: %s%n", toolName, tool.create());
+        }
+    }
+
+    private static SelectAIAgent createClient() throws SelectAIException {
+        return SelectAIAgent.create(DbConnectionConfig.builder()
+                .dbUser(requiredEnv("SELECTAI_DB_USER"))
+                .dbPassword(requiredEnv("SELECTAI_DB_PASSWORD"))
+                .jdbcUrl(requiredEnv("SELECTAI_JDBC_URL"))
+                .build());
+    }
+
+    private static String requiredEnv(String name) {
+        String value = env(name);
+        if (value == null) {
+            throw new IllegalStateException("Missing required environment variable: " + name);
+        }
+        return value;
+    }
+
+    private static String env(String name) {
+        String value = System.getenv(name);
+        return value == null || value.isBlank() ? null : value;
+    }
+}

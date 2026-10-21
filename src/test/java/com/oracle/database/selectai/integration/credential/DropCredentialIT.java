@@ -36,7 +36,7 @@ import static org.junit.jupiter.api.Assumptions.assumeTrue;
  * Credential names are unique per test. The common integration support reads
  * {@code SELECT_AI_IT_*} environment variables and provides JDBC setup. Optional
  * credential-specific keys include {@code SELECT_AI_IT_CRED_USERNAME},
- * {@code SELECT_AI_IT_CRED_PASSWORD}, {@code SELECT_AI_IT_OCI_USER_OCID},
+ * {@code SELECT_AI_IT_CRED_PASS}, {@code SELECT_AI_IT_OCI_USER_OCID},
  * {@code SELECT_AI_IT_OCI_TENANCY_OCID}, {@code SELECT_AI_IT_OCI_PRIVATE_KEY},
  * and {@code SELECT_AI_IT_OCI_FINGERPRINT}. Local-user scenarios use the
  * configured database password for the temporary user.</p>

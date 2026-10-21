@@ -7,8 +7,9 @@
 package com.oracle.database.selectai.model;
 
 /**
- * SDK execution settings for {@link com.oracle.database.selectai.SelectAI} and
- * {@link com.oracle.database.selectai.DatabaseAdmin} clients.
+ * SDK execution settings for {@link com.oracle.database.selectai.SelectAI},
+ * {@link com.oracle.database.selectai.DatabaseAdmin}, and
+ * {@link com.oracle.database.selectai.agent.SelectAIAgent} clients.
  * <p>
  * These options control SDK-managed JDBC execution behavior. They do not
  * configure database identity, JDBC URL, passwords, wallet settings, or

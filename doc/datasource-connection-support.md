@@ -28,8 +28,8 @@ application-server-managed pool. The SDK does not need a separate public
 
 ### DataSource mode
 
-`SelectAI.create(DataSource)` and `DatabaseAdmin.create(DataSource)` use a
-connection provider that:
+`SelectAI.create(DataSource)`, `SelectAIAgent.create(DataSource)`, and
+`DatabaseAdmin.create(DataSource)` use a connection provider that:
 
 1. Borrows a connection from the DataSource for each SDK operation.
 2. Executes the SDK operation.
@@ -38,24 +38,25 @@ connection provider that:
 For pooled DataSources, `Connection.close()` normally returns the connection to
 the pool. The SDK does not own or close the DataSource itself.
 Connections are obtained lazily when an SDK operation needs one. Calling
-`SelectAI.close()` or `DatabaseAdmin.close()` is safe and idempotent in this
-mode; it does not close or modify the caller-owned DataSource because the
-operation-level connections have already been closed.
+`SelectAI.close()`, `SelectAIAgent.close()`, or `DatabaseAdmin.close()` is safe
+and idempotent in this mode; it does not close or modify the caller-owned
+DataSource because the operation-level connections have already been closed.
 
 ### DbConnectionConfig mode
 
-`SelectAI.create(DbConnectionConfig)` and `DatabaseAdmin.create(DbConnectionConfig)`
-use the configuration-based connection behavior:
+`SelectAI.create(DbConnectionConfig)`,
+`SelectAIAgent.create(DbConnectionConfig)`, and
+`DatabaseAdmin.create(DbConnectionConfig)` use the configuration-based
+connection behavior:
 
 1. Opens one JDBC connection through `DriverManager`.
-2. Reuses that same connection for SDK objects created from the SelectAI
-   instance.
+2. Reuses that same connection for SDK objects created from the client.
 3. Does not close the connection after each operation.
 
 This mode is useful for simple command-line or sample-style programs. It should
 not be treated as a thread-safe shared client mode.
-The `SelectAI` or `DatabaseAdmin` client owns this connection and should be
-closed when the caller is finished with SDK operations.
+The `SelectAI`, `SelectAIAgent`, or `DatabaseAdmin` client owns this connection
+and should be closed when the caller is finished with SDK operations.
 
 ```java
 try (SelectAI selectAI = SelectAI.create(dbConnectionConfig)) {
@@ -104,14 +105,16 @@ rollback as part of failure handling.
 
 In `DbConnectionConfig` mode, the SDK reuses the SDK-owned single JDBC
 connection without explicitly committing or rolling back transactions.
-Connection lifecycle is controlled by `SelectAI.close()` or
-`DatabaseAdmin.close()`. Transaction behavior continues to be determined by the
-connection configuration and the database APIs invoked by the SDK.
+Connection lifecycle is controlled by `SelectAI.close()`,
+`SelectAIAgent.close()`, or `DatabaseAdmin.close()`. Transaction behavior
+continues to be determined by the connection configuration and the database
+APIs invoked by the SDK.
 
 ## SDK Execution Options
 
 `SelectAIOptions` configures SDK-level JDBC execution behavior for both
-connection modes and both public clients, `SelectAI` and `DatabaseAdmin`.
+connection modes and all three public clients: `SelectAI`, `SelectAIAgent`,
+and `DatabaseAdmin`.
 Query timeout is applied internally to statements created by SDK operations
 using `Statement.setQueryTimeout`.
 
@@ -122,6 +125,8 @@ SelectAIOptions options = SelectAIOptions.builder()
 
 SelectAI selectAI = SelectAI.create(dbConnectionConfig, options);
 SelectAI pooledSelectAI = SelectAI.create(dataSource, options);
+SelectAIAgent agentClient = SelectAIAgent.create(dbConnectionConfig, options);
+SelectAIAgent pooledAgentClient = SelectAIAgent.create(dataSource, options);
 DatabaseAdmin databaseAdmin = DatabaseAdmin.create(dbConnectionConfig, options);
 DatabaseAdmin pooledDatabaseAdmin = DatabaseAdmin.create(dataSource, options);
 ```
@@ -146,26 +151,46 @@ configuration when using those authentication modes.
 
 Threading guidance applies to both connection modes.
 
-Use DataSource mode when sharing one `SelectAI` or `DatabaseAdmin` instance
-across multiple threads for independent operations. DataSource mode is suitable
-for this because each operation borrows its own connection.
+Use DataSource mode when sharing one `SelectAI`, `SelectAIAgent`, or
+`DatabaseAdmin` instance across multiple threads for independent operations.
+DataSource mode is suitable for this because each operation borrows its own
+connection.
 
 The DataSource change removes the shared JDBC `Connection` bottleneck, but it
 does not make mutable resource handles fully immutable. Do not concurrently
 mutate or run state-changing operations on the same `Profile`, `Credential`,
-`Conversation`, or `VectorIndex` object unless caller-side synchronization is
-used.
+`Conversation`, `VectorIndex`, `Agent`, `Task`, `Tool`, or `Team` object unless
+caller-side synchronization is used.
 
 `DbConnectionConfig` mode uses a single connection and should be treated as
 single-threaded unless the caller serializes access externally.
 
 ## Public Usage
 
+Application code should import the public contracts and create clients through
+their public factory methods. The implementation classes under
+`com.oracle.database.selectai.impl` and
+`com.oracle.database.selectai.impl.agent` are internal and must not be used as
+application dependencies.
+
 ```java
+import com.oracle.database.selectai.DatabaseAdmin;
+import com.oracle.database.selectai.SelectAI;
+
+import javax.sql.DataSource;
+
 DataSource dataSource = /* application-managed DataSource */;
 
 SelectAI selectAI = SelectAI.create(dataSource);
 DatabaseAdmin databaseAdmin = DatabaseAdmin.create(dataSource);
+```
+
+For agent operations, use the public agent entry point:
+
+```java
+import com.oracle.database.selectai.agent.SelectAIAgent;
+
+SelectAIAgent agentClient = SelectAIAgent.create(dataSource);
 ```
 
 Single-connection mode remains:
