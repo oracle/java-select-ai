@@ -9,17 +9,14 @@
 - [Prerequisites and database setup](#prerequisites-and-database-setup)
 - [Quick start](#quick-start)
 - [Run team quick start](#run-team-quick-start)
-- [Team definition import and export](#team-definition-import-and-export)
-- [Agent runtime variables](#agent-runtime-variables)
 - [Connection management](#connection-management)
   - [DataSource](#datasource)
   - [DbConnectionConfig](#dbconnectionconfig)
-- [Examples](#examples)
 - [Resource lifecycle](#resource-lifecycle)
 - [Error handling and timeouts](#error-handling-and-timeouts)
 - [Security](#security)
 - [Documentation](#documentation)
-- [Samples](#samples)
+- [Examples](#examples)
 - [Help](#help)
 - [Development](#development)
 - [Contributing](#contributing)
@@ -27,18 +24,18 @@
 
 ## Overview
 
-Java SDK for Oracle Autonomous AI Database Select AI operations backed by
-`DBMS_CLOUD_AI` and `DBMS_CLOUD_AI_AGENT`.
+Oracle Select AI for Java provides Java APIs for Select AI capabilities exposed
+through `DBMS_CLOUD_AI` and `DBMS_CLOUD_AI_AGENT`.
 
-Select AI for Java enables Java developers to use Oracle Autonomous AI Database
-Select AI from Java applications. It supports natural-language-to-SQL (NL2SQL) query
+Version `1.1.0` is supported for Oracle Autonomous AI Database 26ai and 19c.
+
+The SDK supports natural-language-to-SQL (NL2SQL) query
 generation over database data, also known as text-to-SQL, generative AI
 responses over trusted content through retrieval augmented generation (RAG),
 synthetic-data generation using large language models, context-aware
 conversations, summarization, translation, and related Select AI functionality.
-The SDK provides Java interfaces, typed request models, and runnable samples
-that bridge Java applications with the `DBMS_CLOUD_AI` and
-`DBMS_CLOUD_AI_AGENT` PL/SQL packages.
+It provides Java interfaces, typed request models, and runnable samples for
+integrating these capabilities into Java applications.
 
 The public API includes clients and models for:
 
@@ -57,46 +54,38 @@ The public API includes clients and models for:
 
 ## What's new in 1.1.0
 
-Version `1.1.0` adds Java support for Oracle Database `DBMS_CLOUD_AI_AGENT`:
+Version `1.1.0` adds Java support for the Oracle Autonomous AI Database
+`DBMS_CLOUD_AI_AGENT` package:
 
-- A dedicated `SelectAIAgent` client for agent orchestration.
-- Typed Java APIs for agents, tasks, tools, and teams, including their
-  attributes and status values.
-- Agent, task, tool, and team attribute updates through typed
-  `setAttribute(...)` and `setAttributes(...)` operations.
-- Agent resource lifecycle operations, metadata loading, listing, and
-  enable/disable or drop operations.
-- Team and tool execution through `RUN_TEAM` and `RUN_TOOL`, including runtime
-  parameters and conversation identifiers for resumable team runs.
-- Shared-team access management through `SelectAIAgent` and `Team` grant and
-  revoke operations.
-- Team state management, including typed conversation-ID convenience methods,
-  and team definition export/import operations.
-- Team import specifications supplied as JSON-compatible Java maps or raw JSON
-  strings, and typed export parameters through `ExportTeamParams`.
-- Session runtime-variable access through `getVariable(...)` and
-  `setVariable(...)`.
-- Agent samples, API documentation, class diagrams, and integration-test
-  support under the agent sample and documentation areas.
+- **Agent Framework resources:** Create and manage agents, tasks, tools, and
+  teams through `SelectAIAgent`.
+- **Team runs and conversations:** Execute teams, preserve conversation IDs
+  across calls, and inspect or update execution state.
+- **Shared teams:** Discover available teams, manage owner-scoped access
+  grants, and run teams shared by other users.
+- **Team definition import and export:** Import and export team definitions
+  using Java APIs.
+- **Typed tool configuration and runtime parameters:** Configure tool inputs
+  and parameters, and supply instruction, attribute, and state variables for
+  team runs.
 
 The existing `SelectAI` APIs for profiles, credentials, conversations, vector
 indexes, and other `DBMS_CLOUD_AI` operations remain available.
 
+See [Releases and release notes](https://github.com/oracle/java-select-ai/releases)
+for the complete change history.
+
 ## Supported environments
 
-Select AI for Java version `1.1.0` has been validated for the following
-database and service environments:
+Select AI for Java version `1.1.0` is supported for Oracle Autonomous AI
+Database 26ai and 19c.
 
-| Database or service environment | Java 1.1.0 release status | Scope |
-| --- | --- | --- |
-| Oracle Autonomous AI Database 26ai | Validated | Select AI and `DBMS_CLOUD_AI_AGENT` operations covered by the release test matrix. |
-| Oracle Autonomous AI Database 19c | Validated | Select AI and `DBMS_CLOUD_AI_AGENT` operations covered by the release test matrix, subject to the capabilities enabled by the database service. |
-| Other Oracle AI Database or Oracle Database releases | Not certified for Java 1.1.0 | The package may be available on some releases, but those combinations are outside this release's validation scope. |
+Support for additional Oracle AI Database deployment options is planned.
 
 The [Oracle Select AI capability matrix](https://docs.oracle.com/en/database/oracle/oracle-database/26/saicm/index.html)
 shows database-release differences for individual Select AI features and
 `DBMS_CLOUD_AI_AGENT` subprograms. A database release having a listed package
-capability does not by itself make that release certified for this Java SDK.
+capability does not by itself mean that release is supported by this Java SDK.
 Individual providers, profile attributes, vector-index features, built-in
 tools, and agent features remain subject to the capability matrix and the
 database service configuration.
@@ -107,9 +96,9 @@ configuration and opens the JDBC connection; with `DataSource`, client
 creation validates the `DataSource` and defers JDBC access until an operation
 needs a connection. If the connected database does not provide the required
 package, views, privileges, or operation-specific capability, the affected
-operation fails with `SelectAIException` from JDBC or Oracle Database. A
-successful client initialization therefore does not certify that every agent
-operation is supported.
+operation fails with `SelectAIException` from JDBC or Oracle Autonomous AI
+Database. A successful client initialization therefore does not certify that
+every agent operation is supported.
 
 The SDK requires JDK 17 or later. Maven 3.8 or later is recommended for
 building the project.
@@ -159,86 +148,14 @@ com.oracle.database.selectai:select-ai:1.1.0
 The locally built JAR is available at `target/select-ai-1.1.0.jar` after the
 build.
 
-### Direct JAR usage and runtime dependencies
-
-The SDK JAR is a plain JAR and does not bundle third-party dependencies. For
-direct JAR execution, copy the runtime dependencies resolved from `pom.xml`
-into `target/dependency`:
-
-```bash
-mvn clean install
-mvn -DincludeScope=runtime \
-    -DoutputDirectory=target/dependency \
-    dependency:copy-dependencies
-```
-
-The SDK runtime classpath includes:
-
-| Dependency | Purpose |
-| --- | --- |
-| `com.oracle.database.jdbc:ojdbc11:23.26.1.0.0` | Oracle JDBC Thin driver |
-| `com.oracle.database.security:oraclepki:23.26.1.0.0` | Oracle wallet and security support |
-| `org.slf4j:slf4j-api:2.0.17` | Logging API used by the SDK |
-| `com.fasterxml.jackson.core:jackson-databind:2.22.3` | JSON serialization and deserialization |
-| Dependencies resolved transitively by Maven | Additional libraries required by the direct dependencies, including Jackson core/annotations and Oracle security support dependencies |
-
-Use the SDK JAR and the copied dependencies on the application classpath:
-
-```bash
-java -cp "target/select-ai-1.1.0.jar:target/dependency/*" \
-    com.example.Application
-```
-
-On Windows PowerShell, use `;` instead of `:` in the classpath:
-
-```powershell
-java -cp "target/select-ai-1.1.0.jar;target/dependency/*" `
-    com.example.Application
-```
-
-The SDK does not include an SLF4J logging provider. Applications must provide
-and configure their preferred SLF4J 2.x provider. Standalone samples use the
-`samples` Maven profile, which adds `slf4j-simple` for sample execution:
-
-```bash
-mvn -Psamples \
-    -DincludeScope=runtime \
-    -DoutputDirectory=target/dependency \
-    dependency:copy-dependencies
-```
-
-The equivalent PowerShell command is:
-
-```powershell
-mvn -Psamples `
-    -DincludeScope=runtime `
-    -DoutputDirectory=target/dependency `
-    dependency:copy-dependencies
-```
-
-For a published artifact, use the Maven Central artifact page to review the
-available repository checksums and signatures. For local artifact verification
-only, calculate a SHA-256 checksum after building. Use the command available
-on your platform:
-
-```bash
-# macOS
-shasum -a 256 target/select-ai-1.1.0.jar
-
-# Linux and systems with GNU Coreutils
-sha256sum target/select-ai-1.1.0.jar
-```
-
-On Windows PowerShell:
-
-```powershell
-Get-FileHash target/select-ai-1.1.0.jar -Algorithm SHA256
-```
+For runtime dependencies, explicit classpath commands, and checksum
+verification, see
+[Running with an explicit classpath](DEVELOPMENT.md#running-with-an-explicit-classpath).
 
 ## Prerequisites and database setup
 
-Before using the SDK, configure an Oracle Autonomous AI Database or another
-supported Oracle Database environment. The required setup depends on the
+Before using the SDK, configure a supported Oracle Autonomous AI Database
+environment. The required setup depends on the
 database deployment and selected feature; do not apply every administrative
 configuration to every application.
 
@@ -265,9 +182,9 @@ The runtime database user must have:
 - Access to the database tables, views, directories, or other objects
   referenced by profiles, prompts, or vector indexes.
 
-The exact privileges vary by Oracle Database release, deployment, schema
-ownership, and selected operation. A database administrator should grant only
-the permissions required by the application.
+The exact privileges vary by Oracle Autonomous AI Database release, deployment,
+schema ownership, and selected operation. A database administrator should grant
+only the permissions required by the application.
 
 Agent discovery and existing-resource loading also require the documented
 `USER_AI_AGENTS`, `USER_AI_AGENT_TASKS`, `USER_AI_AGENT_TOOLS`, and
@@ -289,10 +206,10 @@ endpoint may require:
 - Outbound connectivity configuration appropriate for the deployment.
 
 In Oracle Autonomous AI Database, some service and network configuration may be
-managed by the service. In other Oracle Database deployments, a database
-administrator may need to configure network ACLs, wallets, TLS, DNS, or
-outbound access. The SDK does not require every application to manage network
-ACLs directly.
+managed by the service. Depending on the deployment and service configuration,
+a database administrator may need to configure network ACLs, wallets, TLS,
+DNS, or outbound access. The SDK does not require every application to manage
+network ACLs directly.
 
 When an existing profile is loaded or profiles are listed, the SDK preserves
 database-defined values for `provider`, `oci_apiformat`, and
@@ -335,7 +252,7 @@ access, or external documents. See [`samples/README.md`](samples/README.md)
 before running a sample. Samples that reference Oracle sample schema objects,
 such as `SH.CUSTOMERS` or `SH.COUNTRIES`, require those objects to be installed
 and visible to the configured database user. The `SH` schema is not guaranteed
-to exist in every Oracle Autonomous AI Database or Oracle Database instance.
+to exist in every Oracle Autonomous AI Database instance.
 
 ## Quick start
 
@@ -452,65 +369,16 @@ should apply their own output handling, redaction, and logging policies.
 
 ## Run team quick start
 
-The following complete example opens an existing AI Agent team, sends a team
-prompt with a conversation ID, prints the team response, and handles SDK
-validation and database failures. The team named by
-`SELECTAI_AGENT_TEAM_NAME` must already exist and be accessible to the
-configured database user. Its referenced agents, tasks, tools, and Select AI
-profile must also exist and be accessible. The conversation ID named by
-`SELECTAI_AGENT_TEAM_CONVERSATION_ID` must identify an existing database
-conversation. To create the team, see the
-[CreateTeamSample source](samples/src/main/java/com/oracle/database/selectai/samples/agent/CreateTeamSample.java).
-To create a conversation, see the
-[CreateConversationSample source](samples/src/main/java/com/oracle/database/selectai/samples/conversation/CreateConversationSample.java).
+This example runs an existing AI Agent team, prints its response, and handles
+SDK validation and database failures. The team named by
+`SELECTAI_AGENT_TEAM_NAME` and its referenced agents, tasks, tools, and Select
+AI profile must already exist and be accessible to the configured database user.
 
-This example does not create or delete a team, agent, task, tool, profile, or
-conversation. Before running it, grant the configured database user the
-required execution privileges. For a team owned by another database user, the
-team owner must grant the consumer access before the consumer runs the
-qualified team name. This can be done from Java with
-`SelectAIAgent#grantTeamAccess(String, String)` or
-`Team#grantAccess(String)`, or with the corresponding
-`DBMS_CLOUD_AI_AGENT.GRANT_TEAM_ACCESS` procedure. The connected owner must
-own the team; a database administrator is not inherently required.
-
-The conversation identifier must identify an existing database conversation
-created with `Conversation#create()` or `DBMS_CLOUD_AI.CREATE_CONVERSATION`.
-An arbitrary client-generated UUID is not sufficient. Reuse the same identifier
-when resuming a team run that is waiting for human input, including when the
-next call uses a different pooled database connection.
-
-The conversation lifecycle is separate from team execution: create or reuse a
-database conversation through the core `SelectAI` and `Conversation` APIs,
-pass its database-generated ID to `RunTeamRequest.conversationId(...)`, and
-reuse that ID for later `runTeam(...)`,
-`getTeamStateByConversationId(...)`, or
-`setTeamExecutionState(...)` calls. `runTeam(...)` returns a `TeamRunResult`
-containing the database result; it does not create or return a conversation ID.
-Drop the conversation
-through the core `Conversation` API when it is no longer needed.
-
-Create a new conversation with `SelectAI.conversation(ConversationAttributes)`
-followed by `Conversation.create()`. To reuse an existing conversation, open it
-with `SelectAI.conversation(String)` and retain the returned database-generated
-conversation ID. Do not replace that ID with an arbitrary client-generated
-value.
-
-For an owner-scoped team handle, prefer
-`Team#getStateByConversationId(String)` and
-`Team#setExecutionState(ExecutionStateRequest)`. Use
-`ExecutionStateParams.forConversationId(String)` or
-`ExecutionStateRequest.Builder#params(ExecutionStateParams)` when constructing
-typed `SET_EXECUTION_STATE` parameters. The convenience
-`ExecutionStateRequest.Builder#conversationId(String)` method covers the
-common case. The typed execution-state model currently supports the required
-`conversation_id` parameter explicitly.
-For a team granted by another owner, prefer
-`SelectAIAgent#getTeamStateByConversationId(String, String)` and
-`SelectAIAgent#setTeamExecutionState(String, ExecutionStateRequest)` with the
-owner-qualified team name. These methods inspect or update
-the run by `conversation_id` without requiring access to the owner's team
-metadata.
+Create or reuse a database conversation through the core `SelectAI` API and
+supply its database-generated ID as `SELECTAI_AGENT_TEAM_CONVERSATION_ID`.
+Do not substitute an arbitrary UUID. Preserve this ID for subsequent runs,
+including calls using different pooled connections. `runTeam()` returns a
+`TeamRunResult` containing the team result, not a conversation ID.
 
 ```java
 import com.oracle.database.selectai.agent.SelectAIAgent;
@@ -555,6 +423,20 @@ public final class RunTeamQuickStart {
     }
 }
 ```
+
+This example does not create or delete a team, agent, task, tool, profile, or
+conversation. For setup, see the
+[CreateTeamSample source](samples/src/main/java/com/oracle/database/selectai/samples/agent/CreateTeamSample.java)
+and the
+[CreateConversationSample source](samples/src/main/java/com/oracle/database/selectai/samples/conversation/CreateConversationSample.java).
+
+Before running it, ensure the configured database user has the required
+execution privileges. For a shared team, the owner must grant the consumer
+access before the consumer runs the owner-qualified team name. See
+[Managing Shared-Team Access](doc/agent-api.md#managing-shared-team-access).
+
+For conversation lifecycle, state management, and resuming a workflow waiting
+for human input, see [Conversation workflow](doc/agent-api.md#conversation-workflow).
 
 Required environment variables:
 
@@ -616,105 +498,13 @@ java -cp "run-team-quickstart-out;target/select-ai-1.1.0.jar;target/dependency/*
     RunTeamQuickStart
 ```
 
-The run uses `DbConnectionConfig` mode. `SelectAIAgent.create(...)` owns one
-JDBC connection and closes it when the try-with-resources block ends. Because
-the example uses existing database resources, no cleanup command is required.
+This example uses `DbConnectionConfig` mode. The SDK-owned JDBC connection
+closes when the try-with-resources block ends. No database-resource cleanup is
+required because the example uses existing resources.
 
-Team execution is synchronous. A long-running workflow can retain the
-operation connection until the database returns a result. Size application
-connection pools for the expected concurrent workflow count, configure an
-appropriate `SelectAIOptions` query timeout, and retry only when the operation
-is known to be safe to repeat. A JDBC statement timeout does not guarantee
-cancellation of work already running in the database or at an external model
-provider.
-
-`RunTeamRequest` exposes the typed `RunTeamParams` model for the documented
-`RUN_TEAM` runtime parameters. It includes `conversationId`,
-`instructionVariables`, `attributeVariables`, and `stateVariables`. The
-convenience methods on `RunTeamRequest.Builder`, such as
-`conversationId(...)` and `stateVariables(...)`, remain available for the
-common case. Do not combine those individual methods with `params(...)` in the
-same request.
-
-`listTeams()` lists teams owned by the current database user and returns mutable
-`Team` handles. A team granted by another owner is not
-returned as an owned `Team` handle; use `listAvailableTeams()` to discover
-teams available to the calling user, then run a shared team with its
-owner-qualified name through `SelectAIAgent.runTeam(...)`. `AvailableTeam`
-objects are read-only discovery snapshots backed by
-`DBMS_CLOUD_AI_AGENT.LIST_TEAMS()`.
-
-`ToolAttributes` accepts immutable `ToolParams` models for SQL, RAG, web search,
-Slack, and email tools. Use `GenericToolParams` for additional tool types;
-unknown database parameters are preserved when tools are loaded. See
-[Tool parameters](doc/agent-api.md#tool-parameters) and the standalone
-[ToolParamsSample](samples/src/main/java/com/oracle/database/selectai/samples/agent/ToolParamsSample.java).
-Database-backed creation, update, and loading examples are listed in the
-[typed tool parameter samples guide](samples/README.md#typed-tool-parameter-samples).
-
-Tool input metadata uses `List<ToolInput>`, with typed `name` and `description`
-fields. See [Tool inputs](doc/agent-api.md#tool-inputs) and the offline
-[ToolInputSample](samples/src/main/java/com/oracle/database/selectai/samples/agent/ToolInputSample.java).
-For custom-tool creation, updates, loading, and cleanup, see the
-[typed tool input samples guide](samples/README.md#typed-tool-input-samples).
-
-## Team definition import and export
-
-`ImportTeamRequest` accepts native JSON-compatible Java maps for team
-specifications. `ExportTeamRequest` uses the typed `ExportTeamParams` model;
-the documented export option is `overwrite`:
-
-```java
-import com.oracle.database.selectai.model.agent.ExportTeamRequest;
-import com.oracle.database.selectai.model.agent.ExportTeamParams;
-import com.oracle.database.selectai.model.agent.ImportTeamRequest;
-import java.util.List;
-import java.util.Map;
-
-ImportTeamRequest importRequest = ImportTeamRequest.builder(
-                "GENAI_PROFILE", "SUPPORT_TEAM")
-        .specification(Map.of("agents", List.of()))
-        .force(true)
-        .build();
-
-ExportTeamRequest exportRequest = ExportTeamRequest.builder(
-                "https://objectstorage.example/team.json")
-        .params(ExportTeamParams.builder().overwrite(true).build())
-        .build();
-```
-
-To receive the exported team definition directly as a JSON string, use
-`Team.exportDefinition()` for database defaults or
-`Team.exportDefinition(ExportTeamParams)` for the typed `overwrite` option.
-The `ExportTeamRequest` overload writes the definition to Object Storage or a
-database directory instead of returning it to the application.
-
-The database validates the team definition, destination, referenced resources,
-and caller privileges.
-
-## Agent runtime variables
-
-`SelectAIAgent` exposes `DBMS_CLOUD_AI_AGENT.GET_VARIABLE` and
-`SET_VARIABLE` for namespaced runtime variables. The default scope is
-`ephemeral`; passing `null` to `setVariable(...)` clears the variable.
-
-```java
-try (SelectAIAgent agentClient = SelectAIAgent.create(connectionConfig)) {
-    agentClient.setVariable("state_variables", "request_id", "REQ-123");
-    String requestId = agentClient.getVariable("state_variables", "request_id");
-    System.out.println(requestId);
-    agentClient.setVariable("state_variables", "request_id", null);
-}
-```
-
-Runtime variables are associated with the current database session. In
-`DataSource` mode, separate SDK operations may use different pooled
-connections, so applications must not depend on a variable remaining visible
-to a later operation unless they control session affinity. The database
-validates supported namespaces, names, scopes, and values. See
-[GetVariableSample](samples/src/main/java/com/oracle/database/selectai/samples/agent/GetVariableSample.java)
-and [SetVariableSample](samples/src/main/java/com/oracle/database/selectai/samples/agent/SetVariableSample.java)
-for complete runnable examples.
+Team execution is synchronous and retains a JDBC connection until the call
+completes. See the [Agent API guide](doc/agent-api.md) for execution guidance,
+runtime parameters, team discovery, and tool configuration.
 
 ## Connection management
 
@@ -842,22 +632,6 @@ treated as single-threaded unless access is synchronized externally.
 
 For more detail, see [`doc/datasource-connection-support.md`](doc/datasource-connection-support.md).
 
-## Examples
-
-Runnable examples are organized under [`samples/`](samples/) by feature:
-
-- `profile`: generation, chat sessions, attributes, summarization, translation,
-  feedback, and synthetic data
-- `conversation`: lifecycle, attributes, and conversation prompts
-- `vectorindex`: lifecycle, metadata, and updates
-- `credential`: database credential creation and deletion
-- `databaseadmin`: privileged package, network ACL, and data-access operations
-- `datasource`: DataSource-backed clients
-- `agent`: agent, task, tool, and team lifecycle and execution
-
-See [`samples/README.md`](samples/README.md) for prerequisites and commands.
-For the agent API, see [`doc/agent-api.md`](doc/agent-api.md).
-
 ## Resource lifecycle
 
 Factories that receive a resource name or ID open an existing database
@@ -911,15 +685,16 @@ requirements.
 
 SQL generated or executed through Select AI runs with the privileges of the
 connected database user. The SDK does not elevate privileges or bypass Oracle
-Database authorization. Access to schemas, tables, views, PL/SQL functions, and
-other referenced objects is determined by Oracle Database.
+Autonomous AI Database authorization. Access to schemas, tables, views, PL/SQL
+functions, and other referenced objects is determined by Oracle Autonomous AI
+Database.
 
 Depending on the requested operation and Select AI profile configuration,
 prompts, retrieved content, database metadata, SQL context, agent instructions,
 task definitions, tool inputs, and runtime parameters may be sent to the
 configured AI provider. Generated responses are returned from that provider
-through Oracle Database. Applications should configure profiles and providers
-according to their data-classification and privacy requirements.
+through Oracle Autonomous AI Database. Applications should configure profiles
+and providers according to their data-classification and privacy requirements.
 
 Passwords supplied through environment variables are suitable for local
 examples only. Production applications should use an approved secret-management
@@ -951,7 +726,10 @@ For vulnerability reporting, see [`SECURITY.md`](SECURITY.md).
 The generated API documentation is available at [`doc/apidocs/index.html`](doc/apidocs/index.html).
 It documents the public interfaces, models, validation behavior, exceptions,
 connection ownership, and resource lifecycle. The
-[`Select AI Agent API guide`](doc/agent-api.md) covers agent resources.
+[`Select AI Agent API guide`](doc/agent-api.md) covers agent resources, including:
+
+- [Team definition import and export](doc/agent-api.md#team-definition-import-and-export)
+- [Agent runtime variables](doc/agent-api.md#runtime-variables)
 
 Classes under `com.oracle.database.selectai.impl` are internal implementation details and
 are not supported as customer-facing APIs. Applications should use public
@@ -959,7 +737,21 @@ interfaces and factory methods such as `SelectAI.create(...)`,
 `SelectAIAgent.create(...)`, `DatabaseAdmin.create(...)`, and
 `DbConnection.create(...)`.
 
-## Samples
+## Examples
+
+Runnable examples are organized under [`samples/`](samples/) by feature:
+
+- `profile`: generation, chat sessions, attributes, summarization, translation,
+  feedback, and synthetic data
+- `conversation`: lifecycle, attributes, and conversation prompts
+- `vectorindex`: lifecycle, metadata, and updates
+- `credential`: database credential creation and deletion
+- `databaseadmin`: privileged package, network ACL, and data-access operations
+- `datasource`: DataSource-backed clients
+- `agent`: agent, task, tool, and team lifecycle and execution
+
+See [`samples/README.md`](samples/README.md) for prerequisites and commands.
+For the agent API, see [`doc/agent-api.md`](doc/agent-api.md).
 
 Samples are standalone Java sources and require a Bash-compatible shell for
 the commands shown below. The SDK does not bundle runtime dependencies, and

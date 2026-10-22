@@ -9,6 +9,7 @@ documented in [`README.md`](README.md).
 - [Repository layout](#repository-layout)
 - [Connection provider internals](#connection-provider-internals)
 - [Build](#build)
+- [Running with an explicit classpath](#running-with-an-explicit-classpath)
 - [Unit tests](#unit-tests)
 - [Integration tests](#integration-tests)
 - [Javadoc](#javadoc)
@@ -111,6 +112,82 @@ under `target/`. It does not publish or upload anything. GPG signatures are a
 separate release requirement and are not created by this local workflow.
 
 The project targets Java 17. Do not use language features newer than Java 17.
+
+## Running with an explicit classpath
+
+The SDK JAR is a plain JAR and does not bundle third-party dependencies. For
+direct JAR execution, copy the runtime dependencies resolved from `pom.xml`
+into `target/dependency`:
+
+```bash
+mvn clean install
+mvn -DincludeScope=runtime \
+    -DoutputDirectory=target/dependency \
+    dependency:copy-dependencies
+```
+
+The SDK runtime classpath includes:
+
+| Dependency | Purpose |
+| --- | --- |
+| `com.oracle.database.jdbc:ojdbc11:23.26.1.0.0` | Oracle JDBC Thin driver |
+| `com.oracle.database.security:oraclepki:23.26.1.0.0` | Oracle wallet and security support |
+| `org.slf4j:slf4j-api:2.0.17` | Logging API used by the SDK |
+| `com.fasterxml.jackson.core:jackson-databind:2.22.3` | JSON serialization and deserialization |
+| Dependencies resolved transitively by Maven | Additional libraries required by the direct dependencies, including Jackson core/annotations and Oracle security support dependencies |
+
+Use the SDK JAR and the copied dependencies on the application classpath:
+
+```bash
+java -cp "target/select-ai-1.1.0.jar:target/dependency/*" \
+    com.example.Application
+```
+
+On Windows PowerShell, use `;` instead of `:` in the classpath:
+
+```powershell
+java -cp "target/select-ai-1.1.0.jar;target/dependency/*" `
+    com.example.Application
+```
+
+The SDK does not include an SLF4J logging provider. Applications must provide
+and configure their preferred SLF4J 2.x provider. Standalone samples use the
+`samples` Maven profile, which adds `slf4j-simple` for sample execution:
+
+```bash
+mvn -Psamples \
+    -DincludeScope=runtime \
+    -DoutputDirectory=target/dependency \
+    dependency:copy-dependencies
+```
+
+The equivalent PowerShell command is:
+
+```powershell
+mvn -Psamples `
+    -DincludeScope=runtime `
+    -DoutputDirectory=target/dependency `
+    dependency:copy-dependencies
+```
+
+For a published artifact, use the Maven Central artifact page to review the
+available repository checksums and signatures. For local artifact verification
+only, calculate a SHA-256 checksum after building. Use the command available
+on your platform:
+
+```bash
+# macOS
+shasum -a 256 target/select-ai-1.1.0.jar
+
+# Linux and systems with GNU Coreutils
+sha256sum target/select-ai-1.1.0.jar
+```
+
+On Windows PowerShell:
+
+```powershell
+Get-FileHash target/select-ai-1.1.0.jar -Algorithm SHA256
+```
 
 ## Unit tests
 
