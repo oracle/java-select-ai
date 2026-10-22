@@ -89,8 +89,10 @@ System.out.println(result.getRawValue());
 ```
 
 The name-only `team(...)` factory and `listTeams()` load team metadata from
-the current user's team view. To run a team granted by another owner, use the
-client-level method instead of trying to load a `Team` handle:
+the current user's team view and return mutable, owner-scoped `Team` handles.
+Teams granted by another owner are not returned by `listTeams()`. To run a
+shared team, use the client-level method instead of trying to load a `Team`
+handle:
 
 ```java
 TeamRunResult result = agentClient.runTeam("TEAM_OWNER.SHARED_SUPPORT_TEAM",
@@ -211,9 +213,9 @@ same owner-qualified team name passed to `runTeam(...)`.
 Team execution is synchronous. A long-running workflow can retain the
 operation connection until the database returns a result. Applications should
 size connection pools for expected concurrent workflow count, configure an
-appropriate SDK query timeout, and retry only when the workflow is safe to
-repeat. A JDBC statement timeout does not guarantee cancellation of work that
-is already running in the database or at an external model provider.
+appropriate `SelectAIOptions` query timeout, and retry only when the workflow
+is safe to repeat. A JDBC statement timeout does not guarantee cancellation of
+work that is already running in the database or at an external model provider.
 
 Assuming `selectAI` is an open `SelectAI` client and `team` is an existing
 `Team` handle:
@@ -271,21 +273,30 @@ inspection and management.
 
 ### Runtime Variables
 
-`SelectAIAgent` exposes the session-scoped
-`DBMS_CLOUD_AI_AGENT.GET_VARIABLE` and `SET_VARIABLE` operations:
+`SelectAIAgent` exposes `DBMS_CLOUD_AI_AGENT.GET_VARIABLE` and
+`SET_VARIABLE` for namespaced runtime variables. The default scope is
+`ephemeral`; passing `null` to `setVariable(...)` clears the variable.
 
 ```java
-agentClient.setVariable("state_variables", "request_id", "REQ-123");
-String requestId = agentClient.getVariable("state_variables", "request_id");
-agentClient.setVariable("state_variables", "request_id", null); // clear
+try (SelectAIAgent agentClient = SelectAIAgent.create(connectionConfig)) {
+    agentClient.setVariable("state_variables", "request_id", "REQ-123");
+    String requestId = agentClient.getVariable("state_variables", "request_id");
+    System.out.println(requestId);
+    agentClient.setVariable("state_variables", "request_id", null);
+}
 ```
 
-The default scope is `ephemeral`; overloads accepting an explicit scope are
-also available. A missing variable is returned as `null`, and a null value
-clears the variable. Runtime variables belong to the current database session.
-In `DataSource` mode, separate operations may borrow different pooled
-connections, so applications should use a connection mode with session
-affinity when a variable must be read by a later operation.
+Overloads accepting an explicit scope are also available. A missing variable
+is returned as `null`.
+
+Runtime variables are associated with the current database session. In
+`DataSource` mode, separate SDK operations may use different pooled
+connections, so applications must not depend on a variable remaining visible
+to a later operation unless they control session affinity. The database
+validates supported namespaces, names, scopes, and values. See
+[GetVariableSample](../samples/src/main/java/com/oracle/database/selectai/samples/agent/GetVariableSample.java)
+and [SetVariableSample](../samples/src/main/java/com/oracle/database/selectai/samples/agent/SetVariableSample.java)
+for complete runnable examples.
 
 Operations that require an existing database resource reject configured objects
 that have not completed `create()`.
@@ -480,8 +491,7 @@ and `SetTeamAttributesSample`.
 
 `ImportTeamRequest` accepts native JSON-compatible Java maps for team
 specifications. `ExportTeamRequest` uses the typed `ExportTeamParams` model;
-the documented export option is `overwrite`. The database validates
-definitions, destinations, referenced resources, and caller privileges.
+the documented export option is `overwrite`:
 
 ```java
 import com.oracle.database.selectai.model.agent.ExportTeamRequest;
@@ -490,7 +500,7 @@ import com.oracle.database.selectai.model.agent.ImportTeamRequest;
 import java.util.List;
 import java.util.Map;
 
-ImportTeamRequest request = ImportTeamRequest.builder(
+ImportTeamRequest importRequest = ImportTeamRequest.builder(
                 "GENAI_PROFILE", "SUPPORT_TEAM")
         .specification(Map.of("agents", List.of()))
         .force(true)
@@ -502,11 +512,14 @@ ExportTeamRequest exportRequest = ExportTeamRequest.builder(
         .build();
 ```
 
-Use `Team.exportDefinition()` to receive the exported definition directly as
-JSON using database defaults, or use
-`Team.exportDefinition(ExportTeamParams)` to supply the typed `overwrite`
-option. The `ExportTeamRequest` overload writes the definition to Object
-Storage or a database directory.
+To receive the exported team definition directly as a JSON string, use
+`Team.exportDefinition()` for database defaults or
+`Team.exportDefinition(ExportTeamParams)` for the typed `overwrite` option.
+The `ExportTeamRequest` overload writes the definition to Object Storage or a
+database directory instead of returning it to the application.
+
+The database validates the team definition, destination, referenced resources,
+and caller privileges.
 
 ## Team Attributes
 
