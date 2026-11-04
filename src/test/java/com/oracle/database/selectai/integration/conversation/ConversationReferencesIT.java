@@ -22,11 +22,7 @@ import java.util.UUID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-/**
- * Live conversation lifecycle integration coverage.
- */
-
-/** Integration coverage for conversation ConversationReferences. */
+/** Integration coverage for conversation lifecycle and lookups. */
 class ConversationReferencesIT extends ConversationIntegrationFixture {
 
     /**

@@ -179,7 +179,7 @@ class TeamAccessIT extends AgentIntegrationFixture {
      * Expected: The consumer's response contains 8.
      */
     @Test
-    void ownerCanGrantThroughClientAndConsumerCanRunQualifiedTeam() throws Exception {
+    void test62400OwnerCanGrantThroughClientAndConsumerCanRunQualifiedTeam() throws Exception {
         Team team = createRuntimeTeam("CLIENT_GRANT");
 
         assertThat(agentClient.grantTeamAccess(team.getTeamName(), consumerUser)).isTrue();
@@ -197,7 +197,7 @@ class TeamAccessIT extends AgentIntegrationFixture {
      * Expected: The shared team is absent from the consumer's owned-team list.
      */
     @Test
-    void sharedTeamIsNotListedAsConsumerOwnedTeam() throws Exception {
+    void test62401SharedTeamIsNotListedAsConsumerOwnedTeam() throws Exception {
         TeamGraph graph = createTeamGraph("DISCOVERY_BOUNDARY");
         assertThat(graph.team().grantAccess(consumerUser)).isTrue();
 
@@ -212,7 +212,7 @@ class TeamAccessIT extends AgentIntegrationFixture {
      * reports that the team does not exist.
      */
     @Test
-    void teamHandleGrantAndRevokeControlsQualifiedConsumerRun() throws Exception {
+    void test62402TeamHandleGrantAndRevokeControlsQualifiedConsumerRun() throws Exception {
         TeamGraph graph = createTeamGraph("HANDLE_GRANT");
         String conversationId = createConsumerConversation();
 
@@ -229,7 +229,7 @@ class TeamAccessIT extends AgentIntegrationFixture {
      * runtime profile resolution.
      */
     @Test
-    void revokeRemovesOnlyTargetTeamAccess() throws Exception {
+    void test62403RevokeRemovesOnlyTargetTeamAccess() throws Exception {
         TeamGraph revoked = createTeamGraph("REVOKED_DISCOVERY");
         TeamGraph retained = createTeamGraph("RETAINED_DISCOVERY");
         String conversationId = createConsumerConversation();
@@ -254,7 +254,7 @@ class TeamAccessIT extends AgentIntegrationFixture {
      * does not exist.
      */
     @Test
-    void revokePreventsNewRun() throws Exception {
+    void test62404RevokePreventsNewRun() throws Exception {
         TeamGraph graph = createTeamGraph("REVOKE_RUN");
         assertThat(graph.team().grantAccess(consumerUser)).isTrue();
         String conversationId = createConsumerConversation();
@@ -271,7 +271,7 @@ class TeamAccessIT extends AgentIntegrationFixture {
      * Expected: All three operations throw SelectAIException with an SQLException cause.
      */
     @Test
-    void nonOwnerCannotGrantOrRevokeOwnerTeam() throws Exception {
+    void test62405NonOwnerCannotGrantOrRevokeOwnerTeam() throws Exception {
         TeamGraph graph = createTeamGraph("OWNER_ONLY");
         String ownerUser = dbConfig.getDbUser().toUpperCase(Locale.ROOT);
 
@@ -295,7 +295,7 @@ class TeamAccessIT extends AgentIntegrationFixture {
      * SelectAIException.
      */
     @Test
-    void teamGrantDoesNotExposeUnderlyingResources() throws Exception {
+    void test62406TeamGrantDoesNotExposeUnderlyingResources() throws Exception {
         TeamGraph graph = createTeamGraph("RESOURCE_BOUNDARY");
         assertThat(graph.team().grantAccess(consumerUser)).isTrue();
 
@@ -317,7 +317,7 @@ class TeamAccessIT extends AgentIntegrationFixture {
      * reports that the team does not exist.
      */
     @Test
-    void roleCanBeGrantedAndRevoked() throws Exception {
+    void test62407RoleCanBeGrantedAndRevoked() throws Exception {
         TeamGraph graph = createTeamGraph("ROLE_GRANT");
         roleName = uniqueName("TEAM_ROLE");
         createRoleGrantedToConsumer();

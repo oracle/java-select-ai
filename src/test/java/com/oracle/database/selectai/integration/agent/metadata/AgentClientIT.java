@@ -35,7 +35,7 @@ class AgentClientIT extends AgentIntegrationFixture {
      * references its agent, task, and tool dependencies.
      */
     @Test
-    void test39001DefinitionsCoverAllResourceTypesAndDependencies() throws Exception {
+    void test62000DefinitionsCoverAllResourceTypesAndDependencies() throws Exception {
         Tool tool = agentClient.tool(uniqueName("DEFINITION_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -64,7 +64,7 @@ class AgentClientIT extends AgentIntegrationFixture {
      * Expected: Each list operation returns an empty collection.
      */
     @Test
-    void test39002ListPatternsWithNoMatchesReturnEmptyCollections() throws Exception {
+    void test62001ListPatternsWithNoMatchesReturnEmptyCollections() throws Exception {
         String noMatchPattern = "^" + uniqueName("NO_MATCH") + "$";
 
         assertThat(agentClient.listAgents(noMatchPattern)).isEmpty();
@@ -78,7 +78,7 @@ class AgentClientIT extends AgentIntegrationFixture {
      * Expected: Each call throws SelectAIException whose SQL cause contains ORA-12726.
      */
     @Test
-    void test39003InvalidPatternsAreRejectedForSharedListApis() throws Exception {
+    void test62002InvalidPatternsAreRejectedForSharedListApis() throws Exception {
         Agent agent = agentClient.agent(uniqueName("INVALID_REGEX_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -104,7 +104,7 @@ class AgentClientIT extends AgentIntegrationFixture {
      * second.
      */
     @Test
-    void test39004LoadedResourcesRefreshStatusAfterAnotherHandleChangesIt() throws Exception {
+    void test62003LoadedResourcesRefreshStatusAfterAnotherHandleChangesIt() throws Exception {
         Tool tool = agentClient.tool(uniqueName("REFRESH_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -147,7 +147,7 @@ class AgentClientIT extends AgentIntegrationFixture {
      * is absent.
      */
     @Test
-    void test39005ListAvailableTeamsIncludesOnlyOwnedSingleAgentTeams() throws Exception {
+    void test62004ListAvailableTeamsIncludesOnlyOwnedSingleAgentTeams() throws Exception {
         Agent singleAgent = agentClient.agent(uniqueName("AVAILABLE_SINGLE_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         singleAgent.create();
         managedAgents.add(singleAgent);

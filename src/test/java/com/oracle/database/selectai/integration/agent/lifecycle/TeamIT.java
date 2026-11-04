@@ -33,7 +33,6 @@ import com.oracle.database.selectai.model.agent.ToolAttributes;
 import com.oracle.database.selectai.model.agent.ToolStatus;
 import org.junit.jupiter.api.Test;
 
-import java.sql.CallableStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +50,7 @@ class TeamIT extends AgentIntegrationFixture {
      * member.
      */
     @Test
-    void test33000CreateAndIdentity() throws Exception {
+    void test61700CreateAndIdentity() throws Exception {
         Agent agent = agentClient.agent(uniqueName("TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -72,7 +71,7 @@ class TeamIT extends AgentIntegrationFixture {
      * team.
      */
     @Test
-    void test33001ListTeams() throws Exception {
+    void test61701ListTeams() throws Exception {
         Agent agent = agentClient.agent(uniqueName("LIST_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -92,7 +91,7 @@ class TeamIT extends AgentIntegrationFixture {
      * agent, and task.
      */
     @Test
-    void test33053ListTeamsHydratesMetadataAndAttributes() throws Exception {
+    void test61702ListTeamsHydratesMetadataAndAttributes() throws Exception {
         Agent agent = agentClient.agent(uniqueName("LIST_METADATA_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -130,7 +129,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The result contains exactly the five names with the selected prefix.
      */
     @Test
-    void test33054ListTeamsMultipleMatchesUsingPattern() throws Exception {
+    void test61703ListTeamsMultipleMatchesUsingPattern() throws Exception {
         List<String> names = createTeamListFixture();
         String prefix = listPrefix(names.get(0));
 
@@ -142,7 +141,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The case-insensitive pattern returns exactly the five matching team names.
      */
     @Test
-    void test33055ListTeamsCaseInsensitivePattern() throws Exception {
+    void test61704ListTeamsCaseInsensitivePattern() throws Exception {
         List<String> names = createTeamListFixture();
         String prefix = listPrefix(names.get(0));
 
@@ -156,7 +155,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The result contains all six created names from both groups.
      */
     @Test
-    void test33056ListTeamsAlternationPattern() throws Exception {
+    void test61705ListTeamsAlternationPattern() throws Exception {
         List<String> names = createTeamListFixture();
         String firstPrefix = listPrefix(names.get(0));
         String secondPrefix = listPrefix(names.get(5));
@@ -170,7 +169,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The list is empty.
      */
     @Test
-    void test33057ListTeamsNonMatchingPatternReturnsEmptyList() throws Exception {
+    void test61706ListTeamsNonMatchingPatternReturnsEmptyList() throws Exception {
         String pattern = "^" + uniqueName("NO_MATCH") + "$";
 
         assertThat(agentClient.listTeams(pattern)).isEmpty();
@@ -181,7 +180,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The list is empty.
      */
     @Test
-    void test33058ListTeamsLiteralNonMatchingPatternReturnsEmptyList() throws Exception {
+    void test61707ListTeamsLiteralNonMatchingPatternReturnsEmptyList() throws Exception {
         assertThat(agentClient.listTeams(uniqueName("NO_MATCH_LITERAL"))).isEmpty();
     }
 
@@ -190,7 +189,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The call throws SelectAIException whose SQL cause contains ORA-12726.
      */
     @Test
-    void test33059ListTeamsInvalidPatternIsRejectedByDatabase() throws Exception {
+    void test61708ListTeamsInvalidPatternIsRejectedByDatabase() throws Exception {
         Agent agent = agentClient.agent(uniqueName("INVALID_REGEX_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -210,7 +209,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The result contains exactly the team whose name ends at that match.
      */
     @Test
-    void test33060ListTeamsEndAnchorPattern() throws Exception {
+    void test61709ListTeamsEndAnchorPattern() throws Exception {
         List<String> names = createTeamListFixture();
         String exact = names.get(0);
         String pattern = exact + "$";
@@ -223,7 +222,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The call throws SelectAIException whose SQL cause contains ORA-12733.
      */
     @Test
-    void test33061ListTeamsOverlongPatternIsRejectedByDatabase() throws Exception {
+    void test61710ListTeamsOverlongPatternIsRejectedByDatabase() throws Exception {
         Agent agent = agentClient.agent(uniqueName("OVERLONG_REGEX_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -245,7 +244,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The returned names are sorted alphabetically.
      */
     @Test
-    void test33062ListTeamsAreOrderedByName() throws Exception {
+    void test61711ListTeamsAreOrderedByName() throws Exception {
         Agent agent = agentClient.agent(uniqueName("LIST_ORDER_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -270,7 +269,7 @@ class TeamIT extends AgentIntegrationFixture {
      * agent and task.
      */
     @Test
-    void test33002FetchTeam() throws Exception {
+    void test61712FetchTeam() throws Exception {
         Agent agent = agentClient.agent(uniqueName("FETCH_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -291,7 +290,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The run returns a nonblank response.
      */
     @Test
-    void test33003RunTeam() throws Exception {
+    void test61713RunTeam() throws Exception {
         Agent agent = agentClient.agent(uniqueName("RUN_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -312,7 +311,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: Both operations return true, and the handle reports DISABLED then ENABLED.
      */
     @Test
-    void test33004DisableEnableContract() throws Exception {
+    void test61714DisableEnableContract() throws Exception {
         Agent agent = agentClient.agent(uniqueName("STATUS_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -333,7 +332,7 @@ class TeamIT extends AgentIntegrationFixture {
      * memory length, and supervisor.
      */
     @Test
-    void test33007AllTeamAttributesRoundTrip() throws Exception {
+    void test61715AllTeamAttributesRoundTrip() throws Exception {
         Agent worker = agentClient.agent(uniqueName("ROUND_TRIP_TEAM_WORKER"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         worker.create();
         managedAgents.add(worker);
@@ -385,7 +384,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: Creation throws SelectAIException with a SQL cause containing an ORA error.
      */
     @Test
-    void test33031MissingTeamAgentsRejectedByDatabase() {
+    void test61716MissingTeamAgentsRejectedByDatabase() {
         Team team = agentClient.team(uniqueName("MISSING_TEAM_AGENTS"),
                 TeamAttributes.builder().process("sequential").build(),
                 null, TeamStatus.ENABLED);
@@ -399,7 +398,7 @@ class TeamIT extends AgentIntegrationFixture {
      * default response guidance.
      */
     @Test
-    void test33032TeamMemberWithoutTaskCreatesDefaultTask() throws Exception {
+    void test61717TeamMemberWithoutTaskCreatesDefaultTask() throws Exception {
         Agent agent = agentClient.agent(uniqueName("NO_TASK_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -429,7 +428,7 @@ class TeamIT extends AgentIntegrationFixture {
      * stating it does not exist.
      */
     @Test
-    void test33033NonexistentAgentReferenceRejectedAtRunTime() throws Exception {
+    void test61718NonexistentAgentReferenceRejectedAtRunTime() throws Exception {
         Task task = agentClient.task(uniqueName("MISSING_AGENT_REFERENCE_TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
         managedTasks.add(task);
@@ -462,7 +461,7 @@ class TeamIT extends AgentIntegrationFixture {
      * stating it does not exist.
      */
     @Test
-    void test33034NonexistentTaskReferenceRejectedAtRunTime() throws Exception {
+    void test61719NonexistentTaskReferenceRejectedAtRunTime() throws Exception {
         Agent agent = agentClient.agent(uniqueName("MISSING_TASK_REFERENCE_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -494,7 +493,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: Creation throws SelectAIException with a SQL cause containing an ORA error.
      */
     @Test
-    void test33035InvalidProcessRejectedByDatabase() throws Exception {
+    void test61720InvalidProcessRejectedByDatabase() throws Exception {
         Agent agent = agentClient.agent(uniqueName("INVALID_PROCESS_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -514,7 +513,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: Team creation throws SelectAIException with a SQL cause containing an ORA error.
      */
     @Test
-    void test33036SupervisorListedAsWorkerRejectedByDatabase() throws Exception {
+    void test61721SupervisorListedAsWorkerRejectedByDatabase() throws Exception {
         String supervisorName = uniqueName("INVALID_SUPERVISOR_AGENT");
         Agent supervisor = agentClient.agent(supervisorName, AgentAttributes.builder()
                 .profileName(profileName)
@@ -540,7 +539,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The created team reports ENABLED.
      */
     @Test
-    void test33037NullStatusUsesDatabaseDefaultEnabled() throws Exception {
+    void test61722NullStatusUsesDatabaseDefaultEnabled() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DEFAULT_STATUS_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -562,7 +561,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The call throws SelectAIException with ORA-20053, and the status remains ENABLED.
      */
     @Test
-    void test33005EnableAlreadyEnabledTeamFails() throws Exception {
+    void test61723EnableAlreadyEnabledTeamFails() throws Exception {
         Agent agent = agentClient.agent(uniqueName("ENABLE_TWICE_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -585,7 +584,7 @@ class TeamIT extends AgentIntegrationFixture {
      * DISABLED.
      */
     @Test
-    void test33006DisableAlreadyDisabledTeamFails() throws Exception {
+    void test61724DisableAlreadyDisabledTeamFails() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DISABLE_TWICE_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -608,7 +607,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The lookup throws an exception.
      */
     @Test
-    void test33008FetchMissingTeamFails() {
+    void test61725FetchMissingTeamFails() {
         assertThatThrownBy(() -> agentClient.team(uniqueName("MISSING_TEAM")))
                 .isInstanceOf(Exception.class);
     }
@@ -618,7 +617,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The stale handle operation throws an exception.
      */
     @Test
-    void test33015EnableAfterDeleteFails() throws Exception {
+    void test61726EnableAfterDeleteFails() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DELETE_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -636,7 +635,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The stale handle operation throws an exception.
      */
     @Test
-    void test33016DisableAfterDeleteFails() throws Exception {
+    void test61727DisableAfterDeleteFails() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DELETE_TEAM2_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -654,7 +653,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The lookup throws an exception.
      */
     @Test
-    void test33020FetchAfterDeleteFails() throws Exception {
+    void test61728FetchAfterDeleteFails() throws Exception {
         Agent agent = agentClient.agent(uniqueName("FETCH_DELETE_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -673,7 +672,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The fetched team attributes retain the supervisor agent name.
      */
     @Test
-    void test33022SupervisorTeam() throws Exception {
+    void test61729SupervisorTeam() throws Exception {
         Agent worker = agentClient.agent(uniqueName("WORKER_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         worker.create();
         managedAgents.add(worker);
@@ -703,7 +702,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The returned description is nonblank and includes the team name.
      */
     @Test
-    void test33023DescribeTeam() throws Exception {
+    void test61730DescribeTeam() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DESCRIBE_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -722,7 +721,7 @@ class TeamIT extends AgentIntegrationFixture {
      * typed function-argument fields.
      */
     @Test
-    void test33038DescribeTeamReturnsDocumentedMetadataAndSqlSkill() throws Exception {
+    void test61731DescribeTeamReturnsDocumentedMetadataAndSqlSkill() throws Exception {
         Tool tool = agentClient.tool(uniqueName("DESCRIBE_SQL_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -766,7 +765,7 @@ class TeamIT extends AgentIntegrationFixture {
      * input at position one.
      */
     @Test
-    void test33039DescribeTeamWithCustomToolIncludesFunctionArguments() throws Exception {
+    void test61732DescribeTeamWithCustomToolIncludesFunctionArguments() throws Exception {
         String function = createPythonPlsqlFunction();
         Tool tool = agentClient.tool(uniqueName("DESCRIBE_CUSTOM_TOOL"),
                 ToolAttributes.builder()
@@ -811,7 +810,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The skill names contain both tools exactly once.
      */
     @Test
-    void test33040DescribeTeamAggregatesAndDeduplicatesAgentAndTaskTools() throws Exception {
+    void test61733DescribeTeamAggregatesAndDeduplicatesAgentAndTaskTools() throws Exception {
         Tool sqlTool = agentClient.tool(uniqueName("AGGREGATE_SQL_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         sqlTool.create();
         managedTools.add(sqlTool);
@@ -851,7 +850,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The description has the expected team metadata and an empty skills array.
      */
     @Test
-    void test33041DescribeTeamWithoutToolsReturnsEmptySkills() throws Exception {
+    void test61734DescribeTeamWithoutToolsReturnsEmptySkills() throws Exception {
         Agent agent = agentClient.agent(uniqueName("EMPTY_SKILLS_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -877,7 +876,7 @@ class TeamIT extends AgentIntegrationFixture {
      * disabled.
      */
     @Test
-    void test33042DescribeDisabledTeamRejectedByDatabase() throws Exception {
+    void test61735DescribeDisabledTeamRejectedByDatabase() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DISABLED_DESCRIBE_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -904,7 +903,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The stale handle call throws SelectAIException.
      */
     @Test
-    void test33043StaleTeamHandleDescribeFailsAfterOtherHandleDropsTeam() throws Exception {
+    void test61736StaleTeamHandleDescribeFailsAfterOtherHandleDropsTeam() throws Exception {
         Agent agent = agentClient.agent(uniqueName("STALE_DESCRIBE_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -921,13 +920,13 @@ class TeamIT extends AgentIntegrationFixture {
     }
 
     /**
-     * Test: Drop a team directly through DBMS_CLOUD_AI_AGENT, then describe it through its existing
-     * Java handle.
+     * Test: Drop a team through a second Java SDK handle, then describe it through the original
+     * handle.
      * Expected: The SelectAIException retains a SQL cause containing an ORA error and the dropped
      * team name.
      */
     @Test
-    void test33044DescribeTeamPreservesDatabaseErrorAfterExternalDrop() throws Exception {
+    void test61737DescribeTeamPreservesDatabaseErrorAfterSecondHandleDrop() throws Exception {
         Agent agent = agentClient.agent(uniqueName("EXTERNAL_DROP_DESCRIBE_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -938,12 +937,8 @@ class TeamIT extends AgentIntegrationFixture {
                 agent.getAgentName(), task.getTaskName());
         String teamName = team.getTeamName();
 
-        try (CallableStatement statement = jdbcConnection().prepareCall(
-                "BEGIN C##CLOUD$SERVICE.DBMS_CLOUD_AI_AGENT.DROP_TEAM(?, ?); END;")) {
-            statement.setString(1, teamName);
-            statement.setBoolean(2, true);
-            statement.execute();
-        }
+        Team dropper = agentClient.team(teamName);
+        assertThat(dropper.drop(true)).isTrue();
         managedTeams.remove(team);
 
         assertThatThrownBy(team::describe)
@@ -960,7 +955,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The state is SUCCEEDED.
      */
     @Test
-    void test33024TeamState() throws Exception {
+    void test61738TeamState() throws Exception {
         Agent agent = agentClient.agent(uniqueName("STATE_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -981,7 +976,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: Each conversation lookup returns SUCCEEDED.
      */
     @Test
-    void test33045TeamStateIsolatedByConversationId() throws Exception {
+    void test61739TeamStateIsolatedByConversationId() throws Exception {
         Agent agent = agentClient.agent(uniqueName("STATE_ISOLATION_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -1008,7 +1003,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The lookup throws SelectAIException.
      */
     @Test
-    void test33046TeamStateBeforeAnyRunFails() throws Exception {
+    void test61740TeamStateBeforeAnyRunFails() throws Exception {
         Agent agent = agentClient.agent(uniqueName("STATE_BEFORE_RUN_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -1027,7 +1022,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The lookup throws SelectAIException.
      */
     @Test
-    void test33047InvalidConversationIdFails() throws Exception {
+    void test61741InvalidConversationIdFails() throws Exception {
         Agent agent = agentClient.agent(uniqueName("INVALID_STATE_CONVERSATION_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -1047,7 +1042,7 @@ class TeamIT extends AgentIntegrationFixture {
      * SelectAIException.
      */
     @Test
-    void test33052SetExecutionStateWithoutMatchingRunIsNoOp() throws Exception {
+    void test61742SetExecutionStateWithoutMatchingRunIsNoOp() throws Exception {
         Agent agent = agentClient.agent(uniqueName("INVALID_SET_STATE_CONVERSATION_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -1070,7 +1065,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The SDK rejects the invalid identifier locally.
      */
     @Test
-    void test33048BlankConversationIdIsRejectedLocally() throws Exception {
+    void test61743BlankConversationIdIsRejectedLocally() throws Exception {
         Agent agent = agentClient.agent(uniqueName("MISSING_STATE_CONVERSATION_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -1091,7 +1086,7 @@ class TeamIT extends AgentIntegrationFixture {
      * and the valid update changes state to SUCCEEDED.
      */
     @Test
-    void test33050SetExecutionStateValidatesAndCompletesWaitingHumanRun() throws Exception {
+    void test61744SetExecutionStateValidatesAndCompletesWaitingHumanRun() throws Exception {
         Agent agent = agentClient.agent(uniqueName("WAITING_HUMAN_AGENT"),
                 AgentAttributes.builder()
                         .profileName(profileName)
@@ -1144,7 +1139,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The stale handle call throws SelectAIException.
      */
     @Test
-    void test33051StaleTeamHandleSetExecutionStateFailsAfterDrop() throws Exception {
+    void test61745StaleTeamHandleSetExecutionStateFailsAfterDrop() throws Exception {
         Agent agent = agentClient.agent(uniqueName("STALE_STATE_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -1169,7 +1164,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The second create succeeds and the team can be fetched by its original name.
      */
     @Test
-    void test33025DeleteAndRecreateTeam() throws Exception {
+    void test61746DeleteAndRecreateTeam() throws Exception {
         Agent agent = agentClient.agent(uniqueName("RECREATE_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -1192,7 +1187,7 @@ class TeamIT extends AgentIntegrationFixture {
      * message.
      */
     @Test
-    void test33026DropExistingTeamWithoutForce() throws Exception {
+    void test61747DropExistingTeamWithoutForce() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DROP_NON_FORCE_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -1209,16 +1204,11 @@ class TeamIT extends AgentIntegrationFixture {
     }
 
     /**
-     * Bug <a href="https://bug.oraclecorp.com/ords/bug/bugui/bug-details?mode=edit&bugnumber=40126447">
-     * 40126447</a> - DBMS_CLOUD_AI_AGENT Java drop APIs must delegate repeated forced drops
-     * to the database, where force-drop is idempotent.
-     */
-    /**
      * Test: Force-drop a team and repeat the forced drop through the same handle.
      * Expected: Both calls return true.
      */
     @Test
-    void test33027RepeatedForceDropOnSameTeamHandleSucceeds() throws Exception {
+    void test61748RepeatedForceDropOnSameTeamHandleSucceeds() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DROP_REPEAT_FORCE_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -1238,7 +1228,7 @@ class TeamIT extends AgentIntegrationFixture {
      * team.
      */
     @Test
-    void test33028ForceDropAlreadyMissingTeamSucceeds() throws Exception {
+    void test61749ForceDropAlreadyMissingTeamSucceeds() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DROP_MISSING_FORCE_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -1261,7 +1251,7 @@ class TeamIT extends AgentIntegrationFixture {
      * team name, and "does not exist".
      */
     @Test
-    void test33029NonForceDropMissingTeamPreservesDatabaseError() throws Exception {
+    void test61750NonForceDropMissingTeamPreservesDatabaseError() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DROP_MISSING_NON_FORCE_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -1289,7 +1279,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: The listed handle drops successfully and the follow-up result is empty.
      */
     @Test
-    void test33063DropTeamLoadedFromList() throws Exception {
+    void test61751DropTeamLoadedFromList() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DROP_LISTED_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -1314,7 +1304,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: Both reads throw SelectAIException with the expected team-not-found message.
      */
     @Test
-    void test33064StaleTeamStatusAndAttributesFailAfterExternalDrop() throws Exception {
+    void test61752StaleTeamStatusAndAttributesFailAfterExternalDrop() throws Exception {
         Agent agent = agentClient.agent(uniqueName("STALE_DROP_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -1342,7 +1332,7 @@ class TeamIT extends AgentIntegrationFixture {
      * Expected: Forced drop returns true; non-forced drop throws IllegalStateException.
      */
     @Test
-    void test33065NeverCreatedTeamForceDropDelegatesToDatabase() throws Exception {
+    void test61753NeverCreatedTeamForceDropDelegatesToDatabase() throws Exception {
         TeamAttributes attributes = TeamAttributes.builder()
                 .agents(List.of(TeamMember.builder(uniqueName("UNCREATED_TEAM_AGENT"))
                         .task(uniqueName("UNCREATED_TEAM_TASK")).build()))
@@ -1364,7 +1354,7 @@ class TeamIT extends AgentIntegrationFixture {
      * confirms the team is absent.
      */
     @Test
-    void test33066RepeatedNonForceDropOnSameTeamHandleIsRejectedLocally() throws Exception {
+    void test61754RepeatedNonForceDropOnSameTeamHandleIsRejectedLocally() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DROP_REPEAT_NON_FORCE_TEAM_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);

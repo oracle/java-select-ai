@@ -35,7 +35,7 @@ class ToolConfigurationIT extends AgentIntegrationFixture {
      * visible on both handles.
      */
     @Test
-    void test30039SetCustomToolAttributesPersistThroughFreshHandle() throws Exception {
+    void test61100SetCustomToolAttributesPersistThroughFreshHandle() throws Exception {
         String originalFunction = createPythonPlsqlFunction();
         String updatedFunction = createPythonPlsqlFunction();
         Tool tool = agentClient.tool(uniqueName("SET_ATTRIBUTE_CUSTOM_TOOL"), ToolAttributes.builder()
@@ -63,7 +63,7 @@ class ToolConfigurationIT extends AgentIntegrationFixture {
      * instruction, function, and input.
      */
     @Test
-    void test30040SetCustomToolAttributesPersistThroughFreshHandle() throws Exception {
+    void test61101SetCustomToolAttributesPersistThroughFreshHandle() throws Exception {
         String originalFunction = createPythonPlsqlFunction();
         String updatedFunction = createPythonPlsqlFunction();
         Tool tool = agentClient.tool(uniqueName("SET_ATTRIBUTES_CUSTOM_TOOL"), ToolAttributes.builder()
@@ -92,7 +92,7 @@ class ToolConfigurationIT extends AgentIntegrationFixture {
      * query input.
      */
     @Test
-    void test30041SetSqlToolAttributesPersistThroughFreshHandle() throws Exception {
+    void test61102SetSqlToolAttributesPersistThroughFreshHandle() throws Exception {
         Tool tool = agentClient.tool(uniqueName("SET_ATTRIBUTES_SQL_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -116,7 +116,7 @@ class ToolConfigurationIT extends AgentIntegrationFixture {
      * Expected: The SDK surfaces a SelectAIException whose cause is the database SQLException.
      */
     @Test
-    void test30042UnknownToolAttributeIsRejectedByDatabase() throws Exception {
+    void test61103UnknownToolAttributeIsRejectedByDatabase() throws Exception {
         Tool tool = agentClient.tool(uniqueName("UNKNOWN_ATTRIBUTE_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -130,7 +130,7 @@ class ToolConfigurationIT extends AgentIntegrationFixture {
      * SelectAIException.
      */
     @Test
-    void test30043ClearingCustomToolFunctionIsRejectedByDatabase() throws Exception {
+    void test61104ClearingCustomToolFunctionIsRejectedByDatabase() throws Exception {
         Tool tool = agentClient.tool(uniqueName("CLEAR_FUNCTION_TOOL"), ToolAttributes.builder()
                 .instruction("Return the age for a birth-date input.")
                 .function(createPythonPlsqlFunction())

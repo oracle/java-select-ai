@@ -34,7 +34,7 @@ class TeamConfigurationIT extends AgentIntegrationFixture {
      * mappings match on both handles.
      */
     @Test
-    void test33053SetTeamAttributesPersistThroughFreshHandle() throws Exception {
+    void test61800SetTeamAttributesPersistThroughFreshHandle() throws Exception {
         Agent firstAgent = agentClient.agent(uniqueName("SET_ATTRIBUTE_FIRST_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         firstAgent.create();
         managedAgents.add(firstAgent);
@@ -67,7 +67,7 @@ class TeamConfigurationIT extends AgentIntegrationFixture {
      * process, memory, and mappings.
      */
     @Test
-    void test33054SetTeamAttributesPersistThroughFreshHandle() throws Exception {
+    void test61801SetTeamAttributesPersistThroughFreshHandle() throws Exception {
         Agent firstAgent = agentClient.agent(uniqueName("SET_ATTRIBUTES_FIRST_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         firstAgent.create();
         managedAgents.add(firstAgent);
@@ -101,7 +101,7 @@ class TeamConfigurationIT extends AgentIntegrationFixture {
      * Expected: The SDK surfaces a SelectAIException whose cause is the database SQLException.
      */
     @Test
-    void test33055UnknownTeamAttributeIsRejectedByDatabase() throws Exception {
+    void test61802UnknownTeamAttributeIsRejectedByDatabase() throws Exception {
         Team team = createSimpleTeam("UNKNOWN_ATTRIBUTE");
 
         assertDatabaseRejection(() -> team.setAttribute("SDK_UNKNOWN_TEAM_ATTRIBUTE", "value"));
@@ -113,7 +113,7 @@ class TeamConfigurationIT extends AgentIntegrationFixture {
      * SelectAIException.
      */
     @Test
-    void test33056ClearingMandatoryTeamAgentsIsRejectedByDatabase() throws Exception {
+    void test61803ClearingMandatoryTeamAgentsIsRejectedByDatabase() throws Exception {
         Team team = createSimpleTeam("CLEAR_AGENTS");
 
         assertDatabaseRejection(() -> team.setAttribute("agents", (String) null));
@@ -125,7 +125,7 @@ class TeamConfigurationIT extends AgentIntegrationFixture {
      * SelectAIException.
      */
     @Test
-    void test33057UnsupportedTeamProcessIsRejectedByDatabase() throws Exception {
+    void test61804UnsupportedTeamProcessIsRejectedByDatabase() throws Exception {
         Team team = createSimpleTeam("INVALID_PROCESS");
 
         assertDatabaseRejection(() -> team.setAttribute("process", "not-a-supported-process"));
@@ -137,7 +137,7 @@ class TeamConfigurationIT extends AgentIntegrationFixture {
      * the missing agent and stating it does not exist.
      */
     @Test
-    void test33058NonexistentAgentInTeamMembersIsRejectedAtRunTime() throws Exception {
+    void test61805NonexistentAgentInTeamMembersIsRejectedAtRunTime() throws Exception {
         Task task = agentClient.task(uniqueName("MISSING_AGENT_TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
         managedTasks.add(task);

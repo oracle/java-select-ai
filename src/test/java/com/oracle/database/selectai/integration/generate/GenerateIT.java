@@ -55,26 +55,6 @@ class GenerateIT extends GenerateIntegrationFixture {
     }
 
     /**
-     * Emits the SQL generated for an execution-oriented request. The subsequent execution is a
-     * separate provider call, but this records the schema context and generated SQL immediately
-     * beforehand when diagnosing object-list enforcement failures.
-     */
-    private void logExecutionDiagnostic(String operation, String prompt) {
-        try {
-            String generatedSql = profile.generate(prompt, GenerateAction.showsql);
-            System.out.printf(
-                    "JSAI DIAGNOSTIC operation=%s%n  prompt=%s%n  object_list=%s%n"
-                            + "  generated_sql=%s%n",
-                    operation, prompt, profile.getProfileAttributes().getObjectList(), generatedSql);
-        } catch (Exception exception) {
-            System.out.printf(
-                    "JSAI DIAGNOSTIC operation=%s%n  prompt=%s%n"
-                            + "  showsql_diagnostic_error=%s%n",
-                    operation, prompt, exception.getMessage());
-        }
-    }
-
-    /**
      * Test: On the fixture-created profile, whose object list contains the PEOPLE and GYMNAST
      * tables and whose model is set to {@code openai.gpt-5.6-luna}, call {@code showsql} for
      * both prompts: {@code "How many gymnasts in database?"} and
@@ -121,9 +101,7 @@ class GenerateIT extends GenerateIntegrationFixture {
     @Test
     void test16002RunSql() throws Exception {
         for (String prompt : PROMPTS) {
-            logExecutionDiagnostic("runsql", prompt);
             String response = profile.runsql(prompt);
-            System.out.printf("JSAI DIAGNOSTIC operation=runsql%n  response=%s%n", response);
             assertThat(response)
                     .isNotBlank()
                     .satisfies(value -> assertThat(value.toLowerCase())
@@ -159,9 +137,7 @@ class GenerateIT extends GenerateIntegrationFixture {
     @Test
     void test16004Narrate() throws Exception {
         for (String prompt : PROMPTS) {
-            logExecutionDiagnostic("narrate", prompt);
             String response = profile.narrate(prompt);
-            System.out.printf("JSAI DIAGNOSTIC operation=narrate%n  response=%s%n", response);
             assertThat(response)
                     .isNotBlank()
                     .satisfies(value -> assertThat(value.toLowerCase())
@@ -194,9 +170,7 @@ class GenerateIT extends GenerateIntegrationFixture {
      */
     @Test
     void test16006GenerateRunSql() throws Exception {
-        logExecutionDiagnostic("generate(runsql)", PROMPTS[0]);
         String response = profile.generate(PROMPTS[0], GenerateAction.runsql);
-        System.out.printf("JSAI DIAGNOSTIC operation=generate(runsql)%n  response=%s%n", response);
         assertThat(response)
                 .isNotBlank()
                 .satisfies(value -> assertThat(value.toLowerCase())
@@ -241,9 +215,7 @@ class GenerateIT extends GenerateIntegrationFixture {
      */
     @Test
     void test16009GenerateNarrate() throws Exception {
-        logExecutionDiagnostic("generate(narrate)", PROMPTS[0]);
         String response = profile.generate(PROMPTS[0], GenerateAction.narrate);
-        System.out.printf("JSAI DIAGNOSTIC operation=generate(narrate)%n  response=%s%n", response);
         assertThat(response)
                 .isNotBlank()
                 .satisfies(value -> assertThat(value.toLowerCase())
@@ -298,17 +270,20 @@ class GenerateIT extends GenerateIntegrationFixture {
 
     /**
      * Test: Call the generic {@code generate} API with prompt {@code "Oracle database"}, action
-     * {@code GenerateAction.embedding}, and request-level {@code embeddingModel} set to
-     * {@code "cohere.embed-english-v3.0"}.
+     * {@code GenerateAction.embedding}, setting the request-level {@code embeddingModel} when
+     * {@code SELECT_AI_IT_OCI_EMBEDDING_MODEL} is configured.
      * Expected: The database/provider accepts the request-level embedding model and returns a
      * non-blank embedding response. The inherited fixture cleanup drops the profile and
      * temporary credential.
      */
     @Test
     void test16012GenerateEmbedding() throws Exception {
-        ProfileAttributes attributes = ProfileAttributes.builder()
-                .embeddingModel("cohere.embed-english-v3.0")
-                .build();
+        ProfileAttributes.Builder builder = ProfileAttributes.builder();
+        String embeddingModel = ociEmbeddingModel();
+        if (embeddingModel != null) {
+            builder.embeddingModel(embeddingModel);
+        }
+        ProfileAttributes attributes = builder.build();
 
         assertThat(profile.generate(
                 "Oracle database",

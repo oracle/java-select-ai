@@ -230,9 +230,8 @@ void test30002OpenAiCompatibleProfilePersistsProviderEndpoint() throws Exception
      * Test: Creates an Azure credential and builds direct Azure attributes containing the
      * configured resource name, deployment name, and embedding deployment name before invoking
      * the shared profile-create-and-chat helper.
-     * Expected: If enabled, the shared helper would confirm the Azure provider is returned by the
-     * created profile and the chat response is nonblank and contains {@code "17"}; the method is
-     * currently disabled under Bug 39901111.
+     * Expected: The created profile identifies the Azure provider, and its chat response is
+     * nonblank and contains {@code "17"}.
      */
     
     @Test
@@ -267,9 +266,8 @@ void test30002OpenAiCompatibleProfilePersistsProviderEndpoint() throws Exception
     /**
      * Test: Creates an Azure credential, configures an {@code AzureProviderProfile.Builder} with
      * the resource, deployment, and embedding deployment names, and sends {@code CHAT_PROMPT}.
-     * Expected: If enabled, the shared helper would confirm the Azure provider derived from the
-     * provider profile and a nonblank response containing {@code "17"}; the method is disabled
-     * under Bug 39901111.
+     * Expected: The created profile identifies the Azure provider, and its chat response is
+     * nonblank and contains {@code "17"}.
      */
     
     @Test
@@ -306,9 +304,8 @@ void test30002OpenAiCompatibleProfilePersistsProviderEndpoint() throws Exception
      * Test: Creates an AWS username/password credential from the configured access-key pair,
      * builds direct attributes with provider {@code "aws"}, configured region, and model
      * {@code "meta.llama3-70b-instruct-v1:0"} or its override, and sends {@code CHAT_PROMPT}.
-     * Expected: If enabled, the shared helper would confirm the direct AWS provider is returned by
-     * the created profile and the response is nonblank and contains {@code "17"}; the method is
-     * disabled under Bug 39901111.
+     * Expected: The created profile identifies the AWS provider, and its chat response is
+     * nonblank and contains {@code "17"}.
      */
     
     @Test
@@ -342,9 +339,8 @@ void test30002OpenAiCompatibleProfilePersistsProviderEndpoint() throws Exception
     /**
      * Test: Creates an AWS credential, configures an {@code AWSProviderProfile.Builder} with the
      * configured region and model, and sends {@code CHAT_PROMPT} through the created profile.
-     * Expected: If enabled, the shared helper would confirm the AWS provider derived from the
-     * provider profile and a nonblank response containing {@code "17"}; the method is disabled
-     * under Bug 39901111.
+     * Expected: The created profile identifies the AWS provider, and its chat response is
+     * nonblank and contains {@code "17"}.
      */
     
     @Test
@@ -380,9 +376,8 @@ void test30002OpenAiCompatibleProfilePersistsProviderEndpoint() throws Exception
      * Test: Creates a Google credential from the configured API key, builds direct attributes with
      * provider {@code "google"} and configured-or-default model {@code "gemini-3-flash-preview"},
      * and sends {@code CHAT_PROMPT}.
-     * Expected: If enabled, the shared helper would confirm the direct Google provider is returned
-     * by the created profile and the response is nonblank and contains {@code "17"}; the method
-     * is disabled under Bug 39901111.
+     * Expected: The created profile identifies the Google provider, and its chat response is
+     * nonblank and contains {@code "17"}.
      */
     
     @Test
@@ -410,9 +405,8 @@ void test30002OpenAiCompatibleProfilePersistsProviderEndpoint() throws Exception
      * Test: Creates a Google credential, configures a {@code GoogleProviderProfile.Builder} with
      * the configured-or-default model {@code "gemini-3-flash-preview"}, and sends
      * {@code CHAT_PROMPT} through the created profile.
-     * Expected: If enabled, the shared helper would confirm the Google provider derived from the
-     * provider profile and a nonblank response containing {@code "17"}; the method is disabled
-     * under Bug 39901111.
+     * Expected: The created profile identifies the Google provider, and its chat response is
+     * nonblank and contains {@code "17"}.
      */
     
     @Test

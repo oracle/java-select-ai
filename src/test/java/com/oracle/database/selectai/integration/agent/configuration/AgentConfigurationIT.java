@@ -30,7 +30,7 @@ class AgentConfigurationIT extends AgentIntegrationFixture {
      * freshly loaded handle.
      */
     @Test
-    void test32033SetAgentAttributesPersistThroughFreshHandle() throws Exception {
+    void test61600SetAgentAttributesPersistThroughFreshHandle() throws Exception {
         Agent agent = agentClient.agent(uniqueName("SET_ATTRIBUTE"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -51,7 +51,7 @@ class AgentConfigurationIT extends AgentIntegrationFixture {
      * profile, role, flag, tools, and memory length.
      */
     @Test
-    void test32034SetAgentAttributesPersistThroughFreshHandle() throws Exception {
+    void test61601SetAgentAttributesPersistThroughFreshHandle() throws Exception {
         Agent agent = agentClient.agent(uniqueName("SET_ATTRIBUTES"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -91,7 +91,7 @@ class AgentConfigurationIT extends AgentIntegrationFixture {
      * Expected: The SDK surfaces a SelectAIException whose cause is the database SQLException.
      */
     @Test
-    void test32035UnknownAgentAttributeIsRejectedByDatabase() throws Exception {
+    void test61602UnknownAgentAttributeIsRejectedByDatabase() throws Exception {
         Agent agent = agentClient.agent(uniqueName("UNKNOWN_ATTRIBUTE"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -105,7 +105,7 @@ class AgentConfigurationIT extends AgentIntegrationFixture {
      * SelectAIException.
      */
     @Test
-    void test32036ClearingMandatoryAgentAttributesIsRejectedByDatabase() throws Exception {
+    void test61603ClearingMandatoryAgentAttributesIsRejectedByDatabase() throws Exception {
         Agent agent = agentClient.agent(uniqueName("CLEAR_MANDATORY_ATTRIBUTE"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -120,7 +120,7 @@ class AgentConfigurationIT extends AgentIntegrationFixture {
      * SelectAIException.
      */
     @Test
-    void test32037SupervisorMutationIsRejectedByDatabase() throws Exception {
+    void test61604SupervisorMutationIsRejectedByDatabase() throws Exception {
         Agent agent = agentClient.agent(uniqueName("SUPERVISOR_MUTATION"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);

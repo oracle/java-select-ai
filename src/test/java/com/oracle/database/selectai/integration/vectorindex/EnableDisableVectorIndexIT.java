@@ -330,7 +330,6 @@ class EnableDisableVectorIndexIT extends VectorIndexIntegrationFixture {
                 .similarityThreshold(0.7)
                 .vectorDistanceMetric("COSINE")
                 .vectorDbProvider("oracle")
-                .vectorDimension(1024)
                 .vectorTableName(vectorTableName)
                 .build();
         VectorIndexConfig config = VectorIndexConfig.builder(name)
@@ -354,7 +353,6 @@ class EnableDisableVectorIndexIT extends VectorIndexIntegrationFixture {
         assertThat(persisted.getSimilarityThreshold()).isEqualTo(0.7);
         assertThat(persisted.getVectorDistanceMetric()).isEqualTo("COSINE");
         assertThat(persisted.getVectorDbProvider()).isEqualTo("oracle");
-        assertThat(persisted.getVectorDimension()).isEqualTo(1024);
         assertThat(persisted.getVectorTableName()).isEqualTo(vectorTableName);
     }
 

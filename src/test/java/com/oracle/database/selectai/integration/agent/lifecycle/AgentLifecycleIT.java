@@ -34,7 +34,7 @@ class AgentLifecycleIT extends AgentIntegrationFixture {
      * operations fail locally.
      */
     @Test
-    void test39005PendingResourcesRetainConfigurationAndRejectDatabaseOperations() throws Exception {
+    void test61900PendingResourcesRetainConfigurationAndRejectDatabaseOperations() throws Exception {
         Agent agent = agentClient.agent(uniqueName("PENDING_AGENT"), agentAttributes(),
                 "Pending agent", AgentStatus.DISABLED);
         Task task = agentClient.task(uniqueName("PENDING_TASK"), taskAttributes(),
@@ -78,7 +78,7 @@ class AgentLifecycleIT extends AgentIntegrationFixture {
      * represents a created resource.
      */
     @Test
-    void test39006LoadedResourcesCannotBeCreatedAgain() throws Exception {
+    void test61901LoadedResourcesCannotBeCreatedAgain() throws Exception {
         Tool tool = agentClient.tool(uniqueName("RECREATE_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -107,7 +107,7 @@ class AgentLifecycleIT extends AgentIntegrationFixture {
      * throw an exception.
      */
     @Test
-    void test39007SecondHandlesDetectResourceRemoval() throws Exception {
+    void test61902SecondHandlesDetectResourceRemoval() throws Exception {
         Tool tool = agentClient.tool(uniqueName("REMOVED_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -152,7 +152,7 @@ class AgentLifecycleIT extends AgentIntegrationFixture {
      * ignoring case.
      */
     @Test
-    void test39008ListPatternsReturnMultipleCaseInsensitiveMatchesForEachResource() throws Exception {
+    void test61903ListPatternsReturnMultipleCaseInsensitiveMatchesForEachResource() throws Exception {
         String toolPrefix = uniqueName("PATTERN_TOOL");
         Tool firstTool = agentClient.tool(toolPrefix + "_A", sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         firstTool.create();
@@ -199,7 +199,7 @@ class AgentLifecycleIT extends AgentIntegrationFixture {
      * SelectAIException.
      */
     @Test
-    void test39009StaleHandlesRejectLifecycleOperationsAfterRemoval() throws Exception {
+    void test61904StaleHandlesRejectLifecycleOperationsAfterRemoval() throws Exception {
         Tool tool = agentClient.tool(uniqueName("STALE_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);

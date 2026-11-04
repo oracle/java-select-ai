@@ -34,7 +34,7 @@ class ClientTeamStateIT extends AgentIntegrationFixture {
      * Expected: The run returns a nonblank value and the retrieved state is SUCCEEDED.
      */
     @Test
-    void test39010ClientGetsCompletedStateByConversationId() throws Exception {
+    void test62200ClientGetsCompletedStateByConversationId() throws Exception {
         Team team = createRunnableTeam("CLIENT_STATE");
         Conversation conversation = createConversation();
         String conversationId = conversation.getConversationId();
@@ -52,7 +52,7 @@ class ClientTeamStateIT extends AgentIntegrationFixture {
      * Expected: Both runs return nonblank values, and each conversation reports SUCCEEDED.
      */
     @Test
-    void test39011ClientStateIsIsolatedByConversationId() throws Exception {
+    void test62201ClientStateIsIsolatedByConversationId() throws Exception {
         Team team = createRunnableTeam("CLIENT_STATE_ISOLATION");
         Conversation first = createConversation();
         Conversation second = createConversation();
@@ -73,7 +73,7 @@ class ClientTeamStateIT extends AgentIntegrationFixture {
      * Expected: getTeamStateByConversationId throws SelectAIException.
      */
     @Test
-    void test39012ClientStateBeforeAnyRunFails() throws Exception {
+    void test62202ClientStateBeforeAnyRunFails() throws Exception {
         Team team = createRunnableTeam("CLIENT_STATE_BEFORE_RUN");
         Conversation conversation = createConversation();
 
@@ -89,7 +89,7 @@ class ClientTeamStateIT extends AgentIntegrationFixture {
      * IllegalArgumentException, and setting SUCCEEDED returns true and updates the stored state.
      */
     @Test
-    void test39015ClientSetExecutionStateCompletesWaitingHumanRun() throws Exception {
+    void test62203ClientSetExecutionStateCompletesWaitingHumanRun() throws Exception {
         Agent agent = agentClient.agent(uniqueName("CLIENT_WAITING_HUMAN_AGENT"),
                 AgentAttributes.builder()
                         .profileName(profileName)
@@ -139,7 +139,7 @@ class ClientTeamStateIT extends AgentIntegrationFixture {
      * Expected: Both state operations throw SelectAIException for the dropped team.
      */
     @Test
-    void test39016ClientStateOperationsRejectDroppedTeam() throws Exception {
+    void test62204ClientStateOperationsRejectDroppedTeam() throws Exception {
         Team team = createRunnableTeam("CLIENT_DROPPED_STATE");
         Conversation conversation = createConversation();
         String teamName = team.getTeamName();
