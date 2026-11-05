@@ -30,7 +30,7 @@ class TaskConfigurationIT extends AgentIntegrationFixture {
      * original and reloaded task.
      */
     @Test
-    void test31026SetTaskAttributesPersistThroughFreshHandle() throws Exception {
+    void test61400SetTaskAttributesPersistThroughFreshHandle() throws Exception {
         Tool tool = agentClient.tool(uniqueName("SET_ATTRIBUTE_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -59,7 +59,7 @@ class TaskConfigurationIT extends AgentIntegrationFixture {
      * requested values.
      */
     @Test
-    void test31027SetTaskAttributesPersistThroughFreshHandle() throws Exception {
+    void test61401SetTaskAttributesPersistThroughFreshHandle() throws Exception {
         Tool tool = agentClient.tool(uniqueName("SET_ATTRIBUTES_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -89,7 +89,7 @@ class TaskConfigurationIT extends AgentIntegrationFixture {
      * Expected: The SDK surfaces a SelectAIException whose cause is the database SQLException.
      */
     @Test
-    void test31028UnknownTaskAttributeIsRejectedByDatabase() throws Exception {
+    void test61402UnknownTaskAttributeIsRejectedByDatabase() throws Exception {
         Task task = agentClient.task(uniqueName("UNKNOWN_ATTRIBUTE_TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
         managedTasks.add(task);
@@ -103,7 +103,7 @@ class TaskConfigurationIT extends AgentIntegrationFixture {
      * SelectAIException.
      */
     @Test
-    void test31029ClearingMandatoryTaskInstructionIsRejectedByDatabase() throws Exception {
+    void test61403ClearingMandatoryTaskInstructionIsRejectedByDatabase() throws Exception {
         Task task = agentClient.task(uniqueName("CLEAR_INSTRUCTION_TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
         managedTasks.add(task);

@@ -30,7 +30,7 @@ class AgentIT extends AgentIntegrationFixture {
      * name.
      */
     @Test
-    void test32000Identity() throws Exception {
+    void test61500Identity() throws Exception {
         Agent agent = agentClient.agent(uniqueName("AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -45,7 +45,7 @@ class AgentIT extends AgentIntegrationFixture {
      * agent.
      */
     @Test
-    void test32001ListAgents() throws Exception {
+    void test61501ListAgents() throws Exception {
         Agent agent = agentClient.agent(uniqueName("LIST_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -61,7 +61,7 @@ class AgentIT extends AgentIntegrationFixture {
      * and memory length of seven.
      */
     @Test
-    void test32033ListAgentsHydratesMetadataAndAttributes() throws Exception {
+    void test61502ListAgentsHydratesMetadataAndAttributes() throws Exception {
         String name = uniqueName("LIST_METADATA");
         AgentAttributes attributes = AgentAttributes.builder()
                 .profileName(profileName)
@@ -90,7 +90,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The result contains exactly the five matching names, regardless of their order.
      */
     @Test
-    void test32034ListAgentsMultipleMatchesUsingPattern() throws Exception {
+    void test61503ListAgentsMultipleMatchesUsingPattern() throws Exception {
         List<String> names = createAgentListFixture();
         String prefix = listPrefix(names.get(0));
 
@@ -103,7 +103,7 @@ class AgentIT extends AgentIntegrationFixture {
      * agent.
      */
     @Test
-    void test32035ListAgentsCaseInsensitivePattern() throws Exception {
+    void test61504ListAgentsCaseInsensitivePattern() throws Exception {
         List<String> names = createAgentListFixture();
         String prefix = listPrefix(names.get(0));
 
@@ -117,7 +117,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The result contains exactly all six names from both groups.
      */
     @Test
-    void test32036ListAgentsAlternationPattern() throws Exception {
+    void test61505ListAgentsAlternationPattern() throws Exception {
         List<String> names = createAgentListFixture();
         String firstPrefix = listPrefix(names.get(0));
         String secondPrefix = listPrefix(names.get(5));
@@ -131,7 +131,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The agent collection is empty.
      */
     @Test
-    void test32037ListAgentsNonMatchingPatternReturnsEmptyList() throws Exception {
+    void test61506ListAgentsNonMatchingPatternReturnsEmptyList() throws Exception {
         String pattern = "^" + uniqueName("NO_MATCH") + "$";
 
         assertThat(agentClient.listAgents(pattern)).isEmpty();
@@ -142,7 +142,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The agent collection is empty.
      */
     @Test
-    void test32038ListAgentsLiteralNonMatchingPatternReturnsEmptyList() throws Exception {
+    void test61507ListAgentsLiteralNonMatchingPatternReturnsEmptyList() throws Exception {
         assertThat(agentClient.listAgents(uniqueName("NO_MATCH_LITERAL"))).isEmpty();
     }
 
@@ -151,7 +151,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The call throws SelectAIException and its database cause contains ORA-12726.
      */
     @Test
-    void test32039ListAgentsInvalidPatternIsRejectedByDatabase() throws Exception {
+    void test61508ListAgentsInvalidPatternIsRejectedByDatabase() throws Exception {
         Agent agent = agentClient.agent(uniqueName("INVALID_REGEX_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -167,7 +167,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: Only the selected agent is returned.
      */
     @Test
-    void test32040ListAgentsEndAnchorPattern() throws Exception {
+    void test61509ListAgentsEndAnchorPattern() throws Exception {
         List<String> names = createAgentListFixture();
         String exact = names.get(0);
         String pattern = exact + "$";
@@ -180,7 +180,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The call throws SelectAIException and its database cause contains ORA-12733.
      */
     @Test
-    void test32041ListAgentsOverlongPatternIsRejectedByDatabase() throws Exception {
+    void test61510ListAgentsOverlongPatternIsRejectedByDatabase() throws Exception {
         Agent agent = agentClient.agent(uniqueName("OVERLONG_REGEX_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -198,7 +198,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The returned names are ordered A, B, C.
      */
     @Test
-    void test32042ListAgentsAreOrderedByName() throws Exception {
+    void test61511ListAgentsAreOrderedByName() throws Exception {
         String prefix = uniqueName("LIST_ORDER");
         String first = prefix + "_A";
         String second = prefix + "_B";
@@ -222,7 +222,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The fetched handle has the same name and role as the created agent.
      */
     @Test
-    void test32002FetchAgent() throws Exception {
+    void test61512FetchAgent() throws Exception {
         Agent created = agentClient.agent(uniqueName("FETCH_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         created.create();
         managedAgents.add(created);
@@ -239,7 +239,7 @@ class AgentIT extends AgentIntegrationFixture {
      * attribute.
      */
     @Test
-    void test32006AllAgentAttributesRoundTrip() throws Exception {
+    void test61513AllAgentAttributesRoundTrip() throws Exception {
         String toolName = uniqueName("ROUND_TRIP_TOOL");
         Tool tool = agentClient.tool(toolName, sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
@@ -276,7 +276,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The lookup throws an exception.
      */
     @Test
-    void test32003FetchMissingAgentFails() {
+    void test61514FetchMissingAgentFails() {
         assertThatThrownBy(() -> agentClient.agent(uniqueName("MISSING_AGENT")))
                 .isInstanceOf(Exception.class);
     }
@@ -286,7 +286,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The created agent reports ENABLED status.
      */
     @Test
-    void test32004DefaultStatusEnabled() throws Exception {
+    void test61515DefaultStatusEnabled() throws Exception {
         String name = uniqueName("DEFAULT_AGENT");
         Agent agent = agentClient.agent(name, agentAttributes(), null, null);
         agent.create();
@@ -299,7 +299,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The created agent reports DISABLED status.
      */
     @Test
-    void test32005CreateDisabledAgent() throws Exception {
+    void test61516CreateDisabledAgent() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DISABLED_AGENT"), agentAttributes(), "Java agent test", AgentStatus.DISABLED);
         agent.create();
         managedAgents.add(agent);
@@ -311,7 +311,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: Construction throws IllegalArgumentException.
      */
     @Test
-    void test32008MissingAgentNameFailsLocally() {
+    void test61517MissingAgentNameFailsLocally() {
         assertThatThrownBy(() -> agentClient.agent("", agentAttributes(), null, AgentStatus.ENABLED))
                 .isInstanceOf(IllegalArgumentException.class);
     }
@@ -321,7 +321,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: Construction throws IllegalArgumentException.
      */
     @Test
-    void test32009MissingAgentAttributesFailsLocally() {
+    void test61518MissingAgentAttributesFailsLocally() {
         assertThatThrownBy(() -> agentClient.agent(uniqueName("NO_ATTRIBUTES"), null, null,
                 AgentStatus.ENABLED)).isInstanceOf(IllegalArgumentException.class);
     }
@@ -331,7 +331,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: Both status changes succeed, and the handle reports DISABLED then ENABLED.
      */
     @Test
-    void test32010DisableEnable() throws Exception {
+    void test61519DisableEnable() throws Exception {
         Agent agent = agentClient.agent(uniqueName("STATUS_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -346,7 +346,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The call throws SelectAIException with ORA-20050 in its cause, and status remains ENABLED.
      */
     @Test
-    void test32011EnableAlreadyEnabledAgentFails() throws Exception {
+    void test61520EnableAlreadyEnabledAgentFails() throws Exception {
         Agent agent = agentClient.agent(uniqueName("ENABLE_TWICE"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -363,7 +363,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The call throws SelectAIException with ORA-20050 in its cause, and status remains DISABLED.
      */
     @Test
-    void test32012DisableAlreadyDisabledAgentFails() throws Exception {
+    void test61521DisableAlreadyDisabledAgentFails() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DISABLE_TWICE"), agentAttributes(), "Java agent test", AgentStatus.DISABLED);
         agent.create();
         managedAgents.add(agent);
@@ -380,7 +380,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The duplicate creation throws an exception, while the original agent retains its name.
      */
     @Test
-    void test32016DuplicateCreationFails() throws Exception {
+    void test61522DuplicateCreationFails() throws Exception {
         String name = uniqueName("DUPLICATE_AGENT");
         Agent first = agentClient.agent(name, agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         first.create();
@@ -396,7 +396,7 @@ class AgentIT extends AgentIntegrationFixture {
      * name.
      */
     @Test
-    void test32017DeleteAndRecreate() throws Exception {
+    void test61523DeleteAndRecreate() throws Exception {
         String name = uniqueName("RECREATE_AGENT");
         Agent agent = agentClient.agent(name, agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
@@ -414,7 +414,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The status change throws an exception.
      */
     @Test
-    void test32018DisableAfterDeleteFails() throws Exception {
+    void test61524DisableAfterDeleteFails() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DELETE_DISABLE"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -428,7 +428,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The status change throws an exception.
      */
     @Test
-    void test32019EnableAfterDeleteFails() throws Exception {
+    void test61525EnableAfterDeleteFails() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DELETE_ENABLE"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -442,7 +442,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The lookup throws an exception.
      */
     @Test
-    void test32023FetchAfterDeleteFails() throws Exception {
+    void test61526FetchAfterDeleteFails() throws Exception {
         String name = uniqueName("FETCH_DELETE");
         Agent agent = agentClient.agent(name, agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
@@ -457,7 +457,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The collection is nonempty and includes the created agent name.
      */
     @Test
-    void test32024ListNonEmpty() throws Exception {
+    void test61527ListNonEmpty() throws Exception {
         Agent agent = agentClient.agent(uniqueName("NON_EMPTY"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -470,7 +470,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The definition contains the agent name and the DBMS_CLOUD_AI_AGENT.CREATE_AGENT call.
      */
     @Test
-    void test32025GetDefinition() throws Exception {
+    void test61528GetDefinition() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DEFINITION_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -484,7 +484,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: A fresh handle reports the supervisor attribute as true.
      */
     @Test
-    void test32026CreateSupervisorAgent() throws Exception {
+    void test61529CreateSupervisorAgent() throws Exception {
         AgentAttributes attributes = AgentAttributes.builder()
                 .profileName(profileName)
                 .role("Coordinate and supervise the team.")
@@ -503,7 +503,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: Creation throws SelectAIException.
      */
     @Test
-    void test32027MissingProfileNameIsRejectedByDatabase() {
+    void test61530MissingProfileNameIsRejectedByDatabase() {
         Agent agent = agentClient.agent(uniqueName("MISSING_PROFILE"),
                 AgentAttributes.builder().role("Answer database questions.").build(),
                 null, AgentStatus.ENABLED);
@@ -516,7 +516,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: Creation throws SelectAIException.
      */
     @Test
-    void test32028MissingRoleIsRejectedByDatabase() {
+    void test61531MissingRoleIsRejectedByDatabase() {
         Agent agent = agentClient.agent(uniqueName("MISSING_ROLE"),
                 AgentAttributes.builder().profileName(profileName).build(),
                 null, AgentStatus.ENABLED);
@@ -529,7 +529,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The drop succeeds, and the subsequent lookup reports that the agent was not found.
      */
     @Test
-    void test32029DropExistingAgentWithoutForce() throws Exception {
+    void test61532DropExistingAgentWithoutForce() throws Exception {
         String name = uniqueName("DROP_NON_FORCE");
         Agent agent = agentClient.agent(name, agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
@@ -544,12 +544,9 @@ class AgentIT extends AgentIntegrationFixture {
     /**
      * Test: Create an agent and force-drop the same handle twice.
      * Expected: Both drop calls return true.
-     *
-     * Bug <a href="https://bug.oraclecorp.com/ords/bug/bugui/bug-details?mode=edit&bugnumber=40126447">
-     * 40126447</a> - Repeated force drops must be delegated to database force-drop semantics.
      */
     @Test
-    void test32030RepeatedForceDropOnSameHandleSucceeds() throws Exception {
+    void test61533RepeatedForceDropOnSameHandleSucceeds() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DROP_REPEAT_FORCE"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);
@@ -563,7 +560,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The first and repeated force-drop calls both return true.
      */
     @Test
-    void test32031ForceDropAlreadyMissingAgentSucceeds() throws Exception {
+    void test61534ForceDropAlreadyMissingAgentSucceeds() throws Exception {
         String name = uniqueName("DROP_MISSING_FORCE");
         Agent first = agentClient.agent(name, agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         first.create();
@@ -582,7 +579,7 @@ class AgentIT extends AgentIntegrationFixture {
      * missing agent.
      */
     @Test
-    void test32032NonForceDropMissingAgentPreservesDatabaseError() throws Exception {
+    void test61535NonForceDropMissingAgentPreservesDatabaseError() throws Exception {
         String name = uniqueName("DROP_MISSING_NON_FORCE");
         Agent first = agentClient.agent(name, agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         first.create();
@@ -607,7 +604,7 @@ class AgentIT extends AgentIntegrationFixture {
      * empty.
      */
     @Test
-    void test32043DropAgentLoadedFromList() throws Exception {
+    void test61536DropAgentLoadedFromList() throws Exception {
         Agent source = agentClient.agent(uniqueName("DROP_LISTED_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         source.create();
         managedAgents.add(source);
@@ -627,7 +624,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: Both reads throw SelectAIException stating that the agent was not found.
      */
     @Test
-    void test32044StaleAgentStatusAndAttributesFailAfterExternalDrop() throws Exception {
+    void test61537StaleAgentStatusAndAttributesFailAfterExternalDrop() throws Exception {
         Agent source = agentClient.agent(uniqueName("STALE_DROP_AGENT"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         source.create();
         managedAgents.add(source);
@@ -651,7 +648,7 @@ class AgentIT extends AgentIntegrationFixture {
      * Expected: The force drop returns true, while the non-force drop throws IllegalStateException.
      */
     @Test
-    void test32045NeverCreatedAgentForceDropDelegatesToDatabase() throws Exception {
+    void test61538NeverCreatedAgentForceDropDelegatesToDatabase() throws Exception {
         String forceName = uniqueName("UNCREATED_FORCE_DROP");
         Agent forceHandle = agentClient.agent(forceName, agentAttributes(), null, AgentStatus.ENABLED);
         assertThat(forceHandle.drop(true)).isTrue();
@@ -668,7 +665,7 @@ class AgentIT extends AgentIntegrationFixture {
      * returns no agents.
      */
     @Test
-    void test32046RepeatedNonForceDropOnSameAgentHandleIsRejectedLocally() throws Exception {
+    void test61539RepeatedNonForceDropOnSameAgentHandleIsRejectedLocally() throws Exception {
         Agent agent = agentClient.agent(uniqueName("DROP_REPEAT_NON_FORCE"), agentAttributes(), "Java agent test", AgentStatus.ENABLED);
         agent.create();
         managedAgents.add(agent);

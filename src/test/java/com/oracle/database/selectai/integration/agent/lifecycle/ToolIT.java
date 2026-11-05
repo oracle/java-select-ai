@@ -19,9 +19,6 @@ import com.oracle.database.selectai.model.agent.ToolStatus;
 import com.oracle.database.selectai.model.agent.ToolType;
 import org.junit.jupiter.api.Test;
 
-import java.sql.CallableStatement;
-import java.sql.SQLException;
-import java.sql.Types;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -38,7 +35,7 @@ class ToolIT extends AgentIntegrationFixture {
      * the supplied description, SQL attributes, and a function-argument array.
      */
     @Test
-    void test30000SqlToolCreated() throws Exception {
+    void test61000SqlToolCreated() throws Exception {
         Tool tool = agentClient.tool(uniqueName("SQL_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -59,7 +56,7 @@ class ToolIT extends AgentIntegrationFixture {
      * description includes an id, supplied text, and a function-argument array.
      */
     @Test
-    void test30001RagToolCreated() throws Exception {
+    void test61001RagToolCreated() throws Exception {
         String ragProfile = uniqueName("RAG_PROFILE");
         createManagedProfile(ragProfile, isolatedProfileAttributes(), "Python-compatible RAG profile");
         Tool tool = agentClient.tool(uniqueName("RAG_TOOL"), ToolAttributes.builder()
@@ -82,7 +79,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: Reading the created tool's attributes returns the same function name.
      */
     @Test
-    void test30002PlsqlToolCreated() throws Exception {
+    void test61002PlsqlToolCreated() throws Exception {
         String function = createPythonPlsqlFunction();
         Tool tool = agentClient.tool(uniqueName("PLSQL_TOOL"), ToolAttributes.builder()
                 .instruction("Return the requested value.").function(function).build(),
@@ -97,7 +94,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The returned tool names include the newly created tool.
      */
     @Test
-    void test30003ListTools() throws Exception {
+    void test61003ListTools() throws Exception {
         Tool tool = agentClient.tool(uniqueName("LIST_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -109,7 +106,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The result contains exactly that tool name.
      */
     @Test
-    void test30004ListToolsByRegex() throws Exception {
+    void test61004ListToolsByRegex() throws Exception {
         Tool tool = agentClient.tool(uniqueName("REGEX_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -122,7 +119,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The loaded handle has the same name and tool type as the created handle.
      */
     @Test
-    void test30005FetchTool() throws Exception {
+    void test61005FetchTool() throws Exception {
         Tool created = agentClient.tool(uniqueName("FETCH_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         created.create();
         managedTools.add(created);
@@ -138,7 +135,7 @@ class ToolIT extends AgentIntegrationFixture {
      * then ENABLED.
      */
     @Test
-    void test30006EnableDisableTool() throws Exception {
+    void test61006EnableDisableTool() throws Exception {
         Tool tool = agentClient.tool(uniqueName("STATUS_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -156,7 +153,7 @@ class ToolIT extends AgentIntegrationFixture {
      * description, status, and instruction.
      */
     @Test
-    void test30007AllToolAttributesRoundTrip() throws Exception {
+    void test61007AllToolAttributesRoundTrip() throws Exception {
         String function = createPythonPlsqlFunction();
         ToolAttributes customAttributes = ToolAttributes.builder()
                 .instruction("Return the age for a birth-date input")
@@ -212,7 +209,7 @@ class ToolIT extends AgentIntegrationFixture {
      * remains ENABLED.
      */
     @Test
-    void test30026EnableAlreadyEnabledToolFails() throws Exception {
+    void test61008EnableAlreadyEnabledToolFails() throws Exception {
         Tool tool = agentClient.tool(uniqueName("ENABLE_TWICE_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -230,7 +227,7 @@ class ToolIT extends AgentIntegrationFixture {
      * remains DISABLED.
      */
     @Test
-    void test30027DisableAlreadyDisabledToolFails() throws Exception {
+    void test61009DisableAlreadyDisabledToolFails() throws Exception {
         Tool tool = agentClient.tool(uniqueName("DISABLE_TWICE_TOOL"), sqlToolAttributes(), null,
                 ToolStatus.DISABLED);
         tool.create();
@@ -248,7 +245,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: Drop returns true and the subsequent disable call throws an exception.
      */
     @Test
-    void test30028DisableAfterDeleteFails() throws Exception {
+    void test61010DisableAfterDeleteFails() throws Exception {
         Tool tool = agentClient.tool(uniqueName("DELETED_DISABLE_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -262,7 +259,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: Drop returns true and the subsequent enable call throws an exception.
      */
     @Test
-    void test30029EnableAfterDeleteFails() throws Exception {
+    void test61011EnableAfterDeleteFails() throws Exception {
         Tool tool = agentClient.tool(uniqueName("DELETED_ENABLE_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -278,7 +275,7 @@ class ToolIT extends AgentIntegrationFixture {
      * "birth-date", and its input metadata is returned as a list.
      */
     @Test
-    void test30010CustomToolAttributesRoundTrip() throws Exception {
+    void test61012CustomToolAttributesRoundTrip() throws Exception {
         String function = createPythonPlsqlFunction();
         ToolAttributes attributes = ToolAttributes.builder().function(function)
                 .instruction("Return the age for a birth-date input")
@@ -299,7 +296,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: Its loaded attributes have a null tool type.
      */
     @Test
-    void test30011CustomToolWithoutType() throws Exception {
+    void test61013CustomToolWithoutType() throws Exception {
         String function = createPythonPlsqlFunction();
         Tool tool = agentClient.tool(uniqueName("CUSTOM_NO_TYPE"), ToolAttributes.builder()
                 .instruction("Return the requested value.").function(function).build(),
@@ -315,7 +312,7 @@ class ToolIT extends AgentIntegrationFixture {
      * defaults.
      */
     @Test
-    void test30012SqlToolWithoutInstruction() throws Exception {
+    void test61014SqlToolWithoutInstruction() throws Exception {
         Tool tool = agentClient.tool(uniqueName("SQL_DEFAULT_INSTRUCTION"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -327,7 +324,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The loaded attributes' instruction contains the supplied relational-data text.
      */
     @Test
-    void test30013SqlToolWithInstruction() throws Exception {
+    void test61015SqlToolWithInstruction() throws Exception {
         Tool tool = agentClient.tool(uniqueName("SQL_INSTRUCTION"), ToolAttributes.builder()
                 .toolType(ToolType.SQL)
                 .toolParams(SqlToolParams.builder().profileName(profileName).build())
@@ -343,7 +340,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: Creation succeeds and the tool remains retrievable by its assigned name.
      */
     @Test
-    void test30014InvalidProfileToolIsPersisted() throws Exception {
+    void test61016InvalidProfileToolIsPersisted() throws Exception {
         Tool tool = agentClient.tool(uniqueName("INVALID_PROFILE"), ToolAttributes.builder()
                 .toolType(ToolType.SQL)
                 .toolParams(SqlToolParams.builder()
@@ -361,7 +358,7 @@ class ToolIT extends AgentIntegrationFixture {
      * its SQL cause.
      */
     @Test
-    void test30035MissingToolDefinitionRejectedByDatabase() {
+    void test61017MissingToolDefinitionRejectedByDatabase() {
         Tool tool = agentClient.tool(uniqueName("MISSING_TOOL_DEFINITION"),
                 ToolAttributes.builder().build(), null, ToolStatus.ENABLED);
         assertThatThrownBy(tool::create)
@@ -378,7 +375,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The lookup throws an exception.
      */
     @Test
-    void test30017FetchMissingToolFails() {
+    void test61018FetchMissingToolFails() {
         assertThatThrownBy(() -> agentClient.tool(uniqueName("MISSING_TOOL")))
                 .isInstanceOf(Exception.class);
     }
@@ -388,7 +385,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The list call throws SelectAIException whose SQL cause contains ORA-12726.
      */
     @Test
-    void test30018InvalidToolRegexFails() throws Exception {
+    void test61019InvalidToolRegexFails() throws Exception {
         Tool tool = agentClient.tool(uniqueName("INVALID_REGEX_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -406,7 +403,7 @@ class ToolIT extends AgentIntegrationFixture {
      * type, and profile parameter.
      */
     @Test
-    void test30019ListToolsHydratesMetadataAndAttributes() throws Exception {
+    void test61020ListToolsHydratesMetadataAndAttributes() throws Exception {
         String name = uniqueName("LIST_METADATA");
         Tool tool = agentClient.tool(name, sqlToolAttributes(), "Tool list metadata", ToolStatus.DISABLED);
         tool.create();
@@ -428,7 +425,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The result contains exactly the five names with the shared prefix.
      */
     @Test
-    void test30039ListToolsMultipleMatchesUsingPattern() throws Exception {
+    void test61021ListToolsMultipleMatchesUsingPattern() throws Exception {
         List<String> names = createToolListFixture();
         String prefix = listPrefix(names.get(0));
 
@@ -441,7 +438,7 @@ class ToolIT extends AgentIntegrationFixture {
      * mixed-case prefix.
      */
     @Test
-    void test30040ListToolsCaseInsensitivePattern() throws Exception {
+    void test61022ListToolsCaseInsensitivePattern() throws Exception {
         List<String> names = createToolListFixture();
         String prefix = listPrefix(names.get(0));
 
@@ -455,7 +452,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The result contains all six fixture names and no other names.
      */
     @Test
-    void test30041ListToolsAlternationPattern() throws Exception {
+    void test61023ListToolsAlternationPattern() throws Exception {
         List<String> names = createToolListFixture();
         String firstPrefix = listPrefix(names.get(0));
         String secondPrefix = listPrefix(names.get(5));
@@ -469,7 +466,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The list call returns an empty collection.
      */
     @Test
-    void test30042ListToolsNonMatchingPatternReturnsEmptyList() throws Exception {
+    void test61024ListToolsNonMatchingPatternReturnsEmptyList() throws Exception {
         String pattern = "^" + uniqueName("NO_MATCH") + "$";
 
         assertThat(agentClient.listTools(pattern)).isEmpty();
@@ -480,7 +477,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The list call returns an empty collection.
      */
     @Test
-    void test30043ListToolsLiteralNonMatchingPatternReturnsEmptyList() throws Exception {
+    void test61025ListToolsLiteralNonMatchingPatternReturnsEmptyList() throws Exception {
         assertThat(agentClient.listTools(uniqueName("NO_MATCH_LITERAL"))).isEmpty();
     }
 
@@ -490,7 +487,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: Only the tool whose name ends with that exact name is returned.
      */
     @Test
-    void test30044ListToolsEndAnchorPattern() throws Exception {
+    void test61026ListToolsEndAnchorPattern() throws Exception {
         List<String> names = createToolListFixture();
         String exact = names.get(0);
         String pattern = exact + "$";
@@ -504,7 +501,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The list call throws SelectAIException whose SQL cause contains ORA-12733.
      */
     @Test
-    void test30045ListToolsOverlongPatternIsRejectedByDatabase() throws Exception {
+    void test61027ListToolsOverlongPatternIsRejectedByDatabase() throws Exception {
         Tool tool = agentClient.tool(uniqueName("OVERLONG_REGEX_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -522,7 +519,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The returned names are ordered lexically as A, B, C.
      */
     @Test
-    void test30046ListToolsAreOrderedByName() throws Exception {
+    void test61028ListToolsAreOrderedByName() throws Exception {
         String prefix = uniqueName("LIST_ORDER");
         String first = prefix + "_A";
         String second = prefix + "_B";
@@ -546,7 +543,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The loaded tool reports ENABLED as its default status.
      */
     @Test
-    void test30020DefaultStatusIsEnabled() throws Exception {
+    void test61029DefaultStatusIsEnabled() throws Exception {
         String name = uniqueName("DEFAULT_ENABLED");
         Tool tool = agentClient.tool(name, sqlToolAttributes(), null, null);
         tool.create();
@@ -559,7 +556,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The loaded tool reports DISABLED.
      */
     @Test
-    void test30021CreateDisabledTool() throws Exception {
+    void test61030CreateDisabledTool() throws Exception {
         String name = uniqueName("DEFAULT_DISABLED");
         Tool tool = agentClient.tool(name, sqlToolAttributes(), null, ToolStatus.DISABLED);
         tool.create();
@@ -573,7 +570,7 @@ class ToolIT extends AgentIntegrationFixture {
      * tool_type and tool_params are absent or null.
      */
     @Test
-    void test30024DescribeTool() throws Exception {
+    void test61031DescribeTool() throws Exception {
         String function = createPythonPlsqlFunction();
         String instruction = "Return the age for a birth-date input";
         ToolAttributes attributes = ToolAttributes.builder()
@@ -605,7 +602,7 @@ class ToolIT extends AgentIntegrationFixture {
      * built-in SQL function.
      */
     @Test
-    void test30038DescribeBuiltInToolAttributes() throws Exception {
+    void test61032DescribeBuiltInToolAttributes() throws Exception {
         String instruction = "Use relational data to answer the question";
         ToolAttributes attributes = ToolAttributes.builder()
                 .instruction(instruction)
@@ -639,7 +636,7 @@ class ToolIT extends AgentIntegrationFixture {
      * deleted tool.
      */
     @Test
-    void test30036DescribeAfterExternalDeletePreservesDatabaseError() throws Exception {
+    void test61033DescribeAfterExternalDeletePreservesDatabaseError() throws Exception {
         String name = uniqueName("DESCRIBE_DELETED_TOOL");
         Tool first = agentClient.tool(name, sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         first.create();
@@ -659,24 +656,16 @@ class ToolIT extends AgentIntegrationFixture {
     }
 
     /**
-     * Test: Call the database DESCRIBE_TOOL procedure directly for a name with no existing tool.
-     * Expected: The call throws SQLException whose message contains an ORA error and the requested
-     * name.
+     * Test: Attempt to describe a tool that does not exist through the Java SDK.
+     * Expected: The SDK rejects the missing tool with a message naming it.
      */
     @Test
-    void test30037DescribeMissingToolRejectedByDatabase() {
+    void test61034DescribeMissingToolRejectedBySdk() {
         String name = uniqueName("MISSING_DESCRIBE_TOOL");
 
-        assertThatThrownBy(() -> {
-            try (CallableStatement statement = jdbcConnection().prepareCall(
-                    "BEGIN ? := C##CLOUD$SERVICE.DBMS_CLOUD_AI_AGENT.DESCRIBE_TOOL(?); END;")) {
-                statement.registerOutParameter(1, Types.CLOB);
-                statement.setString(2, name);
-                statement.execute();
-            }
-        }).isInstanceOfSatisfying(SQLException.class,
-                exception -> assertThat((Throwable) exception).hasMessageContaining("ORA-")
-                        .hasMessageContaining(name));
+        assertThatThrownBy(() -> agentClient.tool(name).describe())
+                .isInstanceOf(SelectAIException.class)
+                .hasMessage("Select AI tool not found: " + name);
     }
 
     /**
@@ -684,7 +673,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The tool call returns a nonblank result.
      */
     @Test
-    void test30025RunTool() throws Exception {
+    void test61035RunTool() throws Exception {
         String function = createPythonPlsqlFunction();
         Tool tool = agentClient.tool(uniqueName("RUN_TOOL"), ToolAttributes.builder()
                 .instruction("Return the age for the supplied birth date.").function(function).build(),
@@ -701,7 +690,7 @@ class ToolIT extends AgentIntegrationFixture {
      * tool can be loaded again.
      */
     @Test
-    void test30030DeleteAndRecreateTool() throws Exception {
+    void test61036DeleteAndRecreateTool() throws Exception {
         String name = uniqueName("RECREATE_TOOL");
         Tool tool = agentClient.tool(name, sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
@@ -720,7 +709,7 @@ class ToolIT extends AgentIntegrationFixture {
      * tool-not-found message.
      */
     @Test
-    void test30031DropExistingToolWithoutForce() throws Exception {
+    void test61037DropExistingToolWithoutForce() throws Exception {
         String name = uniqueName("DROP_NON_FORCE_TOOL");
         Tool tool = agentClient.tool(name, sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
@@ -733,14 +722,11 @@ class ToolIT extends AgentIntegrationFixture {
     }
 
     /**
-     * Bug <a href="https://bug.oraclecorp.com/ords/bug/bugui/bug-details?mode=edit&bugnumber=40126447">
-     * 40126447</a> - DBMS_CLOUD_AI_AGENT Java force-drop APIs must delegate repeated drops to the
-     * database.
      * Test: Force-drop a created tool twice through the same handle.
      * Expected: Both drop calls return true.
      */
     @Test
-    void test30032RepeatedForceDropOnSameToolHandleSucceeds() throws Exception {
+    void test61038RepeatedForceDropOnSameToolHandleSucceeds() throws Exception {
         Tool tool = agentClient.tool(uniqueName("DROP_REPEAT_FORCE_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -756,7 +742,7 @@ class ToolIT extends AgentIntegrationFixture {
      * resource is already absent.
      */
     @Test
-    void test30033ForceDropAlreadyMissingToolSucceeds() throws Exception {
+    void test61039ForceDropAlreadyMissingToolSucceeds() throws Exception {
         String name = uniqueName("DROP_MISSING_FORCE_TOOL");
         Tool first = agentClient.tool(name, sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         first.create();
@@ -775,7 +761,7 @@ class ToolIT extends AgentIntegrationFixture {
      * naming the absent resource.
      */
     @Test
-    void test30034NonForceDropMissingToolPreservesDatabaseError() throws Exception {
+    void test61040NonForceDropMissingToolPreservesDatabaseError() throws Exception {
         String name = uniqueName("DROP_MISSING_NON_FORCE_TOOL");
         Tool first = agentClient.tool(name, sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         first.create();
@@ -799,7 +785,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The drop succeeds and a subsequent name-filtered list is empty.
      */
     @Test
-    void test30047DropToolLoadedFromList() throws Exception {
+    void test61041DropToolLoadedFromList() throws Exception {
         Tool source = agentClient.tool(uniqueName("DROP_LISTED_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         source.create();
         managedTools.add(source);
@@ -819,7 +805,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: Both reads throw SelectAIException with the tool-not-found message.
      */
     @Test
-    void test30048StaleToolStatusAndAttributesFailAfterExternalDrop() throws Exception {
+    void test61042StaleToolStatusAndAttributesFailAfterExternalDrop() throws Exception {
         Tool source = agentClient.tool(uniqueName("STALE_DROP_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         source.create();
         managedTools.add(source);
@@ -843,7 +829,7 @@ class ToolIT extends AgentIntegrationFixture {
      * Expected: The force drop returns true, while the non-force drop throws IllegalStateException.
      */
     @Test
-    void test30049NeverCreatedToolForceDropDelegatesToDatabase() throws Exception {
+    void test61043NeverCreatedToolForceDropDelegatesToDatabase() throws Exception {
         String forceName = uniqueName("UNCREATED_FORCE_DROP");
         Tool forceHandle = agentClient.tool(forceName, sqlToolAttributes(), null, ToolStatus.ENABLED);
         assertThat(forceHandle.drop(true)).isTrue();
@@ -860,7 +846,7 @@ class ToolIT extends AgentIntegrationFixture {
      * name is absent from listing.
      */
     @Test
-    void test30050RepeatedNonForceDropOnSameToolHandleIsRejectedLocally() throws Exception {
+    void test61044RepeatedNonForceDropOnSameToolHandleIsRejectedLocally() throws Exception {
         Tool tool = agentClient.tool(uniqueName("DROP_REPEAT_NON_FORCE"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);

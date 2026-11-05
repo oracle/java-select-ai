@@ -45,7 +45,7 @@ class ToolTypesIT extends AgentIntegrationFixture {
      * at least one input definition.
      */
     @Test
-    void test30007WebSearchToolCreated() throws Exception {
+    void test61200WebSearchToolCreated() throws Exception {
         String credential = envOrDefault("SELECT_AI_IT_AGENT_WEBSEARCH_CREDENTIAL", "OPENAI_CRED");
         String apiKey = requiredFeatureValue("SELECT_AI_IT_AGENT_OPENAI_API_KEY",
                 "Web-search coverage requires the Python OpenAI credential value");
@@ -67,7 +67,7 @@ class ToolTypesIT extends AgentIntegrationFixture {
      * parameters, with a function and input definitions.
      */
     @Test
-    void test30008EmailNotificationToolCreated() throws Exception {
+    void test61201EmailNotificationToolCreated() throws Exception {
         String credential = envOrDefault(
                 "SELECT_AI_IT_AGENT_EMAIL_CREDENTIAL_NAME", "EMAIL_CRED");
         String username = requiredFeatureValue("SELECT_AI_IT_AGENT_EMAIL_CRED_USERNAME",
@@ -102,7 +102,7 @@ class ToolTypesIT extends AgentIntegrationFixture {
      * Expected: The run returns a non-null ToolRunResult with a nonblank raw response.
      */
     @Test
-    void test30010EmailNotificationToolRuns() throws Exception {
+    void test61202EmailNotificationToolRuns() throws Exception {
         String credential = envOrDefault(
                 "SELECT_AI_IT_AGENT_EMAIL_CREDENTIAL_NAME", "EMAIL_CRED");
         String username = requiredFeatureValue("SELECT_AI_IT_AGENT_EMAIL_CRED_USERNAME",
@@ -146,7 +146,7 @@ class ToolTypesIT extends AgentIntegrationFixture {
      * and channel, with a function and input definitions.
      */
     @Test
-    void test30009SlackNotificationToolCreated() throws Exception {
+    void test61203SlackNotificationToolCreated() throws Exception {
         String credential = envOrDefault("SELECT_AI_IT_AGENT_SLACK_CREDENTIAL", "SLACK_CRED");
         String username = requiredFeatureValue("SELECT_AI_IT_AGENT_SLACK_USERNAME",
                 "Slack username is required by the Python notification fixture");

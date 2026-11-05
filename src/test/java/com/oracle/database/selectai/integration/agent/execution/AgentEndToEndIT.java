@@ -42,7 +42,7 @@ class AgentEndToEndIT extends AgentIntegrationFixture {
      * definition contains that name.
      */
     @Test
-    void test38000AgentEndToEnd() throws Exception {
+    void test62100AgentEndToEnd() throws Exception {
         Tool tool = agentClient.tool(uniqueName("E2E_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -70,7 +70,7 @@ class AgentEndToEndIT extends AgentIntegrationFixture {
      * Expected: The team run returns nonblank raw text.
      */
     @Test
-    void test39000SqlTeamRuns() throws Exception {
+    void test62101SqlTeamRuns() throws Exception {
         Tool tool = agentClient.tool(uniqueName("SQL_E2E_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -98,7 +98,7 @@ class AgentEndToEndIT extends AgentIntegrationFixture {
      * Expected: The team run returns nonblank raw text.
      */
     @Test
-    void test39001SqlTeamRunsWithRuntimeVariables() throws Exception {
+    void test62102SqlTeamRunsWithRuntimeVariables() throws Exception {
         Tool tool = agentClient.tool(uniqueName("RUNTIME_VARIABLE_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -136,7 +136,7 @@ class AgentEndToEndIT extends AgentIntegrationFixture {
      * contains 4.
      */
     @Test
-    void test39003SupervisorTeamWithOneWorkerRuns() throws Exception {
+    void test62103SupervisorTeamWithOneWorkerRuns() throws Exception {
         Agent worker = agentClient.agent(uniqueName("SUPERVISOR_WORKER"), AgentAttributes.builder()
                         .profileName(profileName)
                         .role("Answer simple questions.")

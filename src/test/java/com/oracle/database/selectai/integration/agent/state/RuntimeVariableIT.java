@@ -51,7 +51,7 @@ class RuntimeVariableIT extends IntegrationTestFixture {
      * Expected: The write returns true and the read returns "account-42".
      */
     @Test
-    void test39100SetAndGetStateVariableWithDefaultScope() throws Exception {
+    void test62300SetAndGetStateVariableWithDefaultScope() throws Exception {
         String name = uniqueName("STATE_VARIABLE");
 
         assertThat(agentClient.setVariable("state_variables", name, "account-42")).isTrue();
@@ -65,7 +65,7 @@ class RuntimeVariableIT extends IntegrationTestFixture {
      * Expected: Reading each namespace returns only the value stored in that namespace.
      */
     @Test
-    void test39101NamespacesAreIndependent() throws Exception {
+    void test62301NamespacesAreIndependent() throws Exception {
         String name = uniqueName("NAMESPACE_VARIABLE");
 
         assertThat(agentClient.setVariable("state_variables", name, "state-value")).isTrue();
@@ -86,7 +86,7 @@ class RuntimeVariableIT extends IntegrationTestFixture {
      * Expected: Both writes return true, and a subsequent read returns "second-value".
      */
     @Test
-    void test39102SetVariableOverwritesExistingValue() throws Exception {
+    void test62302SetVariableOverwritesExistingValue() throws Exception {
         String name = uniqueName("OVERWRITE_VARIABLE");
 
         assertThat(agentClient.setVariable("state_variables", name, "first-value")).isTrue();
@@ -100,7 +100,7 @@ class RuntimeVariableIT extends IntegrationTestFixture {
      * Expected: Both writes return true, and reading the variable returns null.
      */
     @Test
-    void test39103NullValueClearsVariable() throws Exception {
+    void test62303NullValueClearsVariable() throws Exception {
         String name = uniqueName("CLEAR_VARIABLE");
 
         assertThat(agentClient.setVariable("state_variables", name, "value-to-clear")).isTrue();
@@ -114,7 +114,7 @@ class RuntimeVariableIT extends IntegrationTestFixture {
      * Expected: getVariable returns null.
      */
     @Test
-    void test39104MissingVariableReturnsNull() throws Exception {
+    void test62304MissingVariableReturnsNull() throws Exception {
         assertThat(agentClient.getVariable("state_variables", uniqueName("MISSING_VARIABLE")))
                 .isNull();
     }
@@ -125,7 +125,7 @@ class RuntimeVariableIT extends IntegrationTestFixture {
      * Expected: Both reads return the value written through the other scope form.
      */
     @Test
-    void test39105ExplicitEphemeralScopeMatchesDefaultScope() throws Exception {
+    void test62305ExplicitEphemeralScopeMatchesDefaultScope() throws Exception {
         String defaultScopeName = uniqueName("DEFAULT_SCOPE_VARIABLE");
         String explicitScopeName = uniqueName("EXPLICIT_SCOPE_VARIABLE");
 
@@ -145,7 +145,7 @@ class RuntimeVariableIT extends IntegrationTestFixture {
      * Expected: setVariable accepts the large value and returns true.
      */
     @Test
-    void test39106SetVariableAcceptsLargeUnicodeValue() throws Exception {
+    void test62306SetVariableAcceptsLargeUnicodeValue() throws Exception {
         String name = uniqueName("LARGE_VARIABLE");
         String expectedValue = "large-value-start\n" + "café 東京 🚀\n".repeat(4_000)
                 + "large-value-end";
@@ -159,7 +159,7 @@ class RuntimeVariableIT extends IntegrationTestFixture {
      * Expected: The second session reads null, while the original session still reads its value.
      */
     @Test
-    void test39107RuntimeVariablesAreSessionIsolated() throws Exception {
+    void test62307RuntimeVariablesAreSessionIsolated() throws Exception {
         String name = uniqueName("SESSION_VARIABLE");
         assertThat(agentClient.setVariable("state_variables", name, "first-session-value")).isTrue();
 
@@ -175,7 +175,7 @@ class RuntimeVariableIT extends IntegrationTestFixture {
      * Expected: The call throws SelectAIException with an SQLException cause from the database.
      */
     @Test
-    void test39108UnsupportedScopeIsRejectedByDatabase() {
+    void test62308UnsupportedScopeIsRejectedByDatabase() {
         assertDatabaseRejection(() -> agentClient.setVariable("state_variables",
                 uniqueName("UNSUPPORTED_SCOPE"), "value", "persistent"));
     }
@@ -187,7 +187,7 @@ class RuntimeVariableIT extends IntegrationTestFixture {
      * the blank name throws IllegalArgumentException.
      */
     @Test
-    void test39109InvalidNamespaceIsDelegatedToDatabaseAndBlankNameIsRejectedBySdk() {
+    void test62309InvalidNamespaceIsDelegatedToDatabaseAndBlankNameIsRejectedBySdk() {
         assertDatabaseRejection(() -> agentClient.setVariable("unsupported_namespace",
                 uniqueName("INVALID_NAMESPACE"), "value"));
 

@@ -94,8 +94,8 @@ Table-backed suites and database-administration scenarios require a separate
 admin-capable database account. Their feature fixture creates and refreshes the
 common tables in the `ADMIN` schema through this account, and admin suites use
 it for database-wide operations. Connection-only, credential, provider,
-vector-index, summarize, and privilege tests do not require these admin
-variables unless a selected test documents an admin operation.
+vector-index, and summarize tests do not require these admin variables.
+Privilege tests always require them.
 
 ```bash
 export SELECT_AI_IT_ADMIN_DB_USER=<admin-capable database user>
@@ -311,6 +311,7 @@ tests, as well as OCI provider and vector-index tests.
 | `SELECT_AI_IT_PROVIDER` | Optional; defaults to `oci` | Provider used by the shared profile fixture. |
 | `SELECT_AI_IT_REGION` | Optional | OCI region override. The OCI provider tests default to `us-chicago-1` when this is absent. |
 | `SELECT_AI_IT_OCI_MODEL` | Optional for the shared profile; required by OCI provider tests | OCI GenAI model name. |
+| `SELECT_AI_IT_OCI_EMBEDDING_MODEL` | Optional | OCI embedding model configured on the shared profile and used by embedding generation tests when specified. |
 | `SELECT_AI_IT_OCI_APIFORMAT` | Optional; OCI provider tests default to `GENERIC` | OCI API format. |
 | `SELECT_AI_IT_OCI_ENDPOINT_ID` | Only for the OCI endpoint profile test | OCI inference endpoint OCID. |
 | `SELECT_AI_IT_OCI_RUNTIMETYPE` | Only for the OCI endpoint profile test | Endpoint runtime type; defaults to `COHERE`. |
@@ -322,14 +323,48 @@ Example OCI private-key export:
 export SELECT_AI_IT_OCI_PRIVATE_KEY="<private key content>"
 ```
 
-### Agent team export
+### Agent tests
+
+Agent tests create uniquely named tools, tasks, agents, teams, conversations,
+functions, and tables, then remove the resources they own during cleanup. All
+agent suites except `RuntimeVariableIT` use the default profile fixture, so they
+require the shared database and OCI settings above.
+
+| Test classes | Coverage | Additional requirements |
+| --- | --- | --- |
+| `ToolIT`, `TaskIT`, `AgentIT`, `TeamIT` | Create, load, list, configure, enable, disable, describe, run, and remove individual resources. | None beyond the default agent setup. |
+| `ToolConfigurationIT`, `TaskConfigurationIT`, `AgentConfigurationIT`, `TeamConfigurationIT` | Update resource attributes and verify that a newly loaded handle retains the changes. | None beyond the default agent setup. |
+| `ToolTypesIT` | Create web-search and notification tools; run the email notification tool. | The optional credentials below. Tests whose required values are absent are skipped. |
+| `AgentLifecycleIT`, `AgentClientIT` | Cross-resource lifecycle rules, resource definitions, collection APIs, and handle refresh behavior. | None beyond the default agent setup. |
+| `AgentEndToEndIT`, `ClientTeamStateIT` | Build and run tool-backed teams, pass runtime variables, and read or update team execution state. | None beyond the default agent setup. |
+| `RuntimeVariableIT` | Set, get, clear, scope, and isolate runtime variables. | Only the ordinary database connection; this suite does not create a profile. |
+| `TeamAccessIT` | Grant and revoke team access for a temporary consumer user and role. | Admin connection settings; the admin user must be able to create the temporary user and grant its required database and network access. |
+| `TeamExportIT`, `TeamImportIT`, `TeamRoundTripIT` | Export, import, conflict handling, and executable team round trips. | The destination settings below; the full directory coverage also uses the admin connection. |
+
+Run an individual agent suite by class name, for example:
+
+```bash
+mvn -Dtest=TeamIT test
+```
+
+#### Optional built-in tool settings
+
+`ToolTypesIT` skips only the scenario whose required values are absent.
+
+| Scenario | Required variables | Optional credential-name variable |
+| --- | --- | --- |
+| Web search | `SELECT_AI_IT_AGENT_OPENAI_API_KEY` | `SELECT_AI_IT_AGENT_WEBSEARCH_CREDENTIAL` (default `OPENAI_CRED`) |
+| Email notification | `SELECT_AI_IT_AGENT_EMAIL_CRED_USERNAME`, `SELECT_AI_IT_AGENT_EMAIL_CRED_PASSWORD`, `SELECT_AI_IT_AGENT_EMAIL_RECIPIENT`, `SELECT_AI_IT_AGENT_EMAIL_SENDER`, `SELECT_AI_IT_AGENT_EMAIL_SMTPHOST` | `SELECT_AI_IT_AGENT_EMAIL_CREDENTIAL_NAME` (default `EMAIL_CRED`) |
+| Slack notification | `SELECT_AI_IT_AGENT_SLACK_USERNAME`, `SELECT_AI_IT_AGENT_SLACK_PASSWORD` | `SELECT_AI_IT_AGENT_SLACK_CREDENTIAL` (default `SLACK_CRED`) |
+
+#### Team export and import
 
 `TeamExportIT` covers CLOB exports and exports to both Object Storage and
 database directory files. Configure the file destinations independently:
 
 ```bash
 export SELECT_AI_IT_AGENT_TEAM_EXPORT_LOCATION="https://objectstorage.<region>.oraclecloud.com/n/<namespace>/b/<bucket>/o/selectai-agent-exports/"
-export SELECT_AI_IT_AGENT_TEAM_EXPORT_DIRECTORY_BASE_PATH="$T_WORK/selectai-agent-exports"
+export SELECT_AI_IT_AGENT_TEAM_EXPORT_DIRECTORY_BASE_PATH="/path/accessible/to/database-server/selectai-agent-exports"
 ```
 
 The Object Storage value is a writable URI prefix, not a complete filename.
@@ -343,10 +378,9 @@ read, and delete objects under the prefix. No pre-existing `OCI_CRED` or
 Directory tests create a unique physical subfolder under the configured base
 and a unique database directory object pointing to it, then grant the feature
 user `READ, WRITE` through the existing admin connection settings. The base
-path must be accessible to the database server, as with the farm harness's
-`T_WORK` directory. Only the unique test subfolder receives shared filesystem
-permissions; existing parent permissions are not changed. No preconfigured
-database directory object is required.
+path must be accessible to the database server. Only the unique test subfolder
+receives shared filesystem permissions; existing parent permissions are not
+changed. No preconfigured database directory object is required.
 
 Cleanup removes test export objects/files and directory objects/folders before
 the shared fixture drops credentials. Missing destination settings skip only
@@ -486,6 +520,24 @@ owning file.
 | `FeedbackIT.java` | `19000–19099` |
 | `ConcurrencyIT.java` | `60000–60099` |
 | `ProviderIT.java` | `30000–30099` |
+| `ToolIT.java` | `61000–61099` |
+| `ToolConfigurationIT.java` | `61100–61199` |
+| `ToolTypesIT.java` | `61200–61299` |
+| `TaskIT.java` | `61300–61399` |
+| `TaskConfigurationIT.java` | `61400–61499` |
+| `AgentIT.java` | `61500–61599` |
+| `AgentConfigurationIT.java` | `61600–61699` |
+| `TeamIT.java` | `61700–61799` |
+| `TeamConfigurationIT.java` | `61800–61899` |
+| `AgentLifecycleIT.java` | `61900–61999` |
+| `AgentClientIT.java` | `62000–62099` |
+| `AgentEndToEndIT.java` | `62100–62199` |
+| `ClientTeamStateIT.java` | `62200–62299` |
+| `RuntimeVariableIT.java` | `62300–62399` |
+| `TeamAccessIT.java` | `62400–62499` |
+| `TeamExportIT.java` | `62500–62599` |
+| `TeamImportIT.java` | `62600–62699` |
+| `TeamRoundTripIT.java` | `62700–62799` |
 | `CreateVectorIndexIT.java` | `50000–50099` |
 | `DropVectorIndexIT.java` | `51000–51099` |
 | `UpdateVectorIndexIT.java` | `52000–52099` |

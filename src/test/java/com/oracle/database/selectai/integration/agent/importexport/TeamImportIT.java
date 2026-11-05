@@ -58,7 +58,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @MethodSource("unforcedAgentOrToolConflicts")
-    void test33100UnforcedImportRejectsConflictingAgentOrTool(AgentObjectType type, Boolean force)
+    void test62600UnforcedImportRejectsConflictingAgentOrTool(AgentObjectType type, Boolean force)
             throws Exception {
         ImportGraph source = createImportGraph();
         String specification = source.team().exportDefinition();
@@ -91,7 +91,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @MethodSource("unforcedValues")
-    void test33100UnforcedImportRetainsConflictingTask(Boolean force) throws Exception {
+    void test62601UnforcedImportRetainsConflictingTask(Boolean force) throws Exception {
         ImportGraph source = createImportGraph();
         String specification = source.team().exportDefinition();
         dropGraph(source);
@@ -116,7 +116,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @EnumSource(value = AgentObjectType.class, names = {"AGENT", "TASK", "TOOL"})
-    void test33101ForcedImportReplacesConflictAndPreservesUnrelatedResources(AgentObjectType type)
+    void test62602ForcedImportReplacesConflictAndPreservesUnrelatedResources(AgentObjectType type)
             throws Exception {
         ImportGraph source = createImportGraph();
         String specification = source.team().exportDefinition();
@@ -153,7 +153,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @ValueSource(strings = {"{\"agents\":", "[}"})
-    void test33102MalformedInlineSpecificationRejectedByDatabase(String specification) throws Exception {
+    void test62603MalformedInlineSpecificationRejectedByDatabase(String specification) throws Exception {
         assertImportFailure(inlineRequest(specification, profileName).build());
     }
 
@@ -164,7 +164,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @ValueSource(strings = {"null", "42", "\"not-a-team-specification\""})
-    void test33103UnsupportedSpecificationShapeRejectedByDatabase(String specification) throws Exception {
+    void test62604UnsupportedSpecificationShapeRejectedByDatabase(String specification) throws Exception {
         assertImportFailure(inlineRequest(specification, profileName).build());
     }
 
@@ -176,7 +176,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @ValueSource(strings = {"name", "tools"})
-    void test33104InvalidExportedAgentFieldsRejectedByDatabase(String field) throws Exception {
+    void test62605InvalidExportedAgentFieldsRejectedByDatabase(String field) throws Exception {
         ImportGraph source = createImportGraph();
         ObjectNode specification = exportedAgent(source);
         assertThat(specification.has(field)).as("export contains the field being corrupted").isTrue();
@@ -196,7 +196,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      * nonblank instruction.
      */
     @Test
-    void test33104NonObjectTaskIsHandledAsMissingByDatabase() throws Exception {
+    void test62606NonObjectTaskIsHandledAsMissingByDatabase() throws Exception {
         ImportGraph source = createImportGraph();
         ObjectNode specification = exportedAgent(source);
         specification.put("task", "not-an-object");
@@ -217,7 +217,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      * source profile provider.
      */
     @Test
-    void test33105MissingProfileIsCreatedFromExportedMetadata() throws Exception {
+    void test62607MissingProfileIsCreatedFromExportedMetadata() throws Exception {
         ImportGraph source = createImportGraph();
         String specification = source.team().exportDefinition();
         String importedProfileName = uniqueName("IMP_MISSING_PROFILE");
@@ -237,7 +237,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      * Expected: Import succeeds and the imported agent references the disabled profile name.
      */
     @Test
-    void test33106DisabledProfileCanBeUsedForImport() throws Exception {
+    void test62608DisabledProfileCanBeUsedForImport() throws Exception {
         ImportGraph source = createImportGraph();
         String specification = source.team().exportDefinition();
         Profile disabled = createManagedProfile(uniqueName("IMP_DISABLED_PROFILE"),
@@ -256,7 +256,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      * profile, and the tool retains its function name.
      */
     @Test
-    void test33107ImportUsesDifferentEnabledProfile() throws Exception {
+    void test62609ImportUsesDifferentEnabledProfile() throws Exception {
         ImportGraph source = createImportGraph();
         String specification = source.team().exportDefinition();
         Profile alternate = createManagedProfile(uniqueName("IMP_ALTERNATE_PROFILE"),
@@ -281,7 +281,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @EnumSource(value = ExportDestination.class, names = {"OBJECT_STORAGE", "DIRECTORY"})
-    void test33108MissingImportFileRejectedByDatabase(ExportDestination destination) throws Exception {
+    void test62610MissingImportFileRejectedByDatabase(ExportDestination destination) throws Exception {
         ExportTarget target = createExportTarget(destination);
         assertImportFailure(locationRequest(target).build());
     }
@@ -294,7 +294,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    void test33109MissingObjectStorageCredentialRejectedByDatabase(boolean nonexistentName) throws Exception {
+    void test62611MissingObjectStorageCredentialRejectedByDatabase(boolean nonexistentName) throws Exception {
         ExportTarget target = createExportTarget(ExportDestination.OBJECT_STORAGE);
         ImportGraph source = createImportGraph();
         assertThat(source.team().exportDefinition(target.request(null))).isTrue();
@@ -312,7 +312,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      * matching SQL error metadata.
      */
     @Test
-    void test33110MissingImportDirectoryRejectedByDatabase() throws Exception {
+    void test62612MissingImportDirectoryRejectedByDatabase() throws Exception {
         ImportTeamRequest request = ImportTeamRequest.builder(profileName, uniqueName("IMP_NO_DIRECTORY"))
                 .location(uniqueName("IMP_MISSING_DIR") + ":team.json").build();
         assertImportFailure(request);
@@ -326,7 +326,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @ValueSource(strings = {"", ":"})
-    void test33111DirectoryWithoutFilenameRejectedByDatabase(String suffix) throws Exception {
+    void test62613DirectoryWithoutFilenameRejectedByDatabase(String suffix) throws Exception {
         ImportTeamRequest request = ImportTeamRequest.builder(profileName, uniqueName("IMP_NO_FILENAME"))
                 .location(exportDirectoryName() + suffix).build();
         assertImportFailure(request);
@@ -340,7 +340,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @MethodSource("invalidFileSpecifications")
-    void test33112InvalidFileContentRejectedByDatabase(ExportDestination destination, String specification)
+    void test62614InvalidFileContentRejectedByDatabase(ExportDestination destination, String specification)
             throws Exception {
         ExportTarget target = createExportTarget(destination);
         writeImportContent(target, specification);
@@ -362,7 +362,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      * same file imports as an enabled team.
      */
     @Test
-    void test33113ImportRequiresDirectoryReadPrivilege() throws Exception {
+    void test62615ImportRequiresDirectoryReadPrivilege() throws Exception {
         assumeTrue(!jdbcConnection().getMetaData().getUserName().equalsIgnoreCase(adminDbConfig().getDbUser()),
                 "Directory privilege coverage requires a feature user distinct from the directory administrator");
         ExportTarget target = createExportTarget(ExportDestination.DIRECTORY);
@@ -389,7 +389,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @ValueSource(strings = {"https://", "not-an-object-storage-uri"})
-    void test33114InvalidObjectStorageLocationRejectedByDatabase(String location) throws Exception {
+    void test62616InvalidObjectStorageLocationRejectedByDatabase(String location) throws Exception {
         ImportTeamRequest request = ImportTeamRequest.builder(profileName, uniqueName("IMP_INVALID_URI"))
                 .location(location).objectStorageCredentialName(exportCredentialName()).build();
         assertImportFailure(request);
@@ -403,7 +403,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @EnumSource(ExportDestination.class)
-    void test33115LargeImportPreservesCompleteUnicodeAttributes(ExportDestination destination) throws Exception {
+    void test62617LargeImportPreservesCompleteUnicodeAttributes(ExportDestination destination) throws Exception {
         ExportTarget target = destination == ExportDestination.CLOB ? null : createExportTarget(destination);
         String role = "Import context café 東京. ".repeat(1000) + "ROLE_END_MARKER";
         String instruction = "Preserve the imported instruction. ".repeat(800) + "{query} TASK_END_MARKER";
@@ -457,7 +457,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      * definition and name but retains the agent.
      */
     @Test
-    void test33116GeneratedTaskIsCreatedButExcludedFromReexport() throws Exception {
+    void test62618GeneratedTaskIsCreatedButExcludedFromReexport() throws Exception {
         ImportGraph source = createImportGraph();
         ObjectNode specification = exportedAgent(source);
         assertThat(specification.remove("task")).as("source has an explicitly defined task").isNotNull();
@@ -491,7 +491,7 @@ class TeamImportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @EnumSource(ExportDestination.class)
-    void test33117ImportPreservesMemberMappingsAndTaskDependencies(ExportDestination destination)
+    void test62619ImportPreservesMemberMappingsAndTaskDependencies(ExportDestination destination)
             throws Exception {
         ExportTarget target = destination == ExportDestination.CLOB ? null : createExportTarget(destination);
         ImportGraph source = createImportGraph();

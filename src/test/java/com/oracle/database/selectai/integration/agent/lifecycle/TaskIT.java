@@ -28,7 +28,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The handle exposes a nonblank name, an instruction containing {query}, and ENABLED status.
      */
     @Test
-    void test31000TaskCreation() throws Exception {
+    void test61300TaskCreation() throws Exception {
         Task task = agentClient.task(uniqueName("TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
         managedTasks.add(task);
@@ -43,7 +43,7 @@ class TaskIT extends AgentIntegrationFixture {
      * task.
      */
     @Test
-    void test31001ListTasks() throws Exception {
+    void test61301ListTasks() throws Exception {
         Task task = agentClient.task(uniqueName("LIST_TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
         managedTasks.add(task);
@@ -59,7 +59,7 @@ class TaskIT extends AgentIntegrationFixture {
      * enabled human-tool flag.
      */
     @Test
-    void test31026ListTasksHydratesMetadataAndAttributes() throws Exception {
+    void test61302ListTasksHydratesMetadataAndAttributes() throws Exception {
         String name = uniqueName("LIST_METADATA");
         TaskAttributes attributes = TaskAttributes.builder()
                 .instruction("Answer this list metadata question: {query}")
@@ -85,7 +85,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The result contains exactly the five matching names, regardless of their order.
      */
     @Test
-    void test31027ListTasksMultipleMatchesUsingPattern() throws Exception {
+    void test61303ListTasksMultipleMatchesUsingPattern() throws Exception {
         List<String> names = createTaskListFixture();
         String prefix = listPrefix(names.get(0));
 
@@ -98,7 +98,7 @@ class TaskIT extends AgentIntegrationFixture {
      * task.
      */
     @Test
-    void test31028ListTasksCaseInsensitivePattern() throws Exception {
+    void test61304ListTasksCaseInsensitivePattern() throws Exception {
         List<String> names = createTaskListFixture();
         String prefix = listPrefix(names.get(0));
 
@@ -112,7 +112,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The result contains exactly all six names from both groups.
      */
     @Test
-    void test31029ListTasksAlternationPattern() throws Exception {
+    void test61305ListTasksAlternationPattern() throws Exception {
         List<String> names = createTaskListFixture();
         String firstPrefix = listPrefix(names.get(0));
         String secondPrefix = listPrefix(names.get(5));
@@ -126,7 +126,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The task collection is empty.
      */
     @Test
-    void test31030ListTasksNonMatchingPatternReturnsEmptyList() throws Exception {
+    void test61306ListTasksNonMatchingPatternReturnsEmptyList() throws Exception {
         String pattern = "^" + uniqueName("NO_MATCH") + "$";
 
         assertThat(agentClient.listTasks(pattern)).isEmpty();
@@ -137,7 +137,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The task collection is empty.
      */
     @Test
-    void test31031ListTasksLiteralNonMatchingPatternReturnsEmptyList() throws Exception {
+    void test61307ListTasksLiteralNonMatchingPatternReturnsEmptyList() throws Exception {
         assertThat(agentClient.listTasks(uniqueName("NO_MATCH_LITERAL"))).isEmpty();
     }
 
@@ -146,7 +146,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: Only the selected task is returned.
      */
     @Test
-    void test31032ListTasksEndAnchorPattern() throws Exception {
+    void test61308ListTasksEndAnchorPattern() throws Exception {
         List<String> names = createTaskListFixture();
         String exact = names.get(0);
         String pattern = exact + "$";
@@ -159,7 +159,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The call throws SelectAIException and its database cause contains ORA-12733.
      */
     @Test
-    void test31033ListTasksOverlongPatternIsRejectedByDatabase() throws Exception {
+    void test61309ListTasksOverlongPatternIsRejectedByDatabase() throws Exception {
         Task task = agentClient.task(uniqueName("OVERLONG_REGEX_TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
         managedTasks.add(task);
@@ -177,7 +177,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The returned names are ordered A, B, C.
      */
     @Test
-    void test31034ListTasksAreOrderedByName() throws Exception {
+    void test61310ListTasksAreOrderedByName() throws Exception {
         String prefix = uniqueName("LIST_ORDER");
         String first = prefix + "_A";
         String second = prefix + "_B";
@@ -201,7 +201,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The fetched handle has the same name and instruction as the created task.
      */
     @Test
-    void test31002FetchTask() throws Exception {
+    void test61311FetchTask() throws Exception {
         Task created = agentClient.task(uniqueName("FETCH_TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         created.create();
         managedTasks.add(created);
@@ -216,7 +216,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The created task reports ENABLED status.
      */
     @Test
-    void test31003DefaultStatusEnabled() throws Exception {
+    void test61312DefaultStatusEnabled() throws Exception {
         String name = uniqueName("DEFAULT_TASK");
         Task task = agentClient.task(name, taskAttributes(), null, null);
         task.create();
@@ -230,7 +230,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: Both status changes succeed, and the handle reports DISABLED then ENABLED.
      */
     @Test
-    void test31004DisableEnableTask() throws Exception {
+    void test61313DisableEnableTask() throws Exception {
         Task task = agentClient.task(uniqueName("STATUS_TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
         managedTasks.add(task);
@@ -245,7 +245,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The call throws SelectAIException with ORA-20051 in its cause, and status remains ENABLED.
      */
     @Test
-    void test31005EnableAlreadyEnabledTaskFails() throws Exception {
+    void test61314EnableAlreadyEnabledTaskFails() throws Exception {
         Task task = agentClient.task(uniqueName("ENABLE_TWICE_TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
         managedTasks.add(task);
@@ -262,7 +262,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The call throws SelectAIException with ORA-20051 in its cause, and status remains DISABLED.
      */
     @Test
-    void test31006DisableAlreadyDisabledTaskFails() throws Exception {
+    void test61315DisableAlreadyDisabledTaskFails() throws Exception {
         Task task = agentClient.task(uniqueName("DISABLE_TWICE_TASK"), taskAttributes(), null,
                 TaskStatus.DISABLED);
         task.create();
@@ -282,7 +282,7 @@ class TaskIT extends AgentIntegrationFixture {
      * attribute.
      */
     @Test
-    void test31007AllTaskAttributesRoundTrip() throws Exception {
+    void test61316AllTaskAttributesRoundTrip() throws Exception {
         Tool tool = agentClient.tool(uniqueName("ROUND_TRIP_TASK_TOOL"), sqlToolAttributes(), "Java SQL tool test", ToolStatus.ENABLED);
         tool.create();
         managedTools.add(tool);
@@ -317,7 +317,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The child task reports exactly the parent task name as its input.
      */
     @Test
-    void test31008TaskInputChaining() throws Exception {
+    void test61317TaskInputChaining() throws Exception {
         Task parent = agentClient.task(uniqueName("PARENT_TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         parent.create();
         managedTasks.add(parent);
@@ -337,7 +337,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The created task reports the human-tool attribute as true.
      */
     @Test
-    void test31009HumanToolAttribute() throws Exception {
+    void test61318HumanToolAttribute() throws Exception {
         TaskAttributes attributes = TaskAttributes.builder()
                 .instruction("Request human confirmation when needed")
                 .enableHumanTool(true)
@@ -354,7 +354,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: Construction throws IllegalArgumentException.
      */
     @Test
-    void test31010MissingTaskNameFailsLocally() {
+    void test61319MissingTaskNameFailsLocally() {
         assertThatThrownBy(() -> agentClient.task("", taskAttributes(), null, TaskStatus.ENABLED))
                 .isInstanceOf(IllegalArgumentException.class);
     }
@@ -364,7 +364,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: Construction throws IllegalArgumentException.
      */
     @Test
-    void test31011MissingTaskAttributesFailsLocally() {
+    void test61320MissingTaskAttributesFailsLocally() {
         assertThatThrownBy(() -> agentClient.task(uniqueName("NO_ATTRIBUTES"), null, null,
                 TaskStatus.ENABLED)).isInstanceOf(IllegalArgumentException.class);
     }
@@ -374,7 +374,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The status change throws an exception.
      */
     @Test
-    void test31012EnableDeletedTaskFails() throws Exception {
+    void test61321EnableDeletedTaskFails() throws Exception {
         String name = uniqueName("DELETED_TASK");
         Task task = agentClient.task(name, taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
@@ -389,7 +389,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The status change throws an exception.
      */
     @Test
-    void test31020DisableDeletedTaskFails() throws Exception {
+    void test61322DisableDeletedTaskFails() throws Exception {
         Task task = agentClient.task(uniqueName("DELETED_DISABLE_TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
         managedTasks.add(task);
@@ -403,7 +403,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The duplicate creation throws an exception, while the original task retains its name.
      */
     @Test
-    void test31013DuplicateTaskCreationFails() throws Exception {
+    void test61323DuplicateTaskCreationFails() throws Exception {
         String name = uniqueName("DUPLICATE_TASK");
         Task first = agentClient.task(name, taskAttributes(), "Java task test", TaskStatus.ENABLED);
         first.create();
@@ -418,7 +418,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The call throws SelectAIException and its database cause contains ORA-12726.
      */
     @Test
-    void test31014InvalidTaskRegexFails() throws Exception {
+    void test61324InvalidTaskRegexFails() throws Exception {
         Task task = agentClient.task(uniqueName("INVALID_REGEX_TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
         managedTasks.add(task);
@@ -434,7 +434,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The drop succeeds, and the subsequent lookup throws an exception.
      */
     @Test
-    void test31015DeleteDisabledTaskWithoutForce() throws Exception {
+    void test61325DeleteDisabledTaskWithoutForce() throws Exception {
         String name = uniqueName("DISABLED_DELETE");
         Task task = agentClient.task(name, taskAttributes(), null, TaskStatus.DISABLED);
         task.create();
@@ -450,7 +450,7 @@ class TaskIT extends AgentIntegrationFixture {
      * ORA error.
      */
     @Test
-    void test31016EmptyInstructionRejectedByDatabase() throws Exception {
+    void test61326EmptyInstructionRejectedByDatabase() throws Exception {
         Task task = agentClient.task(uniqueName("NO_INSTRUCTION"),
                 TaskAttributes.builder().instruction("").build(), null, TaskStatus.ENABLED);
         assertThatThrownBy(task::create)
@@ -468,7 +468,7 @@ class TaskIT extends AgentIntegrationFixture {
      * ORA error.
      */
     @Test
-    void test31018MissingInstructionRejectedByDatabase() throws Exception {
+    void test61327MissingInstructionRejectedByDatabase() throws Exception {
         Task task = agentClient.task(uniqueName("MISSING_INSTRUCTION"),
                 TaskAttributes.builder().build(), null, TaskStatus.ENABLED);
         assertThatThrownBy(task::create)
@@ -485,7 +485,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The drop succeeds, and the subsequent lookup throws an exception.
      */
     @Test
-    void test31017DeleteEnabledTaskWithoutForce() throws Exception {
+    void test61328DeleteEnabledTaskWithoutForce() throws Exception {
         String name = uniqueName("ENABLED_DELETE");
         Task task = agentClient.task(name, taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
@@ -501,7 +501,7 @@ class TaskIT extends AgentIntegrationFixture {
      * name.
      */
     @Test
-    void test31021DeleteAndRecreateTask() throws Exception {
+    void test61329DeleteAndRecreateTask() throws Exception {
         String name = uniqueName("RECREATE_TASK");
         Task task = agentClient.task(name, taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
@@ -519,7 +519,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The drop succeeds, and the subsequent lookup reports that the task was not found.
      */
     @Test
-    void test31022DropExistingTaskWithoutForce() throws Exception {
+    void test61330DropExistingTaskWithoutForce() throws Exception {
         String name = uniqueName("DROP_NON_FORCE_TASK");
         Task task = agentClient.task(name, taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
@@ -534,12 +534,9 @@ class TaskIT extends AgentIntegrationFixture {
     /**
      * Test: Create a task and force-drop the same handle twice.
      * Expected: Both drop calls return true.
-     *
-     * Bug <a href="https://bug.oraclecorp.com/ords/bug/bugui/bug-details?mode=edit&bugnumber=40126447">
-     * 40126447</a> - DBMS_CLOUD_AI_AGENT Java drop APIs must not reject repeated forced drops locally.
      */
     @Test
-    void test31023RepeatedForceDropOnSameTaskHandleSucceeds() throws Exception {
+    void test61331RepeatedForceDropOnSameTaskHandleSucceeds() throws Exception {
         Task task = agentClient.task(uniqueName("DROP_REPEAT_FORCE_TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
         managedTasks.add(task);
@@ -553,7 +550,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The first and repeated force-drop calls both return true.
      */
     @Test
-    void test31024ForceDropAlreadyMissingTaskSucceeds() throws Exception {
+    void test61332ForceDropAlreadyMissingTaskSucceeds() throws Exception {
         String name = uniqueName("DROP_MISSING_FORCE_TASK");
         Task first = agentClient.task(name, taskAttributes(), "Java task test", TaskStatus.ENABLED);
         first.create();
@@ -572,7 +569,7 @@ class TaskIT extends AgentIntegrationFixture {
      * missing task.
      */
     @Test
-    void test31025NonForceDropMissingTaskPreservesDatabaseError() throws Exception {
+    void test61333NonForceDropMissingTaskPreservesDatabaseError() throws Exception {
         String name = uniqueName("DROP_MISSING_NON_FORCE_TASK");
         Task first = agentClient.task(name, taskAttributes(), "Java task test", TaskStatus.ENABLED);
         first.create();
@@ -597,7 +594,7 @@ class TaskIT extends AgentIntegrationFixture {
      * empty.
      */
     @Test
-    void test31035DropTaskLoadedFromList() throws Exception {
+    void test61334DropTaskLoadedFromList() throws Exception {
         Task source = agentClient.task(uniqueName("DROP_LISTED_TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         source.create();
         managedTasks.add(source);
@@ -617,7 +614,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: Both reads throw SelectAIException stating that the task was not found.
      */
     @Test
-    void test31036StaleTaskStatusAndAttributesFailAfterExternalDrop() throws Exception {
+    void test61335StaleTaskStatusAndAttributesFailAfterExternalDrop() throws Exception {
         Task source = agentClient.task(uniqueName("STALE_DROP_TASK"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         source.create();
         managedTasks.add(source);
@@ -641,7 +638,7 @@ class TaskIT extends AgentIntegrationFixture {
      * Expected: The force drop returns true, while the non-force drop throws IllegalStateException.
      */
     @Test
-    void test31037NeverCreatedTaskForceDropDelegatesToDatabase() throws Exception {
+    void test61336NeverCreatedTaskForceDropDelegatesToDatabase() throws Exception {
         String forceName = uniqueName("UNCREATED_FORCE_DROP");
         Task forceHandle = agentClient.task(forceName, taskAttributes(), null, TaskStatus.ENABLED);
         assertThat(forceHandle.drop(true)).isTrue();
@@ -658,7 +655,7 @@ class TaskIT extends AgentIntegrationFixture {
      * returns no tasks.
      */
     @Test
-    void test31038RepeatedNonForceDropOnSameTaskHandleIsRejectedLocally() throws Exception {
+    void test61337RepeatedNonForceDropOnSameTaskHandleIsRejectedLocally() throws Exception {
         Task task = agentClient.task(uniqueName("DROP_REPEAT_NON_FORCE"), taskAttributes(), "Java task test", TaskStatus.ENABLED);
         task.create();
         managedTasks.add(task);

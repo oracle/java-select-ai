@@ -42,7 +42,7 @@ class TeamRoundTripIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @EnumSource(ExportDestination.class)
-    void test33092WorkingTeamRunsAfterExportAndImport(ExportDestination destination) throws Exception {
+    void test62700WorkingTeamRunsAfterExportAndImport(ExportDestination destination) throws Exception {
         ExportTarget target = destination == ExportDestination.CLOB ? null : createExportTarget(destination);
         ExecutionProbe probe = createExecutionProbe();
         Tool tool = agentClient.tool(uniqueName("EXP_RUN_TOOL"), ToolAttributes.builder()

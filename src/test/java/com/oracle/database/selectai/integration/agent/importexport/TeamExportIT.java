@@ -55,7 +55,7 @@ class TeamExportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @EnumSource(value = ExportDestination.class, names = {"OBJECT_STORAGE", "DIRECTORY"})
-    void test33025ExportTeamDefinitionToConfiguredLocation(ExportDestination destination)
+    void test62500ExportTeamDefinitionToConfiguredLocation(ExportDestination destination)
             throws Exception {
         ExportGraph graph = createExportGraph();
         assertDefinitions(exportAndRead(graph.team(), destination), graph);
@@ -67,7 +67,7 @@ class TeamExportIT extends TeamExportIntegrationFixture {
      * and enabled statuses.
      */
     @Test
-    void test33080ExportClobIncludesAllAgentsTasksAndTools() throws Exception {
+    void test62501ExportClobIncludesAllAgentsTasksAndTools() throws Exception {
         ExportGraph graph = createExportGraph();
         assertDefinitions(graph.team().exportDefinition(), graph);
     }
@@ -78,7 +78,7 @@ class TeamExportIT extends TeamExportIntegrationFixture {
      * configured attributes and enabled statuses.
      */
     @Test
-    void test33093ExportClobWithTypedParametersIncludesAllComponents() throws Exception {
+    void test62502ExportClobWithTypedParametersIncludesAllComponents() throws Exception {
         ExportGraph graph = createExportGraph();
         String specification = graph.team().exportDefinition(
                 ExportTeamParams.builder().overwrite(false).build());
@@ -94,7 +94,7 @@ class TeamExportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @EnumSource(ExportDestination.class)
-    void test33081ExportImportsEnabledAgentsWithDisabledTasksAndTools(ExportDestination destination)
+    void test62503ExportImportsEnabledAgentsWithDisabledTasksAndTools(ExportDestination destination)
             throws Exception {
         ExportGraph graph = createExportGraph();
         graph.team().disable();
@@ -140,7 +140,7 @@ class TeamExportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @EnumSource(ExportDestination.class)
-    void test33082ExportPreservesCredentialNameWithoutSecrets(ExportDestination destination)
+    void test62504ExportPreservesCredentialNameWithoutSecrets(ExportDestination destination)
             throws Exception {
         String credentialName = uniqueName("EXP_NOTIFY_CRED");
         String secret = "export-secret-" + UUID.randomUUID();
@@ -181,7 +181,7 @@ class TeamExportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @EnumSource(ExportDestination.class)
-    void test33083LargeExportIsNotTruncated(ExportDestination destination) throws Exception {
+    void test62505LargeExportIsNotTruncated(ExportDestination destination) throws Exception {
         String role = "Export context café 東京. ".repeat(1000) + "ROLE_END_MARKER";
         String instruction = "Summarize the export context. ".repeat(800) + "{query} TASK_END_MARKER";
         Tool tool = agentClient.tool(uniqueName("EXP_LARGE_TOOL"), ToolAttributes.builder()
@@ -217,7 +217,7 @@ class TeamExportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @EnumSource(ExportDestination.class)
-    void test33084ExportAfterDeletionThroughAnotherClientFailsInDatabase(ExportDestination destination)
+    void test62506ExportAfterDeletionThroughAnotherClientFailsInDatabase(ExportDestination destination)
             throws Exception {
         ExportGraph graph = createExportGraph();
         ExportTarget target = destination == ExportDestination.CLOB ? null : createExportTarget(destination);
@@ -242,7 +242,7 @@ class TeamExportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @EnumSource(value = ExportDestination.class, names = {"OBJECT_STORAGE", "DIRECTORY"})
-    void test33085OverwriteFalsePreservesExistingDefinition(ExportDestination destination) throws Exception {
+    void test62507OverwriteFalsePreservesExistingDefinition(ExportDestination destination) throws Exception {
         assertExistingFileProtected(destination, false);
     }
 
@@ -253,7 +253,7 @@ class TeamExportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @EnumSource(value = ExportDestination.class, names = {"OBJECT_STORAGE", "DIRECTORY"})
-    void test33086OmittedOverwriteDefaultsToFalse(ExportDestination destination) throws Exception {
+    void test62508OmittedOverwriteDefaultsToFalse(ExportDestination destination) throws Exception {
         assertExistingFileProtected(destination, null);
     }
 
@@ -265,7 +265,7 @@ class TeamExportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @EnumSource(value = ExportDestination.class, names = {"OBJECT_STORAGE", "DIRECTORY"})
-    void test33087OverwriteTrueReplacesExistingDefinition(ExportDestination destination) throws Exception {
+    void test62509OverwriteTrueReplacesExistingDefinition(ExportDestination destination) throws Exception {
         ExportTarget target = createExportTarget(destination);
         ExportGraph original = createExportGraph();
         ExportGraph replacement = createExportGraph();
@@ -286,7 +286,7 @@ class TeamExportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @ValueSource(booleans = {false, true})
-    void test33088MissingObjectStorageCredentialRejectedByDatabase(boolean useNonexistentName)
+    void test62510MissingObjectStorageCredentialRejectedByDatabase(boolean useNonexistentName)
             throws Exception {
         ExportTarget target = createExportTarget(ExportDestination.OBJECT_STORAGE);
         ExportGraph graph = createExportGraph();
@@ -301,7 +301,7 @@ class TeamExportIT extends TeamExportIntegrationFixture {
      * Expected: The export fails with a database ORA error wrapped by SelectAIException.
      */
     @Test
-    void test33089MissingDirectoryRejectedByDatabase() throws Exception {
+    void test62511MissingDirectoryRejectedByDatabase() throws Exception {
         ExportGraph graph = createExportGraph();
         ExportTeamRequest request = ExportTeamRequest.builder(uniqueName("EXP_NO_DIR") + ":team.json").build();
         assertDatabaseFailure(() -> graph.team().exportDefinition(request));
@@ -313,7 +313,7 @@ class TeamExportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @ValueSource(strings = {"", ":"})
-    void test33090DirectoryLocationWithoutFilenameRejectedByDatabase(String suffix) throws Exception {
+    void test62512DirectoryLocationWithoutFilenameRejectedByDatabase(String suffix) throws Exception {
         String directory = exportDirectoryName();
         ExportGraph graph = createExportGraph();
         ExportTeamRequest request = ExportTeamRequest.builder(directory + suffix).build();
@@ -326,7 +326,7 @@ class TeamExportIT extends TeamExportIntegrationFixture {
      */
     @ParameterizedTest
     @ValueSource(strings = {"https://", "not-an-object-storage-uri"})
-    void test33091InvalidObjectStorageLocationRejectedByDatabase(String location) throws Exception {
+    void test62513InvalidObjectStorageLocationRejectedByDatabase(String location) throws Exception {
         ExportGraph graph = createExportGraph();
         ExportTeamRequest request = ExportTeamRequest.builder(location)
                 .objectStorageCredentialName(exportCredentialName()).build();

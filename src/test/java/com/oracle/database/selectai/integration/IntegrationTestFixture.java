@@ -628,6 +628,15 @@ public abstract class IntegrationTestFixture {
     }
 
     /**
+     * Returns the OCI embedding model configured for integration tests.
+     *
+     * @return configured embedding model, or {@code null} when unset
+     */
+    protected final String ociEmbeddingModel() {
+        return env("SELECT_AI_IT_OCI_EMBEDDING_MODEL");
+    }
+
+    /**
      * Allows a feature suite to use the common integration support without
      * creating an unrelated profile resource.
      *
@@ -901,6 +910,10 @@ public abstract class IntegrationTestFixture {
 
         if ("oci".equalsIgnoreCase(provider)) {
             builder.ociCompartmentId(required("SELECT_AI_IT_OCI_COMPARTMENT_ID"));
+            String embeddingModel = ociEmbeddingModel();
+            if (embeddingModel != null) {
+                builder.embeddingModel(embeddingModel);
+            }
         }
 
         if (env("SELECT_AI_IT_REGION") != null) {
